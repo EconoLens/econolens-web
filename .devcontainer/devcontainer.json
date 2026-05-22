@@ -1,0 +1,16 @@
+{
+  "name": "EconoLens Dev",
+  "image": "mcr.microsoft.com/devcontainers/javascript-node:20",
+  "features": { "ghcr.io/devcontainers/features/github-cli:1": {} },
+  "forwardPorts": [3000, 3001],
+  "portsAttributes": { "3000": { "label": "Next.js App", "onAutoForward": "openBrowser" } },
+  "postCreateCommand": "npm install -g @anthropic-ai/claude-code && npm install",
+  "customizations": {
+    "vscode": {
+      "extensions": ["dbaeumer.vscode-eslint","esbenp.prettier-vscode","bradlc.vscode-tailwindcss","sanity-io.vscode-sanity","ms-vscode.vscode-typescript-next","Prisma.prisma","github.copilot"],
+      "settings": { "editor.formatOnSave": true, "editor.defaultFormatter": "esbenp.prettier-vscode", "typescript.tsdk": "node_modules/typescript/lib", "tailwindCSS.includeLanguages": { "typescript": "javascript", "typescriptreact": "javascript" } }
+    }
+  },
+  "remoteEnv": { "NODE_ENV": "development" },
+  "secrets": ["ANTHROPIC_API_KEY","NEXT_PUBLIC_SANITY_PROJECT_ID","NEXT_PUBLIC_SANITY_DATASET","SANITY_API_TOKEN","SUPABASE_URL","SUPABASE_ANON_KEY","SUPABASE_SERVICE_KEY","CLERK_SECRET_KEY","NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY","RAZORPAY_KEY_ID","RAZORPAY_KEY_SECRET","STRIPE_SECRET_KEY","NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY","FRED_API_KEY","COPYSCAPE_API_KEY","BEEHIIV_API_KEY","BUFFER_ACCESS_TOKEN","ZOHO_BOOKS_TOKEN"]
+}
