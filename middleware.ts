@@ -5,7 +5,7 @@ function rlCheck(ip:string,p:string){const k=ip+":"+( p.split("/")[1]||"");const
 const BOT=[/sqlmap/i,/nikto/i,/nmap/i,/masscan/i,/acunetix/i,/nessus/i,/openvas/i];
 const SP=[/\.\.\//, /\.(php|asp|aspx)$/i,/wp-admin/i,/\.env|\.git/i,/union\s+select/i];
 const prot=createRouteMatcher(["/dashboard(.*)","/api/ai(.*)","/api/user(.*)","/api/payment(.*)"]); 
-const pub=createRouteMatcher(["/","/sign-in(.*)","/sign-up(.*)","/article(.*)","/api/news(.*)","/api/indicators(.*)","/api/health"]);
+const pub=createRouteMatcher(["/","/sign-in(.*)","/sign-up(.*)","/article(.*)","/api/news(.*)","/api/indicators(.*)","/api/health","/api/research(.*)","/research(.*)","/pricing(.*)","/about(.*)","/contact(.*)","/privacy(.*)","/terms(.*)","/404(.*)","/500(.*)","/error(.*)"]);
 export default clerkMiddleware(async(auth,req:NextRequest)=>{
   const ip=req.headers.get("x-real-ip")??req.headers.get("x-forwarded-for")?.split(",")[0].trim()??"?";
   const p=req.nextUrl.pathname,ua=req.headers.get("user-agent")??""
