@@ -68,6 +68,18 @@ export default function RootLayout({
         </head>
         <body className="min-h-screen bg-white text-neutral-900 antialiased">
           {children}
+      <footer className="border-t border-neutral-100 py-8 mt-16">
+        <div className="mx-auto max-w-6xl px-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-sm text-neutral-500">
+          <p>&copy; {new Date().getFullYear()} EconoLens. All rights reserved.</p>
+          <nav className="flex gap-6">
+            <a href="/about" className="hover:text-neutral-900 transition-colors">About</a>
+            <a href="/pricing" className="hover:text-neutral-900 transition-colors">Pricing</a>
+            <a href="/contact" className="hover:text-neutral-900 transition-colors">Contact</a>
+            <a href="/privacy" className="hover:text-neutral-900 transition-colors">Privacy</a>
+            <a href="/terms" className="hover:text-neutral-900 transition-colors">Terms</a>
+          </nav>
+        </div>
+      </footer>
         </body>
       </html>
     </ClerkProvider>
