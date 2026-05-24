@@ -41,7 +41,7 @@ export const NewsSearchSchema = z.object({
 });
 
 export const AiResearchSchema = z.object({
-  query: ss(600).min(3),
+  query: z.string().min(3).max(600).transform(stripHtml),
   context: ss(2000).optional(),
   mode: z.enum(["summary", "deep", "indicators"]).default("summary"),
 });
