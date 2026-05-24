@@ -1,17 +1,79 @@
 {
-  "$schema": "https://openapi.vercel.sh/vercel.json",
-  "framework": "nextjs",
-  "buildCommand": "next build",
-  "devCommand": "next dev",
-  "installCommand": "npm install",
-  "outputDirectory": ".next",
-  "regions": [
-    "bom1"
-  ],
+  "version": 2,
   "crons": [
     {
-      "path": "/api/cron/rss-check",
-      "schedule": "0 0 * * *"
+      "path": "/api/cron/refresh-news",
+      "schedule": "0 6,12,18 * * *"
+    }
+  ],
+  "headers": [
+    {
+      "source": "/(.*)",
+      "headers": [
+        {
+          "key": "X-Frame-Options",
+          "value": "DENY"
+        },
+        {
+          "key": "X-Content-Type-Options",
+          "value": "nosniff"
+        },
+        {
+          "key": "X-XSS-Protection",
+          "value": "1; mode=block"
+        },
+        {
+          "key": "Referrer-Policy",
+          "value": "strict-origin-when-cross-origin"
+        },
+        {
+          "key": "Strict-Transport-Security",
+          "value": "max-age=63072000; includeSubDomains; preload"
+        },
+        {
+          "key": "Permissions-Policy",
+          "value": "camera=(), microphone=(), geolocation=(), usb=()"
+        }
+      ]
+    },
+    {
+      "source": "/api/(.*)",
+      "headers": [
+        {
+          "key": "Access-Control-Allow-Origin",
+          "value": "https://www.econolens.co.in"
+        },
+        {
+          "key": "Access-Control-Allow-Methods",
+          "value": "GET, POST, OPTIONS"
+        },
+        {
+          "key": "Access-Control-Allow-Headers",
+          "value": "Content-Type, Authorization"
+        }
+      ]
+    }
+  ],
+  "redirects": [
+    {
+      "source": "/admin(.*)",
+      "destination": "/404",
+      "permanent": false
+    },
+    {
+      "source": "/wp-admin(.*)",
+      "destination": "/404",
+      "permanent": false
+    },
+    {
+      "source": "/.env(.*)",
+      "destination": "/404",
+      "permanent": false
+    },
+    {
+      "source": "/.git(.*)",
+      "destination": "/404",
+      "permanent": false
     }
   ]
 }
