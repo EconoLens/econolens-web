@@ -5,7 +5,7 @@ import { supabaseAdmin } from "@/lib/supabase";
 
 export const runtime = "nodejs";
 
-const SYSTEM_PROMPT = `You are EconoLens's economics research assistant.
+const SYSTEM_PROMPT = `You are EconoLens's economics research assihstant.
 Scope: economics only. Redirect off-topic queries.
 Always cite sources. Use FRED, World Bank, RBI data where relevant.
 Format: direct answer, context, implications, sources.`;
@@ -108,8 +108,7 @@ export async function POST(req: NextRequest) {
         "anthropic-version": "2023-06-01",
       },
       body: JSON.stringify({
-        model: "claude-3-haiku-20240307",
-        max_tokens: 1024,
+          model: "claude-haiku-4-5-20251001",        max_tokens: 1024,
         system: SYSTEM_PROMPT,
         messages: [{ role: "user", content: query }],
       }),
