@@ -15,4 +15,8 @@ export default clerkMiddleware(async(auth,req:NextRequest)=>{
   if(prot(req)&&pub(req)===false)await auth.protect();
   return NextResponse.next();
 });
-export const config={matcher:["/((? !_next/static|_next/image|favicon.ico|robots.txt).*)"]};
+export const config = {
+  matcher: [
+    "/(api|trpc)(.*)",
+  ],
+};
