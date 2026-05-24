@@ -4,7 +4,7 @@ const rl=new Map<string,{c:number,r:number}>();
 function rlCheck(ip:string,p:string){const k=ip+":"+( p.split("/")[1]||"");const max=p.startsWith("/api/ai")?5:p.startsWith("/api/")?20:60;const now=Date.now();let e=rl.get(k);if(e===undefined||now>e.r){e={c:0,r:now+60000};rl.set(k,e)}e.c++;return e.c<=max}
 const BOT=[/sqlmap/i,/nikto/i,/nmap/i,/masscan/i,/acunetix/i,/nessus/i,/openvas/i];
 const SP=[/\.\.\//, /\.(php|asp|aspx)$/i,/wp-admin/i,/\.env|\.git/i,/union\s+select/i];
-const prot=createRouteMatcher(["/dashboard(.*)","/api/ai(.*)","/api/user(.*)","/api/payment(.*)","/api/research(.*)"]); 
+const prot=createRouteMatcher(["/dashboard(.*)","/api/ai(.*)","/api/user(.*)","/api/payment(.*)"]); 
 const pub=createRouteMatcher(["/","/sign-in(.*)","/sign-up(.*)","/article(.*)","/api/news(.*)","/api/indicators(.*)","/api/health"]);
 export default clerkMiddleware(async(auth,req:NextRequest)=>{
   const ip=req.headers.get("x-real-ip")??req.headers.get("x-forwarded-for")?.split(",")[0].trim()??"?";
