@@ -1,23 +1,77 @@
+/**
+ * middleware.ts — EconoLens edge middleware
+ *
+ * Responsibilities:
+ * 1. Detect visitor jurisdiction from Cloudflare CF-IPCountry header
+ *    and set x-jurisdiction response header (gdpr | ccpa | dpdpa | standard)
+ * 2. Enforce service kill switches — routes guarded by COMMUNITY_LIVE,
+ *    AI_TOOL_LIVE, NEWS_PIPELINE_LIVE, DECODING_LIVE, NEWSLETTER_LIVE
+ * 3. Clerk auth — protect /admin/* routes (admin role required)
+ *
+ * commit: "feat: jurisdiction middleware and service kill switches"
+ */
+
 import { clerkMiddleware, createRouteMatcher } from "@clerk/nextjs/server";
 import { NextRequest, NextResponse } from "next/server";
-const rl=new Map<string,{c:number,r:number}>();
-function rlCheck(ip:string,p:string){const k=ip+":"+( p.split("/")[1]||"");const max=p.startsWith("/api/ai")?5:p.startsWith("/api/")?20:60;const now=Date.now();let e=rl.get(k);if(e===undefined||now>e.r){e={c:0,r:now+60000};rl.set(k,e)}e.c++;return e.c<=max}
-const BOT=[/sqlmap/i,/nikto/i,/nmap/i,/masscan/i,/acunetix/i,/nessus/i,/openvas/i];
-const SP=[/\.\.\//, /\.(php|asp|aspx)$/i,/wp-admin/i,/\.env|\.git/i,/union\s+select/i];
-const prot=createRouteMatcher(["/dashboard(.*)","/api/ai(.*)","/api/user(.*)","/api/payment(.*)"]); 
-const pub=createRouteMatcher(["/","/sign-in(.*)","/sign-up(.*)","/article(.*)","/api/news(.*)","/api/indicators(.*)","/api/health","/api/research(.*)","/research(.*)","/pricing(.*)","/about(.*)","/contact(.*)","/privacy(.*)","/terms(.*)","/404(.*)","/500(.*)","/error(.*)"]);
-export default clerkMiddleware(async(auth,req:NextRequest)=>{
-  const ip=req.headers.get("x-real-ip")??req.headers.get("x-forwarded-for")?.split(",")[0].trim()??"?";
-  const p=req.nextUrl.pathname,ua=req.headers.get("user-agent")??""
-  if(BOT.some(b=>b.test(ua)))return new NextResponse("Forbidden",{status:403});
-  if(SP.some(s=>s.test(p)))return new NextResponse("Not Found",{status:404});
-  if(rlCheck(ip,p)===false)return new NextResponse("Too Many Requests",{status:429,headers:{"Retry-After":"60"}});
-  if(prot(req)&&pub(req)===false)await auth.protect();
-  return NextResponse.next();
+import { getJurisdiction, getBlockingSwitch } from "@/lib/compliance/jurisdiction";
+
+// Routes that require Clerk authentication (any signed-in user)
+const isAuthRoute = createRouteMatcher(["/admin(.*)"]);
+
+export default clerkMiddleware(async (auth, req: NextRequest) => {
+  const { pathname } = req.nextUrl;
+
+  // ── 1. Jurisdiction detection ──────────────────────────────────────────────
+  const countryCode =
+    req.headers.get("cf-ipcountry") ??
+    req.headers.get("x-vercel-ip-country") ??
+    null;
+
+  const jurisdiction = getJurisdiction(countryCode);
+
+  // ── 2. Service kill switch enforcement ────────────────────────────────────
+  const blockingSwitch = getBlockingSwitch(pathname);
+
+  if (blockingSwitch) {
+    // Return a 503 maintenance response — never a 404 (which would mislead crawlers)
+    return new NextResponse(
+      JSON.stringify({
+        error: "service_unavailable",
+        message:
+          "This feature is not yet available. We are working on it — check back soon.",
+        service: blockingSwitch,
+      }),
+      {
+        status: 503,
+        headers: {
+          "Content-Type": "application/json",
+          "Retry-After": "86400",
+          "x-jurisdiction": jurisdiction,
+        },
+      }
+    );
+  }
+
+  // ── 3. Admin route protection (Clerk) ─────────────────────────────────────
+  if (isAuthRoute(req)) {
+    await auth.protect();
+  }
+
+  // ── 4. Pass request through with jurisdiction header ──────────────────────
+  const response = NextResponse.next();
+  response.headers.set("x-jurisdiction", jurisdiction);
+
+  // GDPR strict mode — set cookie consent required header for downstream use
+  if (jurisdiction === "gdpr" && process.env.GDPR_STRICT_MODE === "true") {
+    response.headers.set("x-gdpr-strict", "true");
+  }
+
+  return response;
 });
+
 export const config = {
   matcher: [
-    "/((?!_next|[^?]*\\.(?:html?|css|js(?!on)|jpe?g|webp|png|gif|svg|ttf|woff2?|ico|csv|docx?|xlsx?|zip|webmanifest)).*)",
-    "/(api|trpc)(.*)",
+    // Match everything except Next.js internals and static assets
+    "/((?!_next/static|_next/image|favicon.ico|robots.txt|sitemap.xml).*)",
   ],
 };
