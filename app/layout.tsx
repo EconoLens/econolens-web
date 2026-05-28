@@ -1,18 +1,6 @@
 import type { Metadata } from "next";
-import { Inter, Merriweather } from "next/font/google";
 import { ClerkProvider } from "@clerk/nextjs";
 import "./globals.css";
-
-const inter = Inter({
-  subsets: ["latin"],
-  variable: "--font-inter",
-});
-
-const merriweather = Merriweather({
-  weight: ["400", "700"],
-  subsets: ["latin"],
-  variable: "--font-merriweather",
-});
 
 export const metadata: Metadata = {
   title: "EconoLens — Economics News & Analysis",
@@ -28,7 +16,16 @@ export default function RootLayout({
 }) {
   return (
     <ClerkProvider>
-      <html lang="en" className={`${inter.variable} ${merriweather.variable}`}>
+      <html lang="en">
+        <head>
+          {/* Load Google Fonts at runtime in browser */}
+          <link rel="preconnect" href="https://fonts.googleapis.com" />
+          <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="" />
+          <link
+            rel="stylesheet"
+            href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Merriweather:ital,wght@0,400;0,700;1,400&display=swap"
+          />
+        </head>
         <body className="bg-white text-gray-900 font-sans antialiased">
           {children}
         </body>
