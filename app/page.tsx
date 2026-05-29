@@ -93,7 +93,7 @@ export default async function Home() {
             <>
               <div className="flex items-center justify-between mb-8">
                 <h3 className="text-xs font-bold tracking-widest text-gray-400 uppercase">Latest Analysis</h3>
-                <Link href="/articles" className="text-sm text-gray-500 hover:text-black">View all -&gt;</Link>
+                <Link href="/articles" className="text-sm text-gray-500 hover:text-black">View all →</Link>
               </div>
               <div className="grid md:grid-cols-3 gap-10">
                 {recent.map((article: any) => (
@@ -143,7 +143,7 @@ export default async function Home() {
       {/* Footer */}
       <footer className="border-t border-gray-200 py-8 px-6">
         <div className="max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
-          <p className="text-sm text-gray-400">© 2026 EconoLens. All rights reserved.</p>
+          <p className="text-sm text-gray-400">Â© 2026 EconoLens. All rights reserved.</p>
           <div className="flex gap-6 text-sm text-gray-500">
             <Link href="/about" className="hover:text-black">About</Link>
             <Link href="/pricing" className="hover:text-black">Pricing</Link>
