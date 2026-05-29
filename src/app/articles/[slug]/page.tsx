@@ -1,3 +1,5 @@
+export const dynamic = 'force-dynamic';
+
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { fetchArticles, formatDate, slugify, stripHtml } from "@/lib/articles";
@@ -10,7 +12,7 @@ function buildBody(description: string): string {
   const base = stripHtml(description);
   const filler = [
     "India-specific context: this development matters for households and firms in the near term. Inflation expectations, the policy rate stance, and the currency channel each translate global shocks into local outcomes.",
-    "Markets read the data through three lenses — fiscal balance, monetary stance, and external sector resilience. The RBI's reaction function weighs growth-inflation trade-offs while watching crude, the rupee, and global capital flows.",
+    "Markets read the data through three lenses â fiscal balance, monetary stance, and external sector resilience. The RBI's reaction function weighs growth-inflation trade-offs while watching crude, the rupee, and global capital flows.",
     "What to watch next: high-frequency indicators including GST collections, e-way bills, manufacturing PMI, and credit growth often signal direction ahead of the next official release. The bond market typically prices in expectations several weeks before policy meetings.",
     "Implications for investors and policymakers depend on the persistence of the trend. A single print rarely changes the trajectory, but a confluence of signals across CPI, IIP, and external accounts can shift the consensus call.",
   ];
@@ -45,12 +47,12 @@ export default async function ArticlePage({
   return (
     <main className="mx-auto max-w-3xl px-6 py-16">
       <Link href="/articles" className="text-sm text-neutral-600 hover:text-neutral-900">
-        ← All articles
+        â All articles
       </Link>
 
       <header className="mt-6 border-b border-neutral-200 pb-8">
         <p className="text-xs font-medium uppercase tracking-wider text-neutral-500">
-          AI-assisted · Source: Economic Times
+          AI-assisted Â· Source: Economic Times
         </p>
         <h1 className="mt-3 text-4xl font-semibold tracking-tight text-neutral-900">
           {title}
