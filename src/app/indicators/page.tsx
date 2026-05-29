@@ -1,3 +1,5 @@
+export const dynamic = 'force-dynamic';
+
 import { headers } from "next/headers";
 
 export const revalidate = 3600;
@@ -41,7 +43,7 @@ async function loadIndicators(): Promise<{ indicators: IndicatorRow[]; error: st
 }
 
 function formatValue(value: number | null, unit: string): string {
-  if (value === null || Number.isNaN(value)) return "—";
+  if (value === null || Number.isNaN(value)) return "â";
   if (unit === "USD" && Math.abs(value) >= 1_000_000_000) {
     return `$${(value / 1_000_000_000).toFixed(2)}B`;
   }
@@ -56,7 +58,7 @@ function changeStr(value: number | null, previous: number | null): {
   positive: boolean | null;
 } {
   if (value === null || previous === null || previous === 0) {
-    return { text: "—", positive: null };
+    return { text: "â", positive: null };
   }
   const pct = ((value - previous) / Math.abs(previous)) * 100;
   const sign = pct >= 0 ? "+" : "";
