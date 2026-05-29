@@ -3,10 +3,8 @@ export const dynamic = 'force-dynamic';
 import Link from "next/link";
 import { fetchArticles, formatDate, slugify, stripHtml } from "@/lib/articles";
 
-export const dynamic = "force-dynamic";
-
 export const metadata = {
-  title: "Articles â EconoLens",
+  title: "Articles – EconoLens",
 };
 
 export default async function ArticlesPage() {
