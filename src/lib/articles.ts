@@ -1,5 +1,3 @@
-import { headers } from "next/headers";
-
 export type Article = {
   title: string;
   link: string;
@@ -18,15 +16,16 @@ export function slugify(text: string): string {
 }
 
 function getBaseUrl(): string {
-  const h = headers();
-  const host = h.get("host") ?? "localhost:3000";
-  const proto = h.get("x-forwarded-proto") ?? (host.startsWith("localhost") ? "http" : "https");
-  return `${proto}://${host}`;
+  // Use env var at runtime; fall back to production URL
+  if (process.env.NEXT_PUBLIC_BASE_URL) return process.env.NEXT_PUBLIC_BASE_URL;
+  if (typeof window !== "undefined") return "";
+  return "https://econolens.co.in";
 }
 
 export async function fetchArticles(): Promise<Article[]> {
   try {
-    const res = await fetch(`${getBaseUrl()}/api/news`, { cache: "no-store" });
+    const base = getBaseUrl();
+    const res = await fetch(`${base}/api/news`, { cache: "no-store" });
     if (!res.ok) return [];
     const data = await res.json();
     return Array.isArray(data) ? (data as Article[]) : [];
@@ -39,11 +38,7 @@ export function formatDate(pubDate: string): string {
   if (!pubDate) return "";
   const d = new Date(pubDate);
   if (Number.isNaN(d.getTime())) return pubDate;
-  return d.toLocaleDateString("en-IN", {
-    year: "numeric",
-    month: "short",
-    day: "numeric",
-  });
+  return d.toLocaleDateString("en-IN", { year: "numeric", month: "short", day: "numeric" });
 }
 
 export function stripHtml(text: string): string {
