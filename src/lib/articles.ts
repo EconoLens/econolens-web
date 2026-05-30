@@ -3,6 +3,8 @@ export type Article = {
   link: string;
   pubDate: string;
   description: string;
+  source?: string;
+  category?: string;
 };
 
 export function slugify(text: string): string {
@@ -16,7 +18,6 @@ export function slugify(text: string): string {
 }
 
 function getBaseUrl(): string {
-  // Use env var at runtime; fall back to production URL
   if (process.env.NEXT_PUBLIC_BASE_URL) return process.env.NEXT_PUBLIC_BASE_URL;
   if (typeof window !== "undefined") return "";
   return "https://econolens.co.in";
