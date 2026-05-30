@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Inter, Cormorant_Garamond, Karla, Space_Mono } from "next/font/google";
 import "./globals.css";
 import { ClerkProvider } from "@clerk/nextjs";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 
 const cormorant = Cormorant_Garamond({
   subsets: ["latin"],
@@ -74,6 +75,8 @@ export default function RootLayout({
 
           {/* Main content */}
           <main>{children}</main>
+
+          <SpeedInsights />
 
           {/* Footer */}
           <footer className="site-footer">
