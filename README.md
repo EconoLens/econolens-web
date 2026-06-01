@@ -15,3 +15,4 @@ claude
 ```
 
 See `CLAUDE.md` for full build instructions.
+<!-- build trigger: fix tsconfig paths, tailwind paths, duplicate configs -->
