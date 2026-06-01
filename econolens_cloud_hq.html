@@ -1,0 +1,1060 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EconoLens — Cloud HQ Operations Centre</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Mono:wght@400;500&family=DM+Sans:wght@300;400;500;600&display=swap');
+:root{
+  --bg:#04040f;--s1:#08081c;--s2:#0d0d24;--card:#10102a;--card2:#161632;
+  --border:#1e1e42;--b2:#252550;--text:#ddddf5;--muted:#5050a0;--dim:#2a2a5a;
+  --ceo:#ffd700;--coo:#ff6b2b;--cto:#00cfff;--cmo:#ff3399;--cfo:#00e87a;
+  --cpo:#9933ff;--cco:#ff8833;--cso:#00ffcc;--chro:#ffaa00;
+  --tech:#4488ff;--mkt:#ff3399;--fin:#00e87a;--content:#44dd99;--ai:#00ffcc;
+  --make:#ff6b2b;--notion:#ffffff;--vercel:#ffffff;--github:#ffffff;
+  --pulse: rgba(255,215,0,0.15);
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;font-size:13px;min-height:100vh;overflow-x:hidden;}
+
+/* HEADER */
+.hdr{background:linear-gradient(180deg,#0a0a22,var(--bg));border-bottom:1px solid var(--border);padding:0 28px;position:sticky;top:0;z-index:300;}
+.hdr-inner{max-width:1700px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;height:54px;}
+.logo{display:flex;align-items:center;gap:10px;}
+.logo-box{width:34px;height:34px;background:linear-gradient(135deg,var(--ceo),#ff8800);border-radius:8px;display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-size:14px;font-weight:800;color:#000;letter-spacing:1px;}
+.logo-text{font-family:'Syne',sans-serif;font-size:18px;font-weight:800;letter-spacing:1px;}
+.logo-sub{font-size:9px;color:var(--muted);font-family:'DM Mono',monospace;letter-spacing:1px;margin-top:1px;}
+.hdr-status{display:flex;gap:8px;flex-wrap:wrap;align-items:center;}
+.status-pill{font-family:'DM Mono',monospace;font-size:9px;font-weight:500;padding:3px 10px;border-radius:20px;letter-spacing:.5px;display:flex;align-items:center;gap:5px;}
+.dot{width:6px;height:6px;border-radius:50%;animation:pulse 2s infinite;}
+@keyframes pulse{0%,100%{opacity:1;}50%{opacity:.4;}}
+.s-green{background:rgba(0,232,122,.1);color:var(--cfo);border:1px solid rgba(0,232,122,.25);}
+.s-gold{background:rgba(255,215,0,.1);color:var(--ceo);border:1px solid rgba(255,215,0,.25);}
+.s-blue{background:rgba(0,207,255,.1);color:var(--cto);border:1px solid rgba(0,207,255,.25);}
+
+/* NAV */
+.nav{background:var(--s1);border-bottom:1px solid var(--border);padding:0 28px;overflow-x:auto;scrollbar-width:none;}
+.nav::-webkit-scrollbar{display:none;}
+.nav-inner{max-width:1700px;margin:0 auto;display:flex;}
+.ntab{font-family:'DM Mono',monospace;font-size:10px;font-weight:500;padding:12px 14px;cursor:pointer;color:var(--muted);border-bottom:2px solid transparent;white-space:nowrap;background:none;border-top:none;border-left:none;border-right:none;letter-spacing:.5px;transition:all .2s;}
+.ntab:hover{color:var(--text);}
+.ntab.active{color:var(--ceo);border-bottom-color:var(--ceo);}
+
+/* MAIN */
+.main{max-width:1700px;margin:0 auto;padding:28px;}
+.pane{display:none;animation:fadein .3s ease;}
+.pane.active{display:block;}
+@keyframes fadein{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:none;}}
+
+/* HERO STATS ROW */
+.stats-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px;margin-bottom:24px;}
+.stat-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:14px 16px;}
+.stat-num{font-family:'Syne',sans-serif;font-size:26px;font-weight:800;line-height:1;}
+.stat-lbl{font-size:10px;color:var(--muted);margin-top:3px;font-family:'DM Mono',monospace;letter-spacing:.5px;}
+.stat-sub{font-size:10px;margin-top:4px;}
+
+/* CLOUD ARCHITECTURE MAP */
+.cloud-map{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:24px;margin-bottom:24px;overflow-x:auto;}
+.cloud-title{font-family:'Syne',sans-serif;font-size:13px;font-weight:700;letter-spacing:2px;color:var(--muted);text-transform:uppercase;margin-bottom:20px;}
+.cloud-layers{display:flex;flex-direction:column;gap:16px;min-width:900px;}
+.cloud-layer{display:flex;align-items:center;gap:12px;}
+.layer-label{font-family:'DM Mono',monospace;font-size:9px;color:var(--muted);letter-spacing:1.5px;text-transform:uppercase;width:80px;flex-shrink:0;text-align:right;}
+.layer-line{flex:1;display:flex;align-items:center;gap:8px;padding:10px 14px;border-radius:10px;border:1px solid var(--border);}
+.tool-chip{font-family:'DM Mono',monospace;font-size:10px;padding:4px 10px;border-radius:6px;white-space:nowrap;display:flex;align-items:center;gap:5px;cursor:default;}
+.tc-arrow{color:var(--muted);font-size:12px;flex-shrink:0;}
+.flow-arrow{font-family:'DM Mono',monospace;font-size:10px;color:var(--muted);}
+
+/* EMPLOYEE GRID */
+.emp-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:14px;}
+.emp-card{background:var(--card);border:1px solid var(--border);border-radius:14px;overflow:hidden;transition:border-color .2s,transform .2s;}
+.emp-card:hover{border-color:var(--b2);transform:translateY(-2px);}
+.emp-top{padding:14px 16px;display:flex;align-items:flex-start;gap:12px;border-bottom:1px solid var(--border);}
+.emp-avatar{width:44px;height:44px;border-radius:11px;display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0;}
+.emp-id{font-family:'DM Mono',monospace;font-size:8px;color:var(--muted);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:2px;}
+.emp-name{font-family:'Syne',sans-serif;font-size:15px;font-weight:700;line-height:1.1;margin-bottom:2px;}
+.emp-role{font-size:10px;color:var(--muted);}
+.emp-body{padding:12px 16px;}
+.emp-section{font-family:'DM Mono',monospace;font-size:8px;color:var(--muted);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:6px;margin-top:10px;}
+.emp-section:first-child{margin-top:0;}
+.emp-tools{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:4px;}
+.emp-tool{font-family:'DM Mono',monospace;font-size:9px;padding:2px 8px;border-radius:5px;border:1px solid var(--border);background:var(--card2);color:var(--muted);}
+.emp-duties{display:flex;flex-direction:column;gap:4px;}
+.emp-duty{font-size:11px;color:#8888b8;padding-left:12px;position:relative;line-height:1.45;}
+.emp-duty::before{content:'▸';position:absolute;left:0;color:var(--dim);font-size:8px;top:2px;}
+.emp-cowork{margin-top:6px;}
+.cowork-task{font-size:10.5px;color:#6666a8;background:rgba(255,215,0,.04);border:1px solid rgba(255,215,0,.12);border-radius:6px;padding:6px 9px;margin-bottom:4px;display:flex;gap:7px;align-items:flex-start;line-height:1.4;}
+.cowork-icon{flex-shrink:0;font-size:11px;}
+.emp-footer{padding:8px 16px;border-top:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;background:rgba(255,255,255,.01);}
+.emp-reports{font-size:10px;color:var(--muted);font-family:'DM Mono',monospace;}
+.emp-phase{font-family:'DM Mono',monospace;font-size:9px;font-weight:500;}
+
+/* FLOW DIAGRAM */
+.flow-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:20px;margin-bottom:16px;overflow-x:auto;}
+.flow-head{font-family:'Syne',sans-serif;font-size:14px;font-weight:700;letter-spacing:1px;margin-bottom:4px;}
+.flow-desc{font-size:11px;color:var(--muted);margin-bottom:16px;}
+.flow-steps{display:flex;flex-direction:column;gap:6px;}
+.flow-step{display:flex;align-items:center;gap:10px;padding:7px 12px;background:var(--card2);border-radius:8px;border-left:3px solid var(--border);}
+.step-num{font-family:'DM Mono',monospace;font-size:9px;color:var(--muted);width:20px;flex-shrink:0;}
+.step-text{font-size:11.5px;color:#9090c0;flex:1;}
+.step-tool{font-family:'DM Mono',monospace;font-size:9px;padding:2px 7px;border-radius:4px;white-space:nowrap;}
+
+/* TASK CALENDAR */
+.cal-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:12px;}
+.cal-card{background:var(--card);border:1px solid var(--border);border-radius:12px;overflow:hidden;}
+.cal-head{padding:10px 14px;display:flex;align-items:center;gap:8px;border-bottom:1px solid var(--border);}
+.cal-freq{font-family:'DM Mono',monospace;font-size:9px;font-weight:500;padding:2px 8px;border-radius:5px;text-transform:uppercase;letter-spacing:.5px;}
+.cal-title{font-family:'Syne',sans-serif;font-size:13px;font-weight:700;}
+.cal-body{padding:10px 14px;}
+.cal-row{display:flex;align-items:baseline;gap:8px;margin-bottom:5px;font-size:11px;}
+.cal-time{font-family:'DM Mono',monospace;font-size:9px;color:var(--muted);width:55px;flex-shrink:0;}
+.cal-task{color:#8888b8;flex:1;}
+.cal-owner{font-family:'DM Mono',monospace;font-size:9px;margin-top:6px;padding:4px 8px;background:var(--card2);border-radius:5px;display:inline-block;}
+
+/* SECTION HEADER */
+.sec-hd{display:flex;align-items:center;gap:12px;margin-bottom:20px;padding-bottom:14px;border-bottom:1px solid var(--border);}
+.sec-icon{width:38px;height:38px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;}
+.sec-title{font-family:'Syne',sans-serif;font-size:20px;font-weight:800;letter-spacing:1px;}
+.sec-sub{color:var(--muted);font-size:11px;margin-top:2px;}
+.notice{background:rgba(255,215,0,.05);border:1px solid rgba(255,215,0,.2);border-radius:10px;padding:12px 16px;font-size:12px;color:#d4b86a;margin-bottom:20px;display:flex;gap:10px;line-height:1.5;}
+
+/* BADGE */
+.badge{font-family:'DM Mono',monospace;font-size:8px;font-weight:500;padding:2px 7px;border-radius:4px;text-transform:uppercase;letter-spacing:.5px;}
+.b-gold{background:rgba(255,215,0,.12);color:var(--ceo);}
+.b-blue{background:rgba(0,207,255,.12);color:var(--cto);}
+.b-pink{background:rgba(255,51,153,.12);color:var(--cmo);}
+.b-green{background:rgba(0,232,122,.12);color:var(--cfo);}
+.b-purple{background:rgba(153,51,255,.12);color:var(--cpo);}
+.b-ora{background:rgba(255,136,51,.12);color:var(--cco);}
+.b-teal{background:rgba(0,255,204,.12);color:var(--cso);}
+.b-ai{background:rgba(0,255,204,.12);color:var(--ai);}
+.b-dev{background:rgba(68,136,255,.12);color:var(--tech);}
+
+/* DEPT GROUP */
+.dept-grp{margin-bottom:32px;}
+.dept-hd{display:flex;align-items:center;gap:10px;padding:10px 16px;border-radius:10px;margin-bottom:14px;border:1px solid;}
+.dept-hd-title{font-family:'Syne',sans-serif;font-size:15px;font-weight:700;letter-spacing:1px;}
+.dept-hd-count{font-family:'DM Mono',monospace;font-size:10px;margin-left:auto;color:var(--muted);}
+
+/* INTERLINK MAP */
+.ilink-box{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:24px;margin-bottom:20px;}
+.ilink-row{display:flex;align-items:center;gap:0;margin-bottom:8px;flex-wrap:wrap;}
+.ilink-node{font-family:'DM Mono',monospace;font-size:10px;padding:5px 12px;border-radius:7px;border:1px solid var(--border);background:var(--card2);white-space:nowrap;}
+.ilink-arr{color:var(--muted);font-size:14px;padding:0 6px;flex-shrink:0;}
+.ilink-label{font-size:10px;color:var(--muted);font-family:'DM Mono',monospace;padding:0 4px;}
+.ilink-divider{width:100%;height:1px;background:var(--border);margin:12px 0;}
+.ilink-caption{font-family:'DM Mono',monospace;font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:8px;}
+
+@media(max-width:768px){.main{padding:16px;}.emp-grid{grid-template-columns:1fr;}.stats-row{grid-template-columns:repeat(2,1fr);}}</style>
+</head>
+<body>
+
+<div class="hdr">
+  <div class="hdr-inner">
+    <div class="logo">
+      <div class="logo-box">EL</div>
+      <div>
+        <div class="logo-text">EconoLens Cloud HQ</div>
+        <div class="logo-sub">OPERATIONS COMMAND CENTRE — 52 AI EMPLOYEES — ALL INTERLINKED</div>
+      </div>
+    </div>
+    <div class="hdr-status">
+      <div class="status-pill s-green"><div class="dot" style="background:var(--cfo)"></div>PIPELINES ACTIVE</div>
+      <div class="status-pill s-gold"><div class="dot" style="background:var(--ceo)"></div>52 AI EMPLOYEES</div>
+      <div class="status-pill s-blue"><div class="dot" style="background:var(--cto)"></div>CLOUD OFFICE LIVE</div>
+    </div>
+  </div>
+</div>
+
+<div class="nav">
+  <div class="nav-inner">
+    <button class="ntab active" onclick="show('overview')">🏢 CLOUD OVERVIEW</button>
+    <button class="ntab" onclick="show('csuite')">👑 C-SUITE</button>
+    <button class="ntab" onclick="show('tech')">💻 TECH (18)</button>
+    <button class="ntab" onclick="show('marketing')">📈 MARKETING</button>
+    <button class="ntab" onclick="show('finance')">💰 FINANCE</button>
+    <button class="ntab" onclick="show('product')">🎯 PRODUCT</button>
+    <button class="ntab" onclick="show('content')">✍️ CONTENT OPS</button>
+    <button class="ntab" onclick="show('flows')">⚡ AUTO FLOWS</button>
+    <button class="ntab" onclick="show('cowork')">🖥️ COWORK TASKS</button>
+    <button class="ntab" onclick="show('calendar')">📅 TASK CALENDAR</button>
+    <button class="ntab" onclick="show('interlinks')">🔗 INTERLINKS</button>
+  </div>
+</div>
+
+<div class="main">
+
+<!-- ═══ CLOUD OVERVIEW ═══ -->
+<div id="pane-overview" class="pane active">
+  <div class="sec-hd"><div class="sec-icon" style="background:rgba(255,215,0,.08)">🏢</div><div><div class="sec-title">THE ECONOLENS CLOUD OFFICE</div><div class="sec-sub">One unified cloud infrastructure — every AI employee linked, every workflow automated, zero silos</div></div></div>
+
+  <div class="stats-row">
+    <div class="stat-card" style="border-top:2px solid var(--ceo)"><div class="stat-num" style="color:var(--ceo)">52</div><div class="stat-lbl">AI EMPLOYEES</div><div class="stat-sub" style="color:var(--muted)">All linked to Cloud HQ</div></div>
+    <div class="stat-card" style="border-top:2px solid var(--cto)"><div class="stat-num" style="color:var(--cto)">5</div><div class="stat-lbl">AUTO FLOWS</div><div class="stat-sub" style="color:var(--muted)">Make.com pipelines</div></div>
+    <div class="stat-card" style="border-top:2px solid var(--coo)"><div class="stat-num" style="color:var(--coo)">30</div><div class="stat-lbl">ARTICLES/DAY</div><div class="stat-sub" style="color:var(--muted)">Fully automated</div></div>
+    <div class="stat-card" style="border-top:2px solid var(--cfo)"><div class="stat-num" style="color:var(--cfo)">99.9%</div><div class="stat-lbl">UPTIME TARGET</div><div class="stat-sub" style="color:var(--muted)">Uptime Robot monitoring</div></div>
+    <div class="stat-card" style="border-top:2px solid var(--cmo)"><div class="stat-num" style="color:var(--cmo)">24/7</div><div class="stat-lbl">OPERATIONS</div><div class="stat-sub" style="color:var(--muted)">RSS polls every 15 min</div></div>
+    <div class="stat-card" style="border-top:2px solid var(--ai)"><div class="stat-num" style="color:var(--ai)">₹1,450</div><div class="stat-lbl">MAX API COST/MO</div><div class="stat-sub" style="color:var(--muted)">Prompt caching active</div></div>
+    <div class="stat-card" style="border-top:2px solid var(--cpo)"><div class="stat-num" style="color:var(--cpo)">30</div><div class="stat-lbl">SERVICES MAP</div><div class="stat-sub" style="color:var(--muted)">3 phases, all tracked</div></div>
+    <div class="stat-card" style="border-top:2px solid var(--cso)"><div class="stat-num" style="color:var(--cso)">1</div><div class="stat-lbl">SOURCE OF TRUTH</div><div class="stat-sub" style="color:var(--muted)">CLAUDE.md v2.0</div></div>
+  </div>
+
+  <!-- CLOUD ARCHITECTURE MAP -->
+  <div class="cloud-map">
+    <div class="cloud-title">// CLOUD INFRASTRUCTURE LAYERS — HOW ALL TOOLS CONNECT</div>
+    <div class="cloud-layers">
+      <div class="cloud-layer">
+        <div class="layer-label">BRAIN</div>
+        <div class="layer-line" style="background:rgba(255,215,0,.04);border-color:rgba(255,215,0,.2);">
+          <div class="tool-chip" style="background:rgba(255,215,0,.1);color:var(--ceo);border:1px solid rgba(255,215,0,.3);">🧠 CLAUDE.md v2.0</div>
+          <div class="tc-arrow">→</div>
+          <div class="tool-chip" style="background:rgba(255,255,255,.05);color:#aaa;border:1px solid var(--border);">📋 Claude.ai Projects</div>
+          <div class="tc-arrow">→</div>
+          <div class="tool-chip" style="background:rgba(255,255,255,.05);color:#aaa;border:1px solid var(--border);">💻 Claude Code</div>
+          <div class="tc-arrow">→</div>
+          <div class="tool-chip" style="background:rgba(255,255,255,.05);color:#aaa;border:1px solid var(--border);">🖥️ Claude Cowork</div>
+          <div class="tc-arrow">→</div>
+          <span style="font-size:10px;color:var(--muted);font-family:'DM Mono',monospace;">All tools read this single file</span>
+        </div>
+      </div>
+      <div class="cloud-layer">
+        <div class="layer-label">CORE</div>
+        <div class="layer-line" style="background:rgba(0,207,255,.03);border-color:rgba(0,207,255,.15);">
+          <div class="tool-chip" style="background:rgba(255,255,255,.08);color:var(--cto);border:1px solid rgba(0,207,255,.25);">▲ Vercel</div>
+          <div class="tc-arrow">↔</div>
+          <div class="tool-chip" style="background:rgba(255,255,255,.08);color:var(--cto);border:1px solid rgba(0,207,255,.25);">⬡ Cloudflare</div>
+          <div class="tc-arrow">↔</div>
+          <div class="tool-chip" style="background:rgba(255,255,255,.08);color:var(--cto);border:1px solid rgba(0,207,255,.25);">◯ GitHub</div>
+          <div class="tc-arrow">↔</div>
+          <div class="tool-chip" style="background:rgba(255,255,255,.08);color:var(--cto);border:1px solid rgba(0,207,255,.25);">◈ Supabase</div>
+          <div class="tc-arrow">↔</div>
+          <div class="tool-chip" style="background:rgba(255,255,255,.08);color:var(--cto);border:1px solid rgba(0,207,255,.25);">◻ Sanity</div>
+          <div class="tc-arrow">↔</div>
+          <div class="tool-chip" style="background:rgba(255,255,255,.08);color:var(--cto);border:1px solid rgba(0,207,255,.25);">🔑 1Password</div>
+        </div>
+      </div>
+      <div class="cloud-layer">
+        <div class="layer-label">AUTOMATION</div>
+        <div class="layer-line" style="background:rgba(255,107,43,.03);border-color:rgba(255,107,43,.15);">
+          <div class="tool-chip" style="background:rgba(255,107,43,.1);color:var(--coo);border:1px solid rgba(255,107,43,.3);">⚙ Make.com (5 flows)</div>
+          <div class="tc-arrow">→</div>
+          <div class="tool-chip" style="background:rgba(255,255,255,.05);color:#aaa;border:1px solid var(--border);">📡 Feedly RSS</div>
+          <div class="tc-arrow">→</div>
+          <div class="tool-chip" style="background:rgba(0,255,204,.08);color:var(--ai);border:1px solid rgba(0,255,204,.2);">🤖 Claude API</div>
+          <div class="tc-arrow">→</div>
+          <div class="tool-chip" style="background:rgba(255,255,255,.05);color:#aaa;border:1px solid var(--border);">✓ Copyscape</div>
+          <div class="tc-arrow">→</div>
+          <div class="tool-chip" style="background:rgba(255,255,255,.05);color:#aaa;border:1px solid var(--border);">📝 Sanity</div>
+          <div class="tc-arrow">→</div>
+          <div class="tool-chip" style="background:rgba(255,255,255,.05);color:#aaa;border:1px solid var(--border);">📱 Buffer</div>
+          <div class="tc-arrow">+</div>
+          <div class="tool-chip" style="background:rgba(255,255,255,.05);color:#aaa;border:1px solid var(--border);">📧 Beehiiv</div>
+        </div>
+      </div>
+      <div class="cloud-layer">
+        <div class="layer-label">AUTH/PAY</div>
+        <div class="layer-line" style="background:rgba(153,51,255,.03);border-color:rgba(153,51,255,.15);">
+          <div class="tool-chip" style="background:rgba(153,51,255,.1);color:var(--cpo);border:1px solid rgba(153,51,255,.3);">🔐 Clerk</div>
+          <div class="tc-arrow">→</div>
+          <div class="tool-chip" style="background:rgba(255,255,255,.05);color:#aaa;border:1px solid var(--border);">◈ Supabase (role check)</div>
+          <div class="tc-arrow">→</div>
+          <div class="tool-chip" style="background:rgba(0,232,122,.08);color:var(--cfo);border:1px solid rgba(0,232,122,.2);">₹ Razorpay</div>
+          <div class="tc-arrow">/</div>
+          <div class="tool-chip" style="background:rgba(0,232,122,.08);color:var(--cfo);border:1px solid rgba(0,232,122,.2);">$ Stripe</div>
+          <div class="tc-arrow">→</div>
+          <div class="tool-chip" style="background:rgba(255,255,255,.05);color:#aaa;border:1px solid var(--border);">📊 Zoho Books</div>
+          <div class="tc-arrow">→</div>
+          <div class="tool-chip" style="background:rgba(255,255,255,.05);color:#aaa;border:1px solid var(--border);">📈 Wave</div>
+        </div>
+      </div>
+      <div class="cloud-layer">
+        <div class="layer-label">ANALYTICS</div>
+        <div class="layer-line" style="background:rgba(255,51,153,.03);border-color:rgba(255,51,153,.15);">
+          <div class="tool-chip" style="background:rgba(255,51,153,.08);color:var(--cmo);border:1px solid rgba(255,51,153,.2);">📊 GA4</div>
+          <div class="tc-arrow">↔</div>
+          <div class="tool-chip" style="background:rgba(255,51,153,.08);color:var(--cmo);border:1px solid rgba(255,51,153,.2);">🔍 GSC</div>
+          <div class="tc-arrow">↔</div>
+          <div class="tool-chip" style="background:rgba(255,51,153,.08);color:var(--cmo);border:1px solid rgba(255,51,153,.2);">📈 SE Ranking</div>
+          <div class="tc-arrow">↔</div>
+          <div class="tool-chip" style="background:rgba(255,255,255,.05);color:#aaa;border:1px solid var(--border);">🔭 Uptime Robot</div>
+          <div class="tc-arrow">↔</div>
+          <div class="tool-chip" style="background:rgba(255,255,255,.05);color:#aaa;border:1px solid var(--border);">📋 Notion HQ</div>
+          <div class="tc-arrow">→</div>
+          <span style="font-size:10px;color:var(--muted);font-family:'DM Mono',monospace;">CEO Dashboard</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- WHO DOES WHAT QUICK REF -->
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;">
+    <div style="background:var(--card);border:1px solid var(--border);border-radius:12px;padding:16px;">
+      <div style="font-family:'DM Mono',monospace;font-size:9px;color:var(--cto);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:12px;">CLAUDE CODE DOMAIN (never edited by Cowork)</div>
+      <div style="font-family:'DM Mono',monospace;font-size:10px;color:#6666a8;line-height:2;">
+        /app/ — Next.js pages + API routes<br>
+        /components/ — UI components<br>
+        /lib/ — API wrappers + utilities<br>
+        /sanity/ — CMS schema<br>
+        /supabase/migrations/ — DB schema<br>
+        /tests/ — Playwright E2E tests<br>
+        /.github/workflows/ — CI/CD pipeline
+      </div>
+    </div>
+    <div style="background:var(--card);border:1px solid var(--border);border-radius:12px;padding:16px;">
+      <div style="font-family:'DM Mono',monospace;font-size:9px;color:var(--cmo);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:12px;">CLAUDE COWORK DOMAIN (never edited by Code)</div>
+      <div style="font-family:'DM Mono',monospace;font-size:10px;color:#6666a8;line-height:2;">
+        /content/drafts/ — Article drafts<br>
+        /content/newsletter/ — Weekly digest files<br>
+        /content/papers/ — Translated papers<br>
+        /ops/outreach/ — BD email drafts<br>
+        /ops/finance/ — Revenue exports, P&L<br>
+        /ops/legal/ — GST exports, compliance<br>
+        /ops/reports/ — CEO weekly/monthly reports
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ C-SUITE ═══ -->
+<div id="pane-csuite" class="pane">
+  <div class="sec-hd"><div class="sec-icon" style="background:rgba(255,215,0,.08)">👑</div><div><div class="sec-title">C-SUITE — 8 OFFICERS APPOINTED</div><div class="sec-sub">Each officer linked to their AI tools, cloud systems access, and Cowork task assignments</div></div></div>
+  <div class="emp-grid">
+
+    <div class="emp-card" style="border-top:3px solid var(--coo)">
+      <div class="emp-top"><div class="emp-avatar" style="background:rgba(255,107,43,.1)">⚙️</div><div><div class="emp-id">COO-01</div><div class="emp-name">CHIEF OPERATING OFFICER</div><div class="emp-role">Platform orchestration · all 8 departments · 99.9% uptime</div></div><span class="badge b-gold">DAY 1</span></div>
+      <div class="emp-body">
+        <div class="emp-section">AI TOOLS APPOINTED</div>
+        <div class="emp-tools"><span class="emp-tool">Notion AI</span><span class="emp-tool">Make.com</span><span class="emp-tool">Vercel</span><span class="emp-tool">Uptime Robot</span><span class="emp-tool">1Password</span></div>
+        <div class="emp-section">CLOUD ACCESS</div>
+        <div class="emp-tools"><span class="emp-tool" style="color:var(--coo)">All Tier 1 systems (read)</span><span class="emp-tool" style="color:var(--coo)">Make.com (admin)</span><span class="emp-tool" style="color:var(--coo)">Notion (admin)</span></div>
+        <div class="emp-section">DAILY DUTIES</div>
+        <div class="emp-duties">
+          <div class="emp-duty">Check Make.com — all 5 flows must show 100% success rate</div>
+          <div class="emp-duty">Check Uptime Robot — flag any downtime to CEO immediately</div>
+          <div class="emp-duty">Review Notion Ops Log — escalate failures with resolution plan</div>
+        </div>
+        <div class="emp-section">COWORK TASK ASSIGNMENTS</div>
+        <div class="emp-cowork">
+          <div class="cowork-task"><span class="cowork-icon">🔄</span>Daily 08:00 — Check Make.com scenario success rates, log to Notion Ops Log</div>
+          <div class="cowork-task"><span class="cowork-icon">📋</span>Monday — Compile weekly ops report from all department logs for CEO</div>
+          <div class="cowork-task"><span class="cowork-icon">🚨</span>On failure — Create Notion incident report + draft CEO alert immediately</div>
+        </div>
+      </div>
+      <div class="emp-footer"><span class="emp-reports">Reports to: CEO | Oversees: 12 ops staff</span><span class="emp-phase" style="color:var(--coo)">PHASE 1</span></div>
+    </div>
+
+    <div class="emp-card" style="border-top:3px solid var(--cto)">
+      <div class="emp-top"><div class="emp-avatar" style="background:rgba(0,207,255,.1)">💻</div><div><div class="emp-id">CTO-01</div><div class="emp-name">CHIEF TECHNOLOGY OFFICER</div><div class="emp-role">Full-stack architecture · 18 tech roles · PageSpeed 90+ mandate</div></div><span class="badge b-blue">DAY 1</span></div>
+      <div class="emp-body">
+        <div class="emp-section">AI TOOLS APPOINTED</div>
+        <div class="emp-tools"><span class="emp-tool">Claude Code</span><span class="emp-tool">GitHub Copilot</span><span class="emp-tool">Vercel</span><span class="emp-tool">Dependabot</span><span class="emp-tool">Sentry</span></div>
+        <div class="emp-section">CLOUD ACCESS</div>
+        <div class="emp-tools"><span class="emp-tool" style="color:var(--cto)">GitHub (admin)</span><span class="emp-tool" style="color:var(--cto)">Vercel (admin)</span><span class="emp-tool" style="color:var(--cto)">Supabase (admin)</span><span class="emp-tool" style="color:var(--cto)">1Password (admin)</span></div>
+        <div class="emp-section">DAILY DUTIES</div>
+        <div class="emp-duties">
+          <div class="emp-duty">Review GitHub PRs + Dependabot alerts (critical CVE = 24h patch)</div>
+          <div class="emp-duty">Enforce: TypeScript, Tailwind, App Router, prompt caching on all Claude calls</div>
+          <div class="emp-duty">Monitor Vercel build logs + Lighthouse CI scores</div>
+        </div>
+        <div class="emp-section">CLAUDE CODE STANDING ORDERS</div>
+        <div class="emp-cowork">
+          <div class="cowork-task"><span class="cowork-icon">📖</span>Always read CLAUDE.md before every new build session</div>
+          <div class="cowork-task"><span class="cowork-icon">🔑</span>Never commit .env files — all keys via Vercel env vars only</div>
+          <div class="cowork-task"><span class="cowork-icon">✅</span>Every commit: conventional format (feat:/fix:/chore:/docs:)</div>
+        </div>
+      </div>
+      <div class="emp-footer"><span class="emp-reports">Reports to: CEO | Oversees: 18 tech roles</span><span class="emp-phase" style="color:var(--cto)">PHASE 1</span></div>
+    </div>
+
+    <div class="emp-card" style="border-top:3px solid var(--cmo)">
+      <div class="emp-top"><div class="emp-avatar" style="background:rgba(255,51,153,.1)">📈</div><div><div class="emp-id">CMO-01</div><div class="emp-name">CHIEF MARKETING OFFICER</div><div class="emp-role">SEO · social · newsletter · 50k sessions/mo by Month 10</div></div><span class="badge b-pink">DAY 1</span></div>
+      <div class="emp-body">
+        <div class="emp-section">AI TOOLS APPOINTED</div>
+        <div class="emp-tools"><span class="emp-tool">SE Ranking</span><span class="emp-tool">Semrush (Ph2)</span><span class="emp-tool">Buffer</span><span class="emp-tool">Beehiiv</span><span class="emp-tool">GA4</span></div>
+        <div class="emp-section">CLOUD ACCESS</div>
+        <div class="emp-tools"><span class="emp-tool" style="color:var(--cmo)">SE Ranking (admin)</span><span class="emp-tool" style="color:var(--cmo)">Buffer (admin)</span><span class="emp-tool" style="color:var(--cmo)">GA4 (admin)</span><span class="emp-tool" style="color:var(--cmo)">Beehiiv (admin)</span></div>
+        <div class="emp-section">COWORK TASK ASSIGNMENTS</div>
+        <div class="emp-cowork">
+          <div class="cowork-task"><span class="cowork-icon">🔍</span>Daily — Check SE Ranking for positions 11-20, log to Notion SEO Tracker</div>
+          <div class="cowork-task"><span class="cowork-icon">📊</span>Weekly Mon — Generate GA4 traffic report vs last week for CEO dashboard</div>
+          <div class="cowork-task"><span class="cowork-icon">📧</span>Monthly — Pull full keyword rank movement, identify top 10 content priorities</div>
+        </div>
+      </div>
+      <div class="emp-footer"><span class="emp-reports">Reports to: CEO | Oversees: 12 marketing roles</span><span class="emp-phase" style="color:var(--cmo)">PHASE 1</span></div>
+    </div>
+
+    <div class="emp-card" style="border-top:3px solid var(--cfo)">
+      <div class="emp-top"><div class="emp-avatar" style="background:rgba(0,232,122,.1)">💰</div><div><div class="emp-id">CFO-01</div><div class="emp-name">CHIEF FINANCIAL OFFICER</div><div class="emp-role">Revenue tracking · GST · break-even 29 subs · 6-stream model</div></div><span class="badge b-green">DAY 1</span></div>
+      <div class="emp-body">
+        <div class="emp-section">AI TOOLS APPOINTED</div>
+        <div class="emp-tools"><span class="emp-tool">Wave</span><span class="emp-tool">Zoho Books</span><span class="emp-tool">Gemini Sheets</span><span class="emp-tool">Stripe</span><span class="emp-tool">Razorpay</span></div>
+        <div class="emp-section">CLOUD ACCESS</div>
+        <div class="emp-tools"><span class="emp-tool" style="color:var(--cfo)">Wave (admin)</span><span class="emp-tool" style="color:var(--cfo)">Zoho Books (admin)</span><span class="emp-tool" style="color:var(--cfo)">Stripe (admin)</span><span class="emp-tool" style="color:var(--cfo)">Razorpay (admin)</span></div>
+        <div class="emp-section">COWORK TASK ASSIGNMENTS</div>
+        <div class="emp-cowork">
+          <div class="cowork-task"><span class="cowork-icon">💳</span>Daily — Log Stripe+Razorpay new subs count to Notion Revenue Tracker</div>
+          <div class="cowork-task"><span class="cowork-icon">📑</span>Monthly last Fri — Compile P&L from Wave+Stripe, paste to Notion Finance</div>
+          <div class="cowork-task"><span class="cowork-icon">🧾</span>Quarterly — Export Zoho Books GST report, save to /ops/legal/gst-[Q].pdf for CA</div>
+        </div>
+      </div>
+      <div class="emp-footer"><span class="emp-reports">Reports to: CEO | Oversees: 8 finance roles</span><span class="emp-phase" style="color:var(--cfo)">PHASE 1</span></div>
+    </div>
+
+    <div class="emp-card" style="border-top:3px solid var(--cpo)">
+      <div class="emp-top"><div class="emp-avatar" style="background:rgba(153,51,255,.1)">🎯</div><div><div class="emp-id">CPO-01</div><div class="emp-name">CHIEF PRODUCT OFFICER</div><div class="emp-role">30-service roadmap · subscriptions · UX benchmark · Phase delivery</div></div><span class="badge b-purple">PHASE 1</span></div>
+      <div class="emp-body">
+        <div class="emp-section">AI TOOLS APPOINTED</div>
+        <div class="emp-tools"><span class="emp-tool">Claude Projects</span><span class="emp-tool">Notion AI</span><span class="emp-tool">GA4</span><span class="emp-tool">Hotjar (Ph2)</span></div>
+        <div class="emp-section">COWORK TASK ASSIGNMENTS</div>
+        <div class="emp-cowork">
+          <div class="cowork-task"><span class="cowork-icon">🗺️</span>Weekly Mon — Update sprint board in Notion: mark done, set next 5 services</div>
+          <div class="cowork-task"><span class="cowork-icon">📋</span>Per feature — Write spec in Notion: goal, user story, acceptance criteria, test cases</div>
+          <div class="cowork-task"><span class="cowork-icon">📊</span>Monthly — Pull GA4 session duration vs 4-min target, report to CEO</div>
+        </div>
+      </div>
+      <div class="emp-footer"><span class="emp-reports">Reports to: CEO | Oversees: 6 product roles</span><span class="emp-phase" style="color:var(--cpo)">PHASE 1</span></div>
+    </div>
+
+    <div class="emp-card" style="border-top:3px solid var(--cco)">
+      <div class="emp-top"><div class="emp-avatar" style="background:rgba(255,136,51,.1)">✍️</div><div><div class="emp-id">CCO-01</div><div class="emp-name">CHIEF CONTENT OFFICER</div><div class="emp-role">30 articles/day · EEAT · zero plagiarism · 3-layer architecture</div></div><span class="badge b-ora">DAY 1</span></div>
+      <div class="emp-body">
+        <div class="emp-section">AI TOOLS APPOINTED</div>
+        <div class="emp-tools"><span class="emp-tool">Claude API</span><span class="emp-tool">Feedly</span><span class="emp-tool">Copyscape</span><span class="emp-tool">Sanity CMS</span><span class="emp-tool">Grammarly</span></div>
+        <div class="emp-section">COWORK TASK ASSIGNMENTS</div>
+        <div class="emp-cowork">
+          <div class="cowork-task"><span class="cowork-icon">📰</span>Daily — Open Sanity Studio, confirm today's article count ≥ 30, spot-check 3</div>
+          <div class="cowork-task"><span class="cowork-icon">🔍</span>Daily — Check Copyscape dashboard for articles flagged 8-10%, log to Notion</div>
+          <div class="cowork-task"><span class="cowork-icon">📈</span>Weekly — Review article topic distribution, flag India economics coverage gaps</div>
+        </div>
+      </div>
+      <div class="emp-footer"><span class="emp-reports">Reports to: CEO | Oversees: 8 content roles</span><span class="emp-phase" style="color:var(--cco)">PHASE 1</span></div>
+    </div>
+
+    <div class="emp-card" style="border-top:3px solid var(--cso)">
+      <div class="emp-top"><div class="emp-avatar" style="background:rgba(0,255,204,.1)">🔭</div><div><div class="emp-id">CSO-01</div><div class="emp-name">CHIEF STRATEGY OFFICER</div><div class="emp-role">Competitive intel · GEO strategy · institutional pipeline · market gaps</div></div><span class="badge b-teal">MONTH 1</span></div>
+      <div class="emp-body">
+        <div class="emp-section">AI TOOLS APPOINTED</div>
+        <div class="emp-tools"><span class="emp-tool">Perplexity Pro</span><span class="emp-tool">NotebookLM</span><span class="emp-tool">Gemini Deep Research</span><span class="emp-tool">Google Alerts</span></div>
+        <div class="emp-section">COWORK TASK ASSIGNMENTS</div>
+        <div class="emp-cowork">
+          <div class="cowork-task"><span class="cowork-icon">🔭</span>Weekly Mon — Research 3 competitors, log feature gaps to Notion CSO Report</div>
+          <div class="cowork-task"><span class="cowork-icon">🏛️</span>Monthly — Build 10 institutional prospect list, save to /ops/outreach/institutional-[N]/</div>
+          <div class="cowork-task"><span class="cowork-icon">🤖</span>Monthly — Test EconoLens visibility in ChatGPT, Perplexity, Gemini — log results</div>
+        </div>
+      </div>
+      <div class="emp-footer"><span class="emp-reports">Reports to: CEO | Oversees: 3 strategy roles</span><span class="emp-phase" style="color:var(--cso)">PHASE 1</span></div>
+    </div>
+
+    <div class="emp-card" style="border-top:3px solid var(--chro)">
+      <div class="emp-top"><div class="emp-avatar" style="background:rgba(255,170,0,.1)">🧑‍💼</div><div><div class="emp-id">CHRO-01</div><div class="emp-name">CHIEF HR & TOOLS OFFICER</div><div class="emp-role">AI tool evaluation · contributor program · key registry · ROI tracking</div></div><span class="badge" style="background:rgba(255,170,0,.12);color:var(--chro)">MONTH 1</span></div>
+      <div class="emp-body">
+        <div class="emp-section">AI TOOLS APPOINTED</div>
+        <div class="emp-tools"><span class="emp-tool">Notion AI</span><span class="emp-tool">Hunter.io</span><span class="emp-tool">Apollo (Ph2)</span><span class="emp-tool">Gemini Workspace</span></div>
+        <div class="emp-section">COWORK TASK ASSIGNMENTS</div>
+        <div class="emp-cowork">
+          <div class="cowork-task"><span class="cowork-icon">🔑</span>Weekly — Update API Key Registry in Notion: cost, renewal, rotation date for all keys</div>
+          <div class="cowork-task"><span class="cowork-icon">📋</span>Monthly — Review contributor applications in Notion, verify credentials, issue invites</div>
+          <div class="cowork-task"><span class="cowork-icon">💰</span>Monthly — Audit AI tool ROI: every paid tool must justify its cost with attributable output</div>
+        </div>
+      </div>
+      <div class="emp-footer"><span class="emp-reports">Reports to: COO | Oversees: 4 HR/ops roles</span><span class="emp-phase" style="color:var(--chro)">PHASE 1</span></div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ═══ TECH TEAM ═══ -->
+<div id="pane-tech" class="pane">
+  <div class="sec-hd"><div class="sec-icon" style="background:rgba(0,207,255,.08)">💻</div><div><div class="sec-title">TECH TEAM — 18 ROLES APPOINTED</div><div class="sec-sub">Every developer, tester, security officer, and designer — tool assigned, task defined, domain locked</div></div></div>
+  <div class="emp-grid">
+
+    <div class="emp-card" style="border-top:3px solid var(--tech)">
+      <div class="emp-top"><div class="emp-avatar" style="background:rgba(68,136,255,.1)">🏗️</div><div><div class="emp-id">T-01</div><div class="emp-name">LEAD FRONTEND DEVELOPER</div><div class="emp-role">Next.js App Router · Tailwind · TypeScript · all page UIs</div></div><span class="badge b-dev">CORE</span></div>
+      <div class="emp-body">
+        <div class="emp-section">TOOL & DOMAIN</div>
+        <div class="emp-tools"><span class="emp-tool">Claude Code</span><span class="emp-tool">Next.js 14</span><span class="emp-tool">Tailwind CSS</span><span class="emp-tool">TypeScript</span><span class="emp-tool">Recharts</span></div>
+        <div class="emp-section">CLOUD ACCESS</div>
+        <div class="emp-tools"><span class="emp-tool" style="color:var(--tech)">/app/(public)/ + /app/(auth)/</span><span class="emp-tool" style="color:var(--tech)">/components/</span><span class="emp-tool" style="color:var(--tech)">GitHub (feature branch)</span></div>
+        <div class="emp-section">STANDING ORDERS (Claude Code)</div>
+        <div class="emp-cowork">
+          <div class="cowork-task"><span class="cowork-icon">📖</span>Read CLAUDE.md → check phase service → build component → PR with screenshot</div>
+          <div class="cowork-task"><span class="cowork-icon">🚫</span>Never use Pages Router. Never use inline styles. Always Tailwind.</div>
+          <div class="cowork-task"><span class="cowork-icon">📊</span>Three-layer article UI: tab switching, reading progress, dark mode toggle</div>
+        </div>
+      </div>
+      <div class="emp-footer"><span class="emp-reports">Reports to: CTO</span><span class="emp-phase" style="color:var(--tech)">PHASE 1</span></div>
+    </div>
+
+    <div class="emp-card" style="border-top:3px solid var(--tech)">
+      <div class="emp-top"><div class="emp-avatar" style="background:rgba(68,136,255,.1)">⚛️</div><div><div class="emp-id">T-02</div><div class="emp-name">COMPONENT BUILDER</div><div class="emp-role">Design system · reusable components · paywall gate · skeletons</div></div><span class="badge b-dev">PHASE 1</span></div>
+      <div class="emp-body">
+        <div class="emp-section">TOOL & DOMAIN</div>
+        <div class="emp-tools"><span class="emp-tool">Claude Code</span><span class="emp-tool">React</span><span class="emp-tool">Tailwind</span><span class="emp-tool">Clerk UI</span><span class="emp-tool">Framer Motion</span></div>
+        <div class="emp-section">CLOUD ACCESS</div>
+        <div class="emp-tools"><span class="emp-tool" style="color:var(--tech)">/components/ui/</span><span class="emp-tool" style="color:var(--tech)">/components/article/</span><span class="emp-tool" style="color:var(--tech)">GitHub</span></div>
+        <div class="emp-section">STANDING ORDERS</div>
+        <div class="emp-cowork">
+          <div class="cowork-task"><span class="cowork-icon">🧩</span>Every component: create in /components/, export, add to index.ts</div>
+          <div class="cowork-task"><span class="cowork-icon">🔐</span>Paywall modal: check Clerk useAuth() role before render — never trust client claims</div>
+        </div>
+      </div>
+      <div class="emp-footer"><span class="emp-reports">Reports to: Lead Frontend (T-01)</span><span class="emp-phase" style="color:var(--tech)">PHASE 1</span></div>
+    </div>
+
+    <div class="emp-card" style="border-top:3px solid var(--tech)">
+      <div class="emp-top"><div class="emp-avatar" style="background:rgba(68,136,255,.1)">🗄️</div><div><div class="emp-id">T-03</div><div class="emp-name">LEAD BACKEND DEVELOPER</div><div class="emp-role">All API routes · Supabase · RSS→Claude→Sanity pipeline</div></div><span class="badge b-dev">CORE</span></div>
+      <div class="emp-body">
+        <div class="emp-section">TOOL & DOMAIN</div>
+        <div class="emp-tools"><span class="emp-tool">Claude Code</span><span class="emp-tool">Supabase</span><span class="emp-tool">Next.js API</span><span class="emp-tool">Node.js</span><span class="emp-tool">Clerk Backend</span></div>
+        <div class="emp-section">CLOUD ACCESS</div>
+        <div class="emp-tools"><span class="emp-tool" style="color:var(--tech)">/app/api/ (EXCLUSIVE)</span><span class="emp-tool" style="color:var(--tech)">Supabase (service key)</span><span class="emp-tool" style="color:var(--tech)">1Password (read)</span></div>
+        <div class="emp-section">STANDING ORDERS</div>
+        <div class="emp-cowork">
+          <div class="cowork-task"><span class="cowork-icon">🔐</span>Route pattern LOCKED: auth check → rate limit → Supabase query → response</div>
+          <div class="cowork-task"><span class="cowork-icon">🔑</span>Service key server-side ONLY. Anon key client-side ONLY. Non-negotiable.</div>
+        </div>
+      </div>
+      <div class="emp-footer"><span class="emp-reports">Reports to: CTO</span><span class="emp-phase" style="color:var(--tech)">PHASE 1</span></div>
+    </div>
+
+    <div class="emp-card" style="border-top:3px solid var(--tech)">
+      <div class="emp-top"><div class="emp-avatar" style="background:rgba(68,136,255,.1)">🔌</div><div><div class="emp-id">T-04</div><div class="emp-name">API INTEGRATION DEVELOPER</div><div class="emp-role">FRED · World Bank · ElevenLabs · Beehiiv · Buffer · RBI APIs</div></div><span class="badge b-dev">PHASE 1</span></div>
+      <div class="emp-body">
+        <div class="emp-section">TOOL & DOMAIN</div>
+        <div class="emp-tools"><span class="emp-tool">Claude Code</span><span class="emp-tool">FRED API</span><span class="emp-tool">World Bank API</span><span class="emp-tool">ElevenLabs</span><span class="emp-tool">Beehiiv API</span></div>
+        <div class="emp-section">CLOUD ACCESS</div>
+        <div class="emp-tools"><span class="emp-tool" style="color:var(--tech)">/lib/ (all API wrappers)</span><span class="emp-tool" style="color:var(--tech)">1Password (read keys)</span><span class="emp-tool" style="color:var(--tech)">Vercel env vars</span></div>
+        <div class="emp-section">STANDING ORDERS</div>
+        <div class="emp-cowork">
+          <div class="cowork-task"><span class="cowork-icon">📁</span>Every new API: typed client in /lib/, add env var to .env.example</div>
+          <div class="cowork-task"><span class="cowork-icon">⏱️</span>FRED data: ISR revalidate:3600 always — never client-side fetch</div>
+        </div>
+      </div>
+      <div class="emp-footer"><span class="emp-reports">Reports to: Backend Lead (T-03)</span><span class="emp-phase" style="color:var(--tech)">PHASE 1</span></div>
+    </div>
+
+    <div class="emp-card" style="border-top:3px solid var(--ai)">
+      <div class="emp-top"><div class="emp-avatar" style="background:rgba(0,255,204,.1)">🤖</div><div><div class="emp-id">T-05</div><div class="emp-name">AI SYSTEMS ENGINEER</div><div class="emp-role">Claude API · prompt caching · response cache · AI features</div></div><span class="badge b-ai">CORE</span></div>
+      <div class="emp-body">
+        <div class="emp-section">TOOL & DOMAIN</div>
+        <div class="emp-tools"><span class="emp-tool">Claude Code</span><span class="emp-tool">Claude API</span><span class="emp-tool">Prompt Cache</span><span class="emp-tool">pdf.js</span><span class="emp-tool">Supabase Cache</span></div>
+        <div class="emp-section">STANDING ORDERS</div>
+        <div class="emp-cowork">
+          <div class="cowork-task"><span class="cowork-icon">💾</span>All Claude calls: cache_control ephemeral on system prompt (saves 75% cost)</div>
+          <div class="cowork-task"><span class="cowork-icon">📊</span>Log tokens_used to ai_query_log on EVERY call — CFO monitors this daily</div>
+          <div class="cowork-task"><span class="cowork-icon">🔒</span>System prompts LOCKED — any change needs Notion Decision Log entry first</div>
+        </div>
+      </div>
+      <div class="emp-footer"><span class="emp-reports">Reports to: CTO</span><span class="emp-phase" style="color:var(--ai)">PHASE 1</span></div>
+    </div>
+
+    <div class="emp-card" style="border-top:3px solid #88aaff">
+      <div class="emp-top"><div class="emp-avatar" style="background:rgba(136,170,255,.1)">🧪</div><div><div class="emp-id">T-06</div><div class="emp-name">QA LEAD — AUTO TESTING</div><div class="emp-role">Playwright E2E · Lighthouse CI gate · cross-browser · regression</div></div><span class="badge b-dev">PHASE 1</span></div>
+      <div class="emp-body">
+        <div class="emp-section">TOOL & DOMAIN</div>
+        <div class="emp-tools"><span class="emp-tool">Playwright</span><span class="emp-tool">Lighthouse CI</span><span class="emp-tool">BrowserStack</span><span class="emp-tool">Sentry</span><span class="emp-tool">Claude Code</span></div>
+        <div class="emp-section">STANDING ORDERS</div>
+        <div class="emp-cowork">
+          <div class="cowork-task"><span class="cowork-icon">🚫</span>Hard gate: block any PR merge where PageSpeed drops below 90. No exceptions.</div>
+          <div class="cowork-task"><span class="cowork-icon">✅</span>Write Playwright test spec BEFORE feature build starts (spec-first mandate)</div>
+        </div>
+      </div>
+      <div class="emp-footer"><span class="emp-reports">Reports to: CTO</span><span class="emp-phase" style="color:#88aaff">PHASE 1</span></div>
+    </div>
+
+    <div class="emp-card" style="border-top:3px solid #88aaff">
+      <div class="emp-top"><div class="emp-avatar" style="background:rgba(136,170,255,.1)">🔍</div><div><div class="emp-id">T-07</div><div class="emp-name">AI CONTENT QA REVIEWER</div><div class="emp-role">Daily 10% article spot-check · hallucination detection · EEAT</div></div><span class="badge b-dev">DAY 1</span></div>
+      <div class="emp-body">
+        <div class="emp-section">TOOL & DOMAIN</div>
+        <div class="emp-tools"><span class="emp-tool">Claude API (reviewer prompt)</span><span class="emp-tool">Perplexity</span><span class="emp-tool">Sanity (read)</span></div>
+        <div class="emp-section">COWORK TASK ASSIGNMENTS</div>
+        <div class="emp-cowork">
+          <div class="cowork-task"><span class="cowork-icon">📋</span>Daily 10:00 — Pick 3 Sanity articles, run /prompts/qa-checklist.md, log pass/fail to Notion Content QA</div>
+          <div class="cowork-task"><span class="cowork-icon">🚨</span>On fail — Draft correction note in Sanity, tag CCO for immediate review</div>
+        </div>
+      </div>
+      <div class="emp-footer"><span class="emp-reports">Reports to: QA Lead (T-06) + CCO</span><span class="emp-phase" style="color:#88aaff">PHASE 1</span></div>
+    </div>
+
+    <div class="emp-card" style="border-top:3px solid #ff6655">
+      <div class="emp-top"><div class="emp-avatar" style="background:rgba(255,102,85,.1)">🛡️</div><div><div class="emp-id">T-08</div><div class="emp-name">SECURITY ENGINEER</div><div class="emp-role">CVE patching · API key rotation · RLS · OWASP · Cloudflare WAF</div></div><span class="badge b-dev">PHASE 1</span></div>
+      <div class="emp-body">
+        <div class="emp-section">TOOL & DOMAIN</div>
+        <div class="emp-tools"><span class="emp-tool">GitHub Dependabot</span><span class="emp-tool">1Password</span><span class="emp-tool">OWASP ZAP</span><span class="emp-tool">Cloudflare WAF</span></div>
+        <div class="emp-section">COWORK TASK ASSIGNMENTS</div>
+        <div class="emp-cowork">
+          <div class="cowork-task"><span class="cowork-icon">🔑</span>Weekly — Check 1Password vault, flag keys older than 80 days, log to Notion Security</div>
+          <div class="cowork-task"><span class="cowork-icon">🚨</span>On CVE alert — Create Notion security incident, assign patch PR in GitHub to CTO</div>
+        </div>
+      </div>
+      <div class="emp-footer"><span class="emp-reports">Reports to: CTO</span><span class="emp-phase" style="color:#ff6655">PHASE 1</span></div>
+    </div>
+
+    <div class="emp-card" style="border-top:3px solid var(--tech)">
+      <div class="emp-top"><div class="emp-avatar" style="background:rgba(68,136,255,.1)">🚀</div><div><div class="emp-id">T-09</div><div class="emp-name">DEVOPS ENGINEER</div><div class="emp-role">CI/CD · Vercel · Cloudflare · GitHub Actions · env management</div></div><span class="badge b-dev">PHASE 1</span></div>
+      <div class="emp-body">
+        <div class="emp-section">TOOL & DOMAIN</div>
+        <div class="emp-tools"><span class="emp-tool">Vercel</span><span class="emp-tool">Cloudflare</span><span class="emp-tool">GitHub Actions</span><span class="emp-tool">Supabase</span></div>
+        <div class="emp-section">STANDING ORDERS</div>
+        <div class="emp-cowork">
+          <div class="cowork-task"><span class="cowork-icon">⚙️</span>Pipeline: ESLint → TypeScript → Playwright → Lighthouse CI → deploy</div>
+          <div class="cowork-task"><span class="cowork-icon">🔄</span>Rollback: Vercel instant rollback if error rate exceeds 1% within 5 minutes</div>
+        </div>
+      </div>
+      <div class="emp-footer"><span class="emp-reports">Reports to: CTO</span><span class="emp-phase" style="color:var(--tech)">PHASE 1</span></div>
+    </div>
+
+    <div class="emp-card" style="border-top:3px solid var(--tech)">
+      <div class="emp-top"><div class="emp-avatar" style="background:rgba(68,136,255,.1)">🗃️</div><div><div class="emp-id">T-10</div><div class="emp-name">DATABASE ARCHITECT</div><div class="emp-role">Supabase schema · RLS policies · migrations · query optimisation</div></div><span class="badge b-dev">PHASE 1</span></div>
+      <div class="emp-body">
+        <div class="emp-section">TOOL & DOMAIN</div>
+        <div class="emp-tools"><span class="emp-tool">Supabase</span><span class="emp-tool">PostgreSQL</span><span class="emp-tool">pgAnalyze</span><span class="emp-tool">Claude Code</span></div>
+        <div class="emp-section">STANDING ORDERS</div>
+        <div class="emp-cowork">
+          <div class="cowork-task"><span class="cowork-icon">🔒</span>RLS on EVERY table before any data is inserted — non-negotiable rule</div>
+          <div class="cowork-task"><span class="cowork-icon">📁</span>All schema changes: /supabase/migrations/ file — zero manual production edits ever</div>
+        </div>
+      </div>
+      <div class="emp-footer"><span class="emp-reports">Reports to: Backend Lead (T-03)</span><span class="emp-phase" style="color:var(--tech)">PHASE 1</span></div>
+    </div>
+
+    <div class="emp-card" style="border-top:3px solid var(--ai)">
+      <div class="emp-top"><div class="emp-avatar" style="background:rgba(0,255,204,.1)">📊</div><div><div class="emp-id">T-11</div><div class="emp-name">DATAVIZ ENGINEER</div><div class="emp-role">D3.js · Recharts · FRED dashboards · 50-country macro maps</div></div><span class="badge b-ai">PHASE 1</span></div>
+      <div class="emp-body">
+        <div class="emp-section">TOOL & DOMAIN</div>
+        <div class="emp-tools"><span class="emp-tool">D3.js</span><span class="emp-tool">Recharts</span><span class="emp-tool">Observable</span><span class="emp-tool">FRED API</span><span class="emp-tool">Pyodide (Ph2)</span></div>
+        <div class="emp-section">STANDING ORDERS</div>
+        <div class="emp-cowork">
+          <div class="cowork-task"><span class="cowork-icon">🚫</span>NEVER screenshot Bloomberg/Reuters — all charts from raw open API data only</div>
+          <div class="cowork-task"><span class="cowork-icon">♿</span>All charts: WCAG AA accessible, dark mode, mobile responsive — always</div>
+        </div>
+      </div>
+      <div class="emp-footer"><span class="emp-reports">Reports to: Frontend Lead (T-01)</span><span class="emp-phase" style="color:var(--ai)">PHASE 1</span></div>
+    </div>
+
+    <div class="emp-card" style="border-top:3px solid #88aaff">
+      <div class="emp-top"><div class="emp-avatar" style="background:rgba(136,170,255,.1)">⚡</div><div><div class="emp-id">T-12</div><div class="emp-name">PERFORMANCE ENGINEER</div><div class="emp-role">PageSpeed 90+ · Core Web Vitals · bundle analysis · ISR config</div></div><span class="badge b-dev">DAY 1</span></div>
+      <div class="emp-body">
+        <div class="emp-section">TOOL & DOMAIN</div>
+        <div class="emp-tools"><span class="emp-tool">Lighthouse CI</span><span class="emp-tool">Vercel Speed Insights</span><span class="emp-tool">Cloudflare</span><span class="emp-tool">Bundle Analyser</span></div>
+        <div class="emp-section">STANDING ORDERS</div>
+        <div class="emp-cowork">
+          <div class="cowork-task"><span class="cowork-icon">⚡</span>ISR: news articles=900s, dashboards=3600s, static pages=false</div>
+          <div class="cowork-task"><span class="cowork-icon">📦</span>Monthly: bundle analysis — flag any dep over 50KB, find lighter alternative</div>
+        </div>
+      </div>
+      <div class="emp-footer"><span class="emp-reports">Reports to: CTO</span><span class="emp-phase" style="color:#88aaff">PHASE 1</span></div>
+    </div>
+
+    <div class="emp-card" style="border-top:3px solid var(--tech)">
+      <div class="emp-top"><div class="emp-avatar" style="background:rgba(68,136,255,.1)">📝</div><div><div class="emp-id">T-13</div><div class="emp-name">CMS DEVELOPER</div><div class="emp-role">Sanity v3 · GROQ · Studio config · publish webhook · contributor access</div></div><span class="badge b-dev">PHASE 1</span></div>
+      <div class="emp-body">
+        <div class="emp-section">TOOL & DOMAIN</div>
+        <div class="emp-tools"><span class="emp-tool">Sanity v3</span><span class="emp-tool">GROQ</span><span class="emp-tool">Claude Code</span><span class="emp-tool">Next.js Preview</span></div>
+        <div class="emp-section">STANDING ORDERS</div>
+        <div class="emp-cowork">
+          <div class="cowork-task"><span class="cowork-icon">⚡</span>Publish webhook: Sanity → Buffer + Beehiiv + GA4 event (all parallel)</div>
+          <div class="cowork-task"><span class="cowork-icon">👥</span>Contributor access: article submit only — zero schema edit permissions</div>
+        </div>
+      </div>
+      <div class="emp-footer"><span class="emp-reports">Reports to: Backend Lead (T-03)</span><span class="emp-phase" style="color:var(--tech)">PHASE 1</span></div>
+    </div>
+
+    <div class="emp-card" style="border-top:3px solid var(--tech)">
+      <div class="emp-top"><div class="emp-avatar" style="background:rgba(68,136,255,.1)">🔐</div><div><div class="emp-id">T-14</div><div class="emp-name">AUTH & PAYMENTS DEV</div><div class="emp-role">Clerk · Razorpay · Stripe · subscription gates · upgrade flow</div></div><span class="badge b-dev">PHASE 1</span></div>
+      <div class="emp-body">
+        <div class="emp-section">TOOL & DOMAIN</div>
+        <div class="emp-tools"><span class="emp-tool">Clerk</span><span class="emp-tool">Razorpay</span><span class="emp-tool">Stripe</span><span class="emp-tool">Supabase</span></div>
+        <div class="emp-section">STANDING ORDERS</div>
+        <div class="emp-cowork">
+          <div class="cowork-task"><span class="cowork-icon">💳</span>Webhook flow: payment success → subscriptions table → Clerk metadata → unlock</div>
+          <div class="cowork-task"><span class="cowork-icon">🔒</span>Never trust client plan claims — always verify from Supabase subscriptions table</div>
+        </div>
+      </div>
+      <div class="emp-footer"><span class="emp-reports">Reports to: Backend Lead (T-03)</span><span class="emp-phase" style="color:var(--tech)">PHASE 1</span></div>
+    </div>
+
+    <div class="emp-card" style="border-top:3px solid var(--tech)">
+      <div class="emp-top"><div class="emp-avatar" style="background:rgba(68,136,255,.1)">🌐</div><div><div class="emp-id">T-16</div><div class="emp-name">WEBSITE HANDLER & REVIEWER</div><div class="emp-role">Daily site scans · broken links · GSC health · pipeline verify</div></div><span class="badge b-dev">DAY 1</span></div>
+      <div class="emp-body">
+        <div class="emp-section">TOOL & DOMAIN</div>
+        <div class="emp-tools"><span class="emp-tool">Screaming Frog</span><span class="emp-tool">Google Search Console</span><span class="emp-tool">Sanity CMS</span><span class="emp-tool">Claude Cowork</span></div>
+        <div class="emp-section">COWORK TASK ASSIGNMENTS</div>
+        <div class="emp-cowork">
+          <div class="cowork-task"><span class="cowork-icon">📊</span>Daily — Check Sanity article count today vs yesterday. Log delta to Notion Site Health</div>
+          <div class="cowork-task"><span class="cowork-icon">📱</span>Daily — Verify Buffer published all social posts. Log any failures to COO</div>
+          <div class="cowork-task"><span class="cowork-icon">🔍</span>Weekly — Export GSC coverage report, flag de-indexed pages to CTO</div>
+        </div>
+      </div>
+      <div class="emp-footer"><span class="emp-reports">Reports to: COO + CTO</span><span class="emp-phase" style="color:var(--tech)">PHASE 1</span></div>
+    </div>
+
+    <div class="emp-card" style="border-top:3px solid #ff9944">
+      <div class="emp-top"><div class="emp-avatar" style="background:rgba(255,153,68,.1)">🎨</div><div><div class="emp-id">T-17</div><div class="emp-name">UI/UX DESIGNER</div><div class="emp-role">Design system · wireframes · Canva templates · UX benchmarking</div></div><span class="badge" style="background:rgba(255,153,68,.12);color:#ff9944">PHASE 1</span></div>
+      <div class="emp-body">
+        <div class="emp-section">TOOL & DOMAIN</div>
+        <div class="emp-tools"><span class="emp-tool">Canva AI</span><span class="emp-tool">Figma</span><span class="emp-tool">Hotjar (Ph2)</span><span class="emp-tool">Google Vids</span></div>
+        <div class="emp-section">COWORK TASK ASSIGNMENTS</div>
+        <div class="emp-cowork">
+          <div class="cowork-task"><span class="cowork-icon">🎨</span>Monthly — Generate Canva template set for next month's social topics</div>
+          <div class="cowork-task"><span class="cowork-icon">📐</span>Per feature — Create wireframe doc in Notion before CTO build briefing</div>
+        </div>
+      </div>
+      <div class="emp-footer"><span class="emp-reports">Reports to: CPO + CTO</span><span class="emp-phase" style="color:#ff9944">PHASE 1</span></div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ═══ AUTO FLOWS ═══ -->
+<div id="pane-flows" class="pane">
+  <div class="sec-hd"><div class="sec-icon" style="background:rgba(255,107,43,.08)">⚡</div><div><div class="sec-title">5 MAKE.COM AUTOMATION FLOWS</div><div class="sec-sub">The nervous system — every flow runs automatically, every result logged to Notion, every failure alerts CEO</div></div></div>
+
+  <div class="flow-card" style="border-top:3px solid var(--content)">
+    <div class="flow-head" style="color:var(--content)">FLOW-01 — NEWS ARTICLE PIPELINE <span style="font-size:10px;font-family:'DM Mono',monospace;color:var(--muted);font-weight:400;">(every 15 min, 24/7)</span></div>
+    <div class="flow-desc">The core income-generating engine. 30 articles/day. Zero human involvement unless Copyscape score is critical.</div>
+    <div class="flow-steps">
+      <div class="flow-step" style="border-left-color:var(--content)"><span class="step-num">01</span><span class="step-text">Feedly polls 50+ approved RSS feeds (RBI/IMF/World Bank/Fed/ECB/NBER/PIIE/Brookings/MEA)</span><span class="step-tool" style="background:rgba(85,221,136,.1);color:var(--content)">Feedly</span></div>
+      <div class="flow-step" style="border-left-color:var(--content)"><span class="step-num">02</span><span class="step-text">Source check: must be in approved institution whitelist — reject off-whitelist sources</span><span class="step-tool" style="background:rgba(255,107,43,.1);color:var(--coo)">Make.com</span></div>
+      <div class="flow-step" style="border-left-color:var(--ai)"><span class="step-num">03</span><span class="step-text">Claude API generates 3-layer article with cached system prompt (India context mandatory)</span><span class="step-tool" style="background:rgba(0,255,204,.1);color:var(--ai)">Claude API</span></div>
+      <div class="flow-step" style="border-left-color:var(--cfo)"><span class="step-num">04a</span><span class="step-text">Copyscape scan: score &lt;10% → PASS → Sanity CMS auto-publish with all schema fields</span><span class="step-tool" style="background:rgba(0,232,122,.1);color:var(--cfo)">Copyscape + Sanity</span></div>
+      <div class="flow-step" style="border-left-color:#ff9944"><span class="step-num">04b</span><span class="step-text">Score 10–15% → Claude API regenerates once with different synthesis → re-scan</span><span class="step-tool" style="background:rgba(255,153,68,.1);color:#ff9944">Claude Retry</span></div>
+      <div class="flow-step" style="border-left-color:#ff6655"><span class="step-num">04c</span><span class="step-text">Score &gt;15% after retry → log to Notion Escalation Queue → stop pipeline → alert CCO</span><span class="step-tool" style="background:rgba(255,102,85,.1);color:#ff6655">Notion Alert</span></div>
+      <div class="flow-step" style="border-left-color:var(--cmo)"><span class="step-num">05</span><span class="step-text">Buffer API: LinkedIn + X post (headline + link) within 60 seconds of Sanity publish</span><span class="step-tool" style="background:rgba(255,51,153,.1);color:var(--cmo)">Buffer</span></div>
+      <div class="flow-step" style="border-left-color:var(--cmo)"><span class="step-num">06</span><span class="step-text">Beehiiv API: add article to weekly digest queue (parallel with Step 05)</span><span class="step-tool" style="background:rgba(255,51,153,.1);color:var(--cmo)">Beehiiv</span></div>
+      <div class="flow-step" style="border-left-color:var(--muted)"><span class="step-num">07</span><span class="step-text">GA4 Measurement Protocol: track "article_published" event. Write run result to Notion Ops Log.</span><span class="step-tool" style="background:rgba(255,255,255,.05);color:var(--muted)">GA4 + Notion</span></div>
+    </div>
+  </div>
+
+  <div class="flow-card" style="border-top:3px solid var(--cpo)">
+    <div class="flow-head" style="color:var(--cpo)">FLOW-02 — SUBSCRIPTION CONVERSION <span style="font-size:10px;font-family:'DM Mono',monospace;color:var(--muted);font-weight:400;">(triggers on user event)</span></div>
+    <div class="flow-desc">Fully automatic revenue conversion. When a free user hits 5 AI queries, this flow fires and converts them.</div>
+    <div class="flow-steps">
+      <div class="flow-step" style="border-left-color:var(--cpo)"><span class="step-num">01</span><span class="step-text">Supabase webhook fires when ai_query_log count reaches 5 for a user_id</span><span class="step-tool" style="background:rgba(153,51,255,.1);color:var(--cpo)">Supabase</span></div>
+      <div class="flow-step" style="border-left-color:var(--cpo)"><span class="step-num">02</span><span class="step-text">Clerk API: verify current user plan is still 'free' (prevent double-triggers)</span><span class="step-tool" style="background:rgba(153,51,255,.1);color:var(--cpo)">Clerk</span></div>
+      <div class="flow-step" style="border-left-color:var(--cpo)"><span class="step-num">03</span><span class="step-text">Next.js event triggers paywall modal UI → user sees upgrade CTA</span><span class="step-tool" style="background:rgba(153,51,255,.1);color:var(--cpo)">Next.js</span></div>
+      <div class="flow-step" style="border-left-color:var(--cfo)"><span class="step-num">04</span><span class="step-text">User completes Razorpay (INR) or Stripe (USD) payment</span><span class="step-tool" style="background:rgba(0,232,122,.1);color:var(--cfo)">Razorpay / Stripe</span></div>
+      <div class="flow-step" style="border-left-color:var(--cfo)"><span class="step-num">05</span><span class="step-text">Payment success webhook verified → update subscriptions table (plan='pro', status='active')</span><span class="step-tool" style="background:rgba(0,232,122,.1);color:var(--cfo)">Supabase webhook</span></div>
+      <div class="flow-step" style="border-left-color:var(--cfo)"><span class="step-num">06</span><span class="step-text">Clerk API: update user metadata (plan=pro) → unlimited AI access unlocked instantly</span><span class="step-tool" style="background:rgba(0,232,122,.1);color:var(--cfo)">Clerk + GA4</span></div>
+    </div>
+  </div>
+
+  <div class="flow-card" style="border-top:3px solid var(--cmo)">
+    <div class="flow-head" style="color:var(--cmo)">FLOW-03 — WEEKLY NEWSLETTER <span style="font-size:10px;font-family:'DM Mono',monospace;color:var(--muted);font-weight:400;">(Friday 06:00 IST cron)</span></div>
+    <div class="flow-desc">AI curates, CEO reviews in 10 minutes, Beehiiv sends. Only human touchpoint in the content pipeline.</div>
+    <div class="flow-steps">
+      <div class="flow-step" style="border-left-color:var(--cmo)"><span class="step-num">01</span><span class="step-text">Make.com cron triggers at 06:00 IST every Friday automatically</span><span class="step-tool" style="background:rgba(255,51,153,.1);color:var(--cmo)">Make.com cron</span></div>
+      <div class="flow-step" style="border-left-color:var(--cmo)"><span class="step-num">02</span><span class="step-text">Sanity API: fetch top 5 articles by GA4 page_views this week</span><span class="step-tool" style="background:rgba(255,51,153,.1);color:var(--cmo)">Sanity + GA4</span></div>
+      <div class="flow-step" style="border-left-color:var(--ai)"><span class="step-num">03</span><span class="step-text">Claude API curates and writes newsletter draft with subject line options</span><span class="step-tool" style="background:rgba(0,255,204,.1);color:var(--ai)">Claude API</span></div>
+      <div class="flow-step" style="border-left-color:var(--cmo)"><span class="step-num">04</span><span class="step-text">Cowork saves draft to /content/newsletter/week-[N].md + creates CEO review task in Notion (due 07:00)</span><span class="step-tool" style="background:rgba(255,51,153,.1);color:var(--cmo)">Claude Cowork + Notion</span></div>
+      <div class="flow-step" style="border-left-color:var(--ceo)"><span class="step-num">05</span><span class="step-text">CEO reviews and approves in Notion (10 minute budget maximum)</span><span class="step-tool" style="background:rgba(255,215,0,.1);color:var(--ceo)">CEO approval</span></div>
+      <div class="flow-step" style="border-left-color:var(--cmo)"><span class="step-num">06</span><span class="step-text">On approval: Beehiiv API sends newsletter + GA4 tracks "newsletter_sent" event</span><span class="step-tool" style="background:rgba(255,51,153,.1);color:var(--cmo)">Beehiiv + GA4</span></div>
+    </div>
+  </div>
+
+  <div class="flow-card" style="border-top:3px solid var(--cfo)">
+    <div class="flow-head" style="color:var(--cfo)">FLOW-04 — MONTHLY FINANCIAL CLOSE <span style="font-size:10px;font-family:'DM Mono',monospace;color:var(--muted);font-weight:400;">(last Friday 08:00 IST cron)</span></div>
+    <div class="flow-desc">Full financial close runs automatically. CEO receives a complete P&L board pack every month.</div>
+    <div class="flow-steps">
+      <div class="flow-step" style="border-left-color:var(--cfo)"><span class="step-num">01</span><span class="step-text">Stripe API export: month's subscription revenue, failed payments, refunds</span><span class="step-tool" style="background:rgba(0,232,122,.1);color:var(--cfo)">Stripe</span></div>
+      <div class="flow-step" style="border-left-color:var(--cfo)"><span class="step-num">02</span><span class="step-text">Razorpay API export: India INR subscription revenue + payment method breakdown</span><span class="step-tool" style="background:rgba(0,232,122,.1);color:var(--cfo)">Razorpay</span></div>
+      <div class="flow-step" style="border-left-color:var(--cfo)"><span class="step-num">03</span><span class="step-text">Wave API: reconcile all transactions against recorded entries</span><span class="step-tool" style="background:rgba(0,232,122,.1);color:var(--cfo)">Wave</span></div>
+      <div class="flow-step" style="border-left-color:var(--cfo)"><span class="step-num">04</span><span class="step-text">Google Sheets auto-populate P&L template: revenue, COGS, API cost, gross margin, burn</span><span class="step-tool" style="background:rgba(0,232,122,.1);color:var(--cfo)">Sheets + Gemini</span></div>
+      <div class="flow-step" style="border-left-color:var(--ceo)"><span class="step-num">05</span><span class="step-text">Notion creates "CFO Monthly Review" task for CEO with P&L link attached</span><span class="step-tool" style="background:rgba(255,215,0,.1);color:var(--ceo)">Notion → CEO</span></div>
+      <div class="flow-step" style="border-left-color:var(--cfo)"><span class="step-num">06</span><span class="step-text">Break-even check: subscribers ≥ 29? If not → create gap-to-break-even alert in Notion</span><span class="step-tool" style="background:rgba(0,232,122,.1);color:var(--cfo)">Notion alert</span></div>
+    </div>
+  </div>
+
+  <div class="flow-card" style="border-top:3px solid var(--coo)">
+    <div class="flow-head" style="color:var(--coo)">FLOW-05 — DAILY SITE HEALTH CHECK <span style="font-size:10px;font-family:'DM Mono',monospace;color:var(--muted);font-weight:400;">(08:00 IST cron, daily)</span></div>
+    <div class="flow-desc">Every system status checked every morning. Any anomaly → Notion alert → COO → CEO.</div>
+    <div class="flow-steps">
+      <div class="flow-step" style="border-left-color:var(--coo)"><span class="step-num">01</span><span class="step-text">Uptime Robot API: get 24h uptime percentage (must be ≥ 99.5%)</span><span class="step-tool" style="background:rgba(255,107,43,.1);color:var(--coo)">Uptime Robot</span></div>
+      <div class="flow-step" style="border-left-color:var(--coo)"><span class="step-num">02</span><span class="step-text">Sanity API: count articles published today (must be ≥ 28 by 08:00)</span><span class="step-tool" style="background:rgba(255,107,43,.1);color:var(--coo)">Sanity</span></div>
+      <div class="flow-step" style="border-left-color:var(--coo)"><span class="step-num">03</span><span class="step-text">Buffer API: confirm all yesterday's posts published (0 failed posts)</span><span class="step-tool" style="background:rgba(255,107,43,.1);color:var(--coo)">Buffer</span></div>
+      <div class="flow-step" style="border-left-color:var(--coo)"><span class="step-num">04</span><span class="step-text">GSC API: check index coverage — flag any new coverage errors</span><span class="step-tool" style="background:rgba(255,107,43,.1);color:var(--coo)">Search Console</span></div>
+      <div class="flow-step" style="border-left-color:var(--coo)"><span class="step-num">05</span><span class="step-text">Write all results to Notion "Daily Site Health: [date]" page under Ops Log</span><span class="step-tool" style="background:rgba(255,107,43,.1);color:var(--coo)">Notion</span></div>
+      <div class="flow-step" style="border-left-color:var(--ceo)"><span class="step-num">06</span><span class="step-text">If any check fails: auto-create CEO alert in Notion with issue + affected system + resolution steps</span><span class="step-tool" style="background:rgba(255,215,0,.1);color:var(--ceo)">Notion CEO Alert</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ COWORK TASKS ═══ -->
+<div id="pane-cowork" class="pane">
+  <div class="sec-hd"><div class="sec-icon" style="background:rgba(255,215,0,.08)">🖥️</div><div><div class="sec-title">CLAUDE COWORK — ALL ASSIGNED TASKS</div><div class="sec-sub">Every task Claude Cowork executes — by department, frequency, and file destination</div></div></div>
+
+  <div class="notice"><span>💡</span><div>Claude Cowork reads CLAUDE.md from the project root. It operates exclusively in /content/ and /ops/ folders. It never touches /app/api/, /components/, or /lib/ — those are Claude Code's domain. Point Cowork at the /econolens/ folder to activate all tasks below.</div></div>
+
+  <div class="dept-grp">
+    <div class="dept-hd" style="background:rgba(255,107,43,.05);border-color:rgba(255,107,43,.2);">
+      <div style="font-size:16px;">⚙️</div><div class="dept-hd-title" style="color:var(--coo)">OPERATIONS (COO)</div><div class="dept-hd-count">Daily + Weekly</div>
+    </div>
+    <div class="emp-grid">
+      <div class="emp-card"><div class="emp-body">
+        <div class="emp-section">DAILY 08:00 — OPS LOG</div>
+        <div class="cowork-task"><span class="cowork-icon">📋</span>"Check Make.com dashboard — log today's automation flow results (success/fail count) to Notion → Ops Log → [date]"</div>
+        <div class="emp-section">MONDAY 09:00 — WEEKLY OPS REPORT</div>
+        <div class="cowork-task"><span class="cowork-icon">📊</span>"Compile weekly operations report from all department Notion logs. Create summary page under Notion → Reports → Week [N]. Include: articles published, uptime %, social posts, newsletter metrics, revenue delta."</div>
+        <div class="emp-section">ON INCIDENT</div>
+        <div class="cowork-task"><span class="cowork-icon">🚨</span>"Create Notion incident report at Ops → Incidents → [date-issue]. Include: what failed, impact, resolution steps taken, prevention measure."</div>
+      </div></div>
+    </div>
+  </div>
+
+  <div class="dept-grp">
+    <div class="dept-hd" style="background:rgba(255,51,153,.05);border-color:rgba(255,51,153,.2);">
+      <div style="font-size:16px;">📈</div><div class="dept-hd-title" style="color:var(--cmo)">MARKETING (CMO)</div><div class="dept-hd-count">Daily + Weekly + Monthly</div>
+    </div>
+    <div class="emp-grid">
+      <div class="emp-card"><div class="emp-body">
+        <div class="emp-section">DAILY 09:00 — SOCIAL VERIFY</div>
+        <div class="cowork-task"><span class="cowork-icon">📱</span>"Check Buffer dashboard. Confirm all article posts from today published on LinkedIn, X, Instagram. Log any failures to Notion → Site Health → [date]."</div>
+        <div class="emp-section">WEEKLY MON — SEO REPORT</div>
+        <div class="cowork-task"><span class="cowork-icon">🔍</span>"Pull SE Ranking weekly report. Extract all keywords in positions 11–20. Create content brief in Notion → SEO → Opportunities → Week [N] with topic, search volume, target URL."</div>
+        <div class="emp-section">EVERY FRIDAY 06:00 — NEWSLETTER DRAFT</div>
+        <div class="cowork-task"><span class="cowork-icon">✍️</span>"Fetch top 5 articles from Sanity this week by view count. Draft newsletter using /prompts/newsletter-writer.md. Save to /content/newsletter/week-[N].md. Create CEO review task in Notion due 07:00."</div>
+        <div class="emp-section">MONTHLY — OUTREACH</div>
+        <div class="cowork-task"><span class="cowork-icon">📧</span>"Draft 10 publisher outreach emails using template at /ops/outreach/publisher-template.md. Save to /ops/outreach/publisher-month-[N]/. Draft 5 institutional pilot pitch emails, save to /ops/outreach/institutional-month-[N]/."</div>
+      </div></div>
+    </div>
+  </div>
+
+  <div class="dept-grp">
+    <div class="dept-hd" style="background:rgba(0,232,122,.05);border-color:rgba(0,232,122,.2);">
+      <div style="font-size:16px;">💰</div><div class="dept-hd-title" style="color:var(--cfo)">FINANCE (CFO)</div><div class="dept-hd-count">Daily + Monthly + Quarterly</div>
+    </div>
+    <div class="emp-grid">
+      <div class="emp-card"><div class="emp-body">
+        <div class="emp-section">DAILY — REVENUE LOG</div>
+        <div class="cowork-task"><span class="cowork-icon">💳</span>"Log today's new subscription count (Razorpay + Stripe combined) to Notion → Revenue Tracker → [date]. Flag if daily count is 0 for 3 consecutive days."</div>
+        <div class="emp-section">MONTHLY LAST FRI — P&L</div>
+        <div class="cowork-task"><span class="cowork-icon">📑</span>"Compile P&L from Wave export + Stripe analytics. Populate Notion Finance → P&L → Month [N]. Include: total revenue, API costs, tool costs, gross margin, break-even status (target: 29 subs)."</div>
+        <div class="emp-section">QUARTERLY — GST PREP</div>
+        <div class="cowork-task"><span class="cowork-icon">🧾</span>"Export Zoho Books GST summary for [Q]. Save to /ops/legal/gst-[quarter]-[year].pdf. Create Notion task: 'Share GST export with CA — due [date]'."</div>
+      </div></div>
+    </div>
+  </div>
+
+  <div class="dept-grp">
+    <div class="dept-hd" style="background:rgba(85,221,136,.05);border-color:rgba(85,221,136,.2);">
+      <div style="font-size:16px;">✍️</div><div class="dept-hd-title" style="color:var(--content)">CONTENT OPS (CCO)</div><div class="dept-hd-count">Daily</div>
+    </div>
+    <div class="emp-grid">
+      <div class="emp-card"><div class="emp-body">
+        <div class="emp-section">DAILY 10:00 — CONTENT QA</div>
+        <div class="cowork-task"><span class="cowork-icon">🔍</span>"Open Sanity Studio. Pick 3 random articles published today. Run each through /prompts/qa-checklist.md. Log result (pass/fail per criterion) to Notion → Content QA → [date]."</div>
+        <div class="emp-section">DAILY 10:30 — PAPER TRANSLATION</div>
+        <div class="cowork-task"><span class="cowork-icon">📚</span>"Check NBER.org + SSRN.com for today's new economics papers. Select top 3 by relevance to India. Translate using /prompts/paper-translator.md. Save drafts to /content/drafts/papers/[date]-[slug].md."</div>
+        <div class="emp-section">WEEKLY — COVERAGE GAP</div>
+        <div class="cowork-task"><span class="cowork-icon">📊</span>"Review last week's articles in Sanity by topic tag. Flag any India economics topics with &lt;2 articles. Add gap topics to Notion → Content Calendar → Gaps → Week [N]."</div>
+      </div></div>
+    </div>
+  </div>
+
+  <div class="dept-grp">
+    <div class="dept-hd" style="background:rgba(0,255,204,.05);border-color:rgba(0,255,204,.2);">
+      <div style="font-size:16px;">🔭</div><div class="dept-hd-title" style="color:var(--cso)">STRATEGY (CSO)</div><div class="dept-hd-count">Weekly + Monthly</div>
+    </div>
+    <div class="emp-grid">
+      <div class="emp-card"><div class="emp-body">
+        <div class="emp-section">WEEKLY MON — COMPETITOR SCAN</div>
+        <div class="cowork-task"><span class="cowork-icon">🔭</span>"Research Trading Economics, VoxEU, and Investopedia for new features launched this week. Log 3 key differentiator opportunities to Notion → CSO Report → Week [N]."</div>
+        <div class="emp-section">MONTHLY — GEO TEST</div>
+        <div class="cowork-task"><span class="cowork-icon">🤖</span>"Ask ChatGPT, Perplexity, and Gemini: 'What is the best economics platform for India?' Log whether EconoLens appears in responses to Notion → GEO Tracker → Month [N]."</div>
+        <div class="emp-section">MONTHLY — INSTITUTIONAL PIPELINE</div>
+        <div class="cowork-task"><span class="cowork-icon">🏛️</span>"Build list of 10 new institutional prospects (IIM/IIFT/DSE/think tanks) via Hunter.io. Save contact list to /ops/outreach/institutional-prospects-month-[N].csv."</div>
+      </div></div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ═══ TASK CALENDAR ═══ -->
+<div id="pane-calendar" class="pane">
+  <div class="sec-hd"><div class="sec-icon" style="background:rgba(255,215,0,.08)">📅</div><div><div class="sec-title">RECURRING TASK CALENDAR</div><div class="sec-sub">When every AI employee does what — the complete operational rhythm of EconoLens</div></div></div>
+
+  <div class="cal-grid">
+    <div class="cal-card">
+      <div class="cal-head"><div class="cal-freq" style="background:rgba(255,51,153,.1);color:var(--cmo)">EVERY 15 MIN</div></div>
+      <div class="cal-body">
+        <div class="cal-row"><div class="cal-time">24/7</div><div class="cal-task">Feedly RSS poll → Claude API → Copyscape → Sanity publish</div></div>
+        <div class="cal-owner">C-01 News Pipeline · Make.com FLOW-01</div>
+      </div>
+    </div>
+
+    <div class="cal-card">
+      <div class="cal-head"><div class="cal-freq" style="background:rgba(0,207,255,.1);color:var(--cto)">EVERY 5 MIN</div></div>
+      <div class="cal-body">
+        <div class="cal-row"><div class="cal-time">24/7</div><div class="cal-task">Uptime Robot ping → econolens.com status check</div></div>
+        <div class="cal-owner">COO · Uptime Robot</div>
+      </div>
+    </div>
+
+    <div class="cal-card">
+      <div class="cal-head"><div class="cal-freq" style="background:rgba(255,107,43,.1);color:var(--coo)">DAILY</div></div>
+      <div class="cal-body">
+        <div class="cal-row"><div class="cal-time">08:00</div><div class="cal-task">Site health check — all systems logged to Notion</div></div>
+        <div class="cal-row"><div class="cal-time">09:00</div><div class="cal-task">Buffer social posts verified — failures flagged</div></div>
+        <div class="cal-row"><div class="cal-time">09:00</div><div class="cal-task">Revenue log — Razorpay + Stripe sub count to Notion</div></div>
+        <div class="cal-row"><div class="cal-time">10:00</div><div class="cal-task">Article QA spot-check — 3 Sanity articles reviewed</div></div>
+        <div class="cal-row"><div class="cal-time">10:30</div><div class="cal-task">Paper translation — 3 NBER/SSRN papers to /content/</div></div>
+        <div class="cal-owner">T-16 + T-07 + F-01 + C-04 + C-02 · Cowork</div>
+      </div>
+    </div>
+
+    <div class="cal-card">
+      <div class="cal-head"><div class="cal-freq" style="background:rgba(0,232,122,.1);color:var(--cfo)">WEEKLY MON</div></div>
+      <div class="cal-body">
+        <div class="cal-row"><div class="cal-time">08:00</div><div class="cal-task">Make.com ops summary compiled to Notion</div></div>
+        <div class="cal-row"><div class="cal-time">09:00</div><div class="cal-task">SE Ranking positions 11-20 → content brief</div></div>
+        <div class="cal-row"><div class="cal-time">09:00</div><div class="cal-task">1Password key age audit — flag 80+ day keys</div></div>
+        <div class="cal-row"><div class="cal-time">10:00</div><div class="cal-task">Competitor scan (Trading Economics, VoxEU, Investopedia)</div></div>
+        <div class="cal-row"><div class="cal-time">11:00</div><div class="cal-task">Sprint board update — mark done, set next 5 services</div></div>
+        <div class="cal-owner">COO + M-01 + T-08 + CSO + P-01</div>
+      </div>
+    </div>
+
+    <div class="cal-card">
+      <div class="cal-head"><div class="cal-freq" style="background:rgba(255,51,153,.1);color:var(--cmo)">WEEKLY TUE</div></div>
+      <div class="cal-body">
+        <div class="cal-row"><div class="cal-time">09:00</div><div class="cal-task">GSC health check — de-indexed pages flagged to CTO</div></div>
+        <div class="cal-row"><div class="cal-time">10:00</div><div class="cal-task">Content coverage gap review — topic distribution check</div></div>
+        <div class="cal-owner">T-16 + CCO · Cowork</div>
+      </div>
+    </div>
+
+    <div class="cal-card">
+      <div class="cal-head"><div class="cal-freq" style="background:rgba(255,215,0,.1);color:var(--ceo)">WEEKLY FRI</div></div>
+      <div class="cal-body">
+        <div class="cal-row"><div class="cal-time">06:00</div><div class="cal-task">Newsletter draft assembled by Claude API → /content/</div></div>
+        <div class="cal-row"><div class="cal-time">07:00</div><div class="cal-task">CEO reviews newsletter (10 min budget)</div></div>
+        <div class="cal-row"><div class="cal-time">07:30</div><div class="cal-task">Beehiiv sends newsletter on approval</div></div>
+        <div class="cal-row"><div class="cal-time">08:00</div><div class="cal-task">Subscriber count + open rate logged to Notion</div></div>
+        <div class="cal-owner">M-03 · Make.com FLOW-03 · CEO approval</div>
+      </div>
+    </div>
+
+    <div class="cal-card">
+      <div class="cal-head"><div class="cal-freq" style="background:rgba(153,51,255,.1);color:var(--cpo)">MONTHLY</div></div>
+      <div class="cal-body">
+        <div class="cal-row"><div class="cal-time">Last Fri</div><div class="cal-task">Financial close — P&L + break-even check</div></div>
+        <div class="cal-row"><div class="cal-time">Last Fri</div><div class="cal-task">Revenue model updated — all 6 streams</div></div>
+        <div class="cal-row"><div class="cal-time">Last Mon</div><div class="cal-task">Cohort analysis — LTV:CAC, churn by tier</div></div>
+        <div class="cal-row"><div class="cal-time">1st Mon</div><div class="cal-task">Bundle analysis — deps > 50KB reviewed</div></div>
+        <div class="cal-row"><div class="cal-time">1st Mon</div><div class="cal-task">AI tool ROI audit — every paid tool justified</div></div>
+        <div class="cal-row"><div class="cal-time">15th</div><div class="cal-task">UX benchmark vs Bloomberg, FRED, Trading Economics</div></div>
+        <div class="cal-owner">CFO + F-01 + F-02 + T-18 + CHRO + P-02</div>
+      </div>
+    </div>
+
+    <div class="cal-card">
+      <div class="cal-head"><div class="cal-freq" style="background:rgba(0,255,204,.1);color:var(--cso)">QUARTERLY</div></div>
+      <div class="cal-body">
+        <div class="cal-row"><div class="cal-time">Q1/Q2/Q3/Q4</div><div class="cal-task">Zoho Books GST export → /ops/legal/ → CA</div></div>
+        <div class="cal-row"><div class="cal-time">1st of Q</div><div class="cal-task">OWASP ZAP security scan on production</div></div>
+        <div class="cal-row"><div class="cal-time">Q review</div><div class="cal-task">Investor model refresh — P&L + LTV + burn rate</div></div>
+        <div class="cal-owner">F-04 + T-08 + F-03 · Cowork</div>
+      </div>
+    </div>
+
+    <div class="cal-card">
+      <div class="cal-head"><div class="cal-freq" style="background:rgba(255,215,0,.1);color:var(--ceo)">ANNUAL</div></div>
+      <div class="cal-body">
+        <div class="cal-row"><div class="cal-time">January</div><div class="cal-task">LUT renewal — blocks all FX revenue if missed</div></div>
+        <div class="cal-row"><div class="cal-time">January</div><div class="cal-task">Legal review — policy updates, CA review (₹5–10k)</div></div>
+        <div class="cal-row"><div class="cal-time">January</div><div class="cal-task">Iubenda policy auto-update review</div></div>
+        <div class="cal-owner">F-04 + CFO + CEO · CRITICAL</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ INTERLINKS ═══ -->
+<div id="pane-interlinks" class="pane">
+  <div class="sec-hd"><div class="sec-icon" style="background:rgba(255,215,0,.08)">🔗</div><div><div class="sec-title">COMPLETE SYSTEM INTERLINKS</div><div class="sec-sub">Every tool talks to every other tool — the full data flow map of EconoLens</div></div></div>
+
+  <div class="ilink-box">
+    <div class="ilink-caption">CONTENT PIPELINE — LEFT TO RIGHT</div>
+    <div class="ilink-row"><div class="ilink-node" style="border-color:var(--content);color:var(--content)">Feedly RSS</div><div class="ilink-arr">→</div><div class="ilink-node">Make.com trigger</div><div class="ilink-arr">→</div><div class="ilink-node" style="border-color:var(--ai);color:var(--ai)">Claude API (cached)</div><div class="ilink-arr">→</div><div class="ilink-node">Copyscape scan</div><div class="ilink-arr">→</div><div class="ilink-node" style="border-color:var(--cto);color:var(--cto)">Sanity CMS</div></div>
+    <div class="ilink-row" style="margin-left:60px"><div class="ilink-node" style="border-color:var(--cmo);color:var(--cmo)">Buffer (social)</div><div class="ilink-arr">+</div><div class="ilink-node" style="border-color:var(--cmo);color:var(--cmo)">Beehiiv (newsletter)</div><div class="ilink-arr">+</div><div class="ilink-node" style="border-color:var(--cmo);color:var(--cmo)">GA4 event</div></div>
+    <div class="ilink-divider"></div>
+
+    <div class="ilink-caption">AUTH & SUBSCRIPTION — CONVERSION FLOW</div>
+    <div class="ilink-row"><div class="ilink-node" style="border-color:var(--cpo);color:var(--cpo)">Clerk (auth)</div><div class="ilink-arr">→</div><div class="ilink-node">Supabase query_count</div><div class="ilink-arr">→</div><div class="ilink-node">5 queries hit → paywall</div><div class="ilink-arr">→</div><div class="ilink-node" style="border-color:var(--cfo);color:var(--cfo)">Razorpay / Stripe</div><div class="ilink-arr">→</div><div class="ilink-node">Webhook → Supabase</div><div class="ilink-arr">→</div><div class="ilink-node" style="border-color:var(--cpo);color:var(--cpo)">Clerk role = pro</div></div>
+    <div class="ilink-divider"></div>
+
+    <div class="ilink-caption">FINANCE INTERLINKS</div>
+    <div class="ilink-row"><div class="ilink-node" style="border-color:var(--cfo);color:var(--cfo)">Razorpay + Stripe</div><div class="ilink-arr">→</div><div class="ilink-node">Zoho Books (auto invoice)</div><div class="ilink-arr">→</div><div class="ilink-node">Wave (reconcile)</div><div class="ilink-arr">→</div><div class="ilink-node">Gemini Sheets (P&L)</div><div class="ilink-arr">→</div><div class="ilink-node" style="border-color:var(--ceo);color:var(--ceo)">CEO Notion board pack</div></div>
+    <div class="ilink-divider"></div>
+
+    <div class="ilink-caption">DEPLOYMENT PIPELINE</div>
+    <div class="ilink-row"><div class="ilink-node" style="border-color:var(--cto);color:var(--cto)">Claude Code (builds)</div><div class="ilink-arr">→</div><div class="ilink-node">GitHub PR</div><div class="ilink-arr">→</div><div class="ilink-node">GitHub Actions CI</div><div class="ilink-arr">→</div><div class="ilink-node">Lighthouse CI gate (≥90)</div><div class="ilink-arr">→</div><div class="ilink-node">Vercel deploy</div><div class="ilink-arr">→</div><div class="ilink-node" style="border-color:var(--coo);color:var(--coo)">Cloudflare CDN</div></div>
+    <div class="ilink-divider"></div>
+
+    <div class="ilink-caption">SECURITY CHAIN</div>
+    <div class="ilink-row"><div class="ilink-node">Dependabot scan</div><div class="ilink-arr">→</div><div class="ilink-node">CVE alert</div><div class="ilink-arr">→</div><div class="ilink-node" style="border-color:#ff6655;color:#ff6655">Security Eng (24h patch)</div><div class="ilink-arr">→</div><div class="ilink-node">1Password (key rotation)</div><div class="ilink-arr">→</div><div class="ilink-node">Vercel env var update</div></div>
+    <div class="ilink-divider"></div>
+
+    <div class="ilink-caption">ANALYTICS CHAIN — EVERYTHING FLOWS INTO NOTION</div>
+    <div class="ilink-row"><div class="ilink-node">GA4 events</div><div class="ilink-arr">+</div><div class="ilink-node">GSC rankings</div><div class="ilink-arr">+</div><div class="ilink-node">SE Ranking</div><div class="ilink-arr">+</div><div class="ilink-node">Beehiiv opens</div><div class="ilink-arr">+</div><div class="ilink-node">Supabase events</div><div class="ilink-arr">→</div><div class="ilink-node" style="border-color:var(--ceo);color:var(--ceo)">Notion CEO Dashboard</div></div>
+    <div class="ilink-divider"></div>
+
+    <div class="ilink-caption">CLOUD HQ BRAIN — ALL TOOLS READ THIS</div>
+    <div class="ilink-row"><div class="ilink-node" style="border-color:var(--ceo);color:var(--ceo)">CLAUDE.md v2.0</div><div class="ilink-arr">→</div><div class="ilink-node" style="border-color:var(--cto);color:var(--cto)">Claude Code (builds)</div><div class="ilink-arr">+</div><div class="ilink-node" style="border-color:var(--cmo);color:var(--cmo)">Claude Cowork (ops)</div><div class="ilink-arr">+</div><div class="ilink-node" style="border-color:var(--ceo);color:var(--ceo)">Claude Projects (strategy)</div></div>
+    <div style="margin-top:12px;font-size:11px;color:var(--muted);font-family:'DM Mono',monospace;">Single file → all Claude tools stay in sync → no context gaps between sessions</div>
+  </div>
+</div>
+
+<!-- Remaining panes (marketing, finance, product, content) show brief cards -->
+<div id="pane-marketing" class="pane">
+  <div class="sec-hd"><div class="sec-icon" style="background:rgba(255,51,153,.08)">📈</div><div><div class="sec-title">MARKETING TEAM — 12 ROLES</div><div class="sec-sub">SEO · Social · Newsletter · BD — all linked to CMO and shared cloud systems</div></div></div>
+  <div class="emp-grid">
+    <div class="emp-card" style="border-top:3px solid var(--cmo)"><div class="emp-top"><div class="emp-avatar" style="background:rgba(255,51,153,.1)">🔎</div><div><div class="emp-id">M-01</div><div class="emp-name">SEO STRATEGIST</div><div class="emp-role">SE Ranking · Ahrefs · Frase · 5,000-keyword universe</div></div><span class="badge b-pink">CORE</span></div><div class="emp-body"><div class="emp-section">TOOL & ACCESS</div><div class="emp-tools"><span class="emp-tool">SE Ranking</span><span class="emp-tool">Ahrefs (Ph2)</span><span class="emp-tool">GSC</span><span class="emp-tool">Frase</span></div><div class="emp-section">COWORK TASKS</div><div class="emp-cowork"><div class="cowork-task"><span class="cowork-icon">🔍</span>Weekly Mon — Pull SE Ranking report, extract positions 11-20, create content brief in Notion</div><div class="cowork-task"><span class="cowork-icon">📊</span>Monthly — Keyword gap analysis vs 3 competitors, identify 20 uncontested terms</div></div></div><div class="emp-footer"><span class="emp-reports">Reports to: CMO</span><span class="emp-phase" style="color:var(--cmo)">PHASE 1</span></div></div>
+    <div class="emp-card" style="border-top:3px solid var(--cmo)"><div class="emp-top"><div class="emp-avatar" style="background:rgba(255,51,153,.1)">📱</div><div><div class="emp-id">M-02</div><div class="emp-name">SOCIAL MEDIA MANAGER</div><div class="emp-role">Buffer · Canva AI · LinkedIn · X · Instagram · WhatsApp</div></div><span class="badge b-pink">DAY 1</span></div><div class="emp-body"><div class="emp-section">TOOL & ACCESS</div><div class="emp-tools"><span class="emp-tool">Buffer (admin)</span><span class="emp-tool">Canva AI (team)</span><span class="emp-tool">Semrush Social (Ph2)</span></div><div class="emp-section">STANDING ORDERS</div><div class="emp-cowork"><div class="cowork-task"><span class="cowork-icon">⚡</span>Buffer auto-publishes every Sanity article within 60 seconds — verify daily</div><div class="cowork-task"><span class="cowork-icon">🎨</span>Weekly — Create 3 Canva infographics from top economic data, schedule via Buffer</div></div></div><div class="emp-footer"><span class="emp-reports">Reports to: CMO</span><span class="emp-phase" style="color:var(--cmo)">PHASE 1</span></div></div>
+    <div class="emp-card" style="border-top:3px solid var(--cmo)"><div class="emp-top"><div class="emp-avatar" style="background:rgba(255,51,153,.1)">📧</div><div><div class="emp-id">M-03</div><div class="emp-name">NEWSLETTER MANAGER</div><div class="emp-role">Beehiiv · 2,000 sub target · 45% open rate · sponsorship</div></div><span class="badge b-pink">PHASE 1</span></div><div class="emp-body"><div class="emp-section">TOOL & ACCESS</div><div class="emp-tools"><span class="emp-tool">Beehiiv (admin)</span><span class="emp-tool">Claude API</span><span class="emp-tool">Sanity (read)</span></div><div class="emp-section">COWORK TASKS</div><div class="emp-cowork"><div class="cowork-task"><span class="cowork-icon">✍️</span>Every Friday 06:00 — Draft newsletter to /content/newsletter/week-[N].md, create CEO review task</div><div class="cowork-task"><span class="cowork-icon">📊</span>Monthly — Beehiiv subscriber growth report to Notion Marketing</div></div></div><div class="emp-footer"><span class="emp-reports">Reports to: CMO</span><span class="emp-phase" style="color:var(--cmo)">PHASE 1</span></div></div>
+    <div class="emp-card" style="border-top:3px solid var(--cmo)"><div class="emp-top"><div class="emp-avatar" style="background:rgba(255,51,153,.1)">🤝</div><div><div class="emp-id">M-04</div><div class="emp-name">BD & PR MANAGER</div><div class="emp-role">Hunter.io · Apollo · 3 ad partners · institutional outreach</div></div><span class="badge b-pink">MONTH 1</span></div><div class="emp-body"><div class="emp-section">TOOL & ACCESS</div><div class="emp-tools"><span class="emp-tool">Hunter.io</span><span class="emp-tool">Apollo (Ph2)</span><span class="emp-tool">Gemini Gmail</span></div><div class="emp-section">COWORK TASKS</div><div class="emp-cowork"><div class="cowork-task"><span class="cowork-icon">📧</span>Monthly — Draft 10 publisher + 5 institutional emails, save to /ops/outreach/</div></div></div><div class="emp-footer"><span class="emp-reports">Reports to: CMO + CSO</span><span class="emp-phase" style="color:var(--cmo)">PHASE 1</span></div></div>
+  </div>
+</div>
+
+<div id="pane-finance" class="pane">
+  <div class="sec-hd"><div class="sec-icon" style="background:rgba(0,232,122,.08)">💰</div><div><div class="sec-title">FINANCE & BUSINESS TEAM — 8 ROLES</div><div class="sec-sub">Revenue planning · investment · unit economics · GST compliance — all linked to CFO</div></div></div>
+  <div class="emp-grid">
+    <div class="emp-card" style="border-top:3px solid var(--cfo)"><div class="emp-top"><div class="emp-avatar" style="background:rgba(0,232,122,.1)">📊</div><div><div class="emp-id">F-01</div><div class="emp-name">REVENUE PLANNER</div><div class="emp-role">Gemini Sheets · 6-stream model · pricing · Mediavine path</div></div><span class="badge b-green">CORE</span></div><div class="emp-body"><div class="emp-section">TOOL & ACCESS</div><div class="emp-tools"><span class="emp-tool">Gemini Sheets</span><span class="emp-tool">Stripe</span><span class="emp-tool">Razorpay</span><span class="emp-tool">Looker Studio</span></div><div class="emp-section">COWORK TASKS</div><div class="emp-cowork"><div class="cowork-task"><span class="cowork-icon">📈</span>Monthly — Export Stripe+Razorpay to /ops/finance/revenue-month-[N].xlsx, update Notion</div></div></div><div class="emp-footer"><span class="emp-reports">Reports to: CFO</span><span class="emp-phase" style="color:var(--cfo)">PHASE 1</span></div></div>
+    <div class="emp-card" style="border-top:3px solid var(--cfo)"><div class="emp-top"><div class="emp-avatar" style="background:rgba(0,232,122,.1)">🔬</div><div><div class="emp-id">F-02</div><div class="emp-name">BUSINESS ANALYST</div><div class="emp-role">GA4 · Supabase · LTV:CAC · cohort analysis · CEO dashboard</div></div><span class="badge b-green">PHASE 1</span></div><div class="emp-body"><div class="emp-section">TOOL & ACCESS</div><div class="emp-tools"><span class="emp-tool">GA4</span><span class="emp-tool">Supabase Analytics</span><span class="emp-tool">Gemini Sheets</span><span class="emp-tool">Looker Studio</span></div><div class="emp-section">COWORK TASKS</div><div class="emp-cowork"><div class="cowork-task"><span class="cowork-icon">📊</span>Weekly Mon — Pull GA4 + Supabase data, fill CEO dashboard template in Notion</div><div class="cowork-task"><span class="cowork-icon">📈</span>Monthly — Run cohort analysis in Sheets: subscriber retention by month cohort</div></div></div><div class="emp-footer"><span class="emp-reports">Reports to: CFO + CPO</span><span class="emp-phase" style="color:var(--cfo)">PHASE 1</span></div></div>
+    <div class="emp-card" style="border-top:3px solid var(--biz);border-top-color:var(--chro)"><div class="emp-top"><div class="emp-avatar" style="background:rgba(255,170,0,.1)">📈</div><div><div class="emp-id">F-03</div><div class="emp-name">INVESTMENT PLANNER</div><div class="emp-role">Phase capital · ROI · 18-month model · Series A readiness</div></div><span class="badge" style="background:rgba(255,170,0,.12);color:var(--chro)">PHASE 1</span></div><div class="emp-body"><div class="emp-section">TOOL & ACCESS</div><div class="emp-tools"><span class="emp-tool">Gemini Sheets</span><span class="emp-tool">Wave</span><span class="emp-tool">NotebookLM</span><span class="emp-tool">Looker Studio</span></div><div class="emp-section">COWORK TASKS</div><div class="emp-cowork"><div class="cowork-task"><span class="cowork-icon">💰</span>Monthly — Update investment tracker: actual vs Phase budget (₹0-50k), save to /ops/finance/</div><div class="cowork-task"><span class="cowork-icon">📋</span>Quarterly — Refresh investor model with latest MRR, LTV, burn rate</div></div></div><div class="emp-footer"><span class="emp-reports">Reports to: CFO + CEO</span><span class="emp-phase" style="color:var(--chro)">PHASE 1</span></div></div>
+    <div class="emp-card" style="border-top:3px solid var(--cfo)"><div class="emp-top"><div class="emp-avatar" style="background:rgba(0,232,122,.1)">🧾</div><div><div class="emp-id">F-04</div><div class="emp-name">TAX & COMPLIANCE</div><div class="emp-role">Zoho Books · GST · LUT · TDS · DPDPA · SEBI disclaimers</div></div><span class="badge b-green">DAY 1</span></div><div class="emp-body"><div class="emp-section">TOOL & ACCESS</div><div class="emp-tools"><span class="emp-tool">Zoho Books</span><span class="emp-tool">Iubenda</span><span class="emp-tool">CookieYes</span><span class="emp-tool">Wave</span></div><div class="emp-section">COWORK TASKS</div><div class="emp-cowork"><div class="cowork-task"><span class="cowork-icon">🧾</span>Quarterly — Export Zoho Books GST report, save to /ops/legal/gst-[Q]-[year].pdf</div><div class="cowork-task"><span class="cowork-icon">📅</span>January — Create LUT renewal task + CA appointment in Notion (CRITICAL — blocks FX revenue)</div></div></div><div class="emp-footer"><span class="emp-reports">Reports to: CFO</span><span class="emp-phase" style="color:var(--cfo)">PHASE 1</span></div></div>
+  </div>
+</div>
+
+<div id="pane-product" class="pane">
+  <div class="sec-hd"><div class="sec-icon" style="background:rgba(153,51,255,.08)">🎯</div><div><div class="sec-title">PRODUCT & UX TEAM — 6 ROLES</div><div class="sec-sub">30-service delivery · subscriptions · UX research · paywall optimisation</div></div></div>
+  <div class="emp-grid">
+    <div class="emp-card" style="border-top:3px solid var(--cpo)"><div class="emp-top"><div class="emp-avatar" style="background:rgba(153,51,255,.1)">🗺️</div><div><div class="emp-id">P-01</div><div class="emp-name">PLATFORM PM</div><div class="emp-role">Notion AI · Claude Projects · 30-service sprint delivery</div></div><span class="badge b-purple">CORE</span></div><div class="emp-body"><div class="emp-section">TOOL & ACCESS</div><div class="emp-tools"><span class="emp-tool">Notion AI (admin)</span><span class="emp-tool">Claude Projects</span><span class="emp-tool">GA4 (read)</span></div><div class="emp-section">COWORK TASKS</div><div class="emp-cowork"><div class="cowork-task"><span class="cowork-icon">🗺️</span>Weekly Mon — Update sprint board: mark done, set next 5 services with acceptance criteria</div><div class="cowork-task"><span class="cowork-icon">📋</span>Per feature — Write spec in Notion: goal, user story, acceptance criteria, test cases</div></div></div><div class="emp-footer"><span class="emp-reports">Reports to: CPO</span><span class="emp-phase" style="color:var(--cpo)">PHASE 1</span></div></div>
+    <div class="emp-card" style="border-top:3px solid var(--cpo)"><div class="emp-top"><div class="emp-avatar" style="background:rgba(153,51,255,.1)">🔬</div><div><div class="emp-id">P-02</div><div class="emp-name">UX RESEARCHER</div><div class="emp-role">GA4 · Hotjar (Ph2) · reading patterns · quiz completion</div></div><span class="badge b-purple">PHASE 1</span></div><div class="emp-body"><div class="emp-section">TOOL & ACCESS</div><div class="emp-tools"><span class="emp-tool">GA4</span><span class="emp-tool">Hotjar (Ph2)</span><span class="emp-tool">Supabase Events</span></div><div class="emp-section">COWORK TASKS</div><div class="emp-cowork"><div class="cowork-task"><span class="cowork-icon">📊</span>Monthly — Pull GA4 scroll depth for article pages, identify drop-off points, report to CPO</div><div class="cowork-task"><span class="cowork-icon">🏆</span>Monthly — Compare EconoLens UX vs Bloomberg, FRED, Trading Economics — log gaps</div></div></div><div class="emp-footer"><span class="emp-reports">Reports to: CPO</span><span class="emp-phase" style="color:var(--cpo)">PHASE 1</span></div></div>
+    <div class="emp-card" style="border-top:3px solid var(--cpo)"><div class="emp-top"><div class="emp-avatar" style="background:rgba(153,51,255,.1)">💎</div><div><div class="emp-id">P-03</div><div class="emp-name">SUBSCRIPTION PM</div><div class="emp-role">Stripe · Razorpay · free→paid 3% target · churn ≤5%</div></div><span class="badge b-purple">PHASE 1</span></div><div class="emp-body"><div class="emp-section">TOOL & ACCESS</div><div class="emp-tools"><span class="emp-tool">Stripe Analytics</span><span class="emp-tool">Razorpay</span><span class="emp-tool">GA4 Funnels</span><span class="emp-tool">Supabase</span></div><div class="emp-section">COWORK TASKS</div><div class="emp-cowork"><div class="cowork-task"><span class="cowork-icon">📊</span>Monthly — Calculate free→paid conversion + churn rate, log to Notion Subscription Metrics</div></div></div><div class="emp-footer"><span class="emp-reports">Reports to: CPO + CFO</span><span class="emp-phase" style="color:var(--cpo)">PHASE 1</span></div></div>
+  </div>
+</div>
+
+<div id="pane-content" class="pane">
+  <div class="sec-hd"><div class="sec-icon" style="background:rgba(85,221,136,.08)">✍️</div><div><div class="sec-title">CONTENT OPS TEAM — 8 ROLES</div><div class="sec-sub">30-article/day machine · paper translation · audio (Ph2) · quizzes (Ph2)</div></div></div>
+  <div class="emp-grid">
+    <div class="emp-card" style="border-top:3px solid var(--content)"><div class="emp-top"><div class="emp-avatar" style="background:rgba(85,221,136,.1)">📰</div><div><div class="emp-id">C-01</div><div class="emp-name">NEWS PIPELINE OPERATOR</div><div class="emp-role">Feedly · Claude API · Copyscape · Sanity — fully automated 24/7</div></div><span class="badge b-ai">CORE</span></div><div class="emp-body"><div class="emp-section">TOOL & ACCESS</div><div class="emp-tools"><span class="emp-tool">Feedly</span><span class="emp-tool">Claude API</span><span class="emp-tool">Copyscape</span><span class="emp-tool">Sanity API</span><span class="emp-tool">Make.com</span></div><div class="emp-section">STANDING ORDERS</div><div class="emp-cowork"><div class="cowork-task"><span class="cowork-icon">⚡</span>Make.com FLOW-01 runs fully automated — zero human needed unless Copyscape &gt;15%</div><div class="cowork-task"><span class="cowork-icon">📋</span>COO reviews Make.com success rate daily — flag if any run fails</div></div></div><div class="emp-footer"><span class="emp-reports">Reports to: CCO</span><span class="emp-phase" style="color:var(--content)">PHASE 1</span></div></div>
+    <div class="emp-card" style="border-top:3px solid var(--content)"><div class="emp-top"><div class="emp-avatar" style="background:rgba(85,221,136,.1)">📚</div><div><div class="emp-id">C-02</div><div class="emp-name">ACADEMIC PAPER TRANSLATOR</div><div class="emp-role">Claude API · pdf.js · NBER/SSRN/REPEC · India context</div></div><span class="badge" style="background:rgba(85,221,136,.12);color:var(--content)">PHASE 1</span></div><div class="emp-body"><div class="emp-section">TOOL & ACCESS</div><div class="emp-tools"><span class="emp-tool">Claude API</span><span class="emp-tool">pdf.js</span><span class="emp-tool">Copyscape</span><span class="emp-tool">Sanity CMS</span></div><div class="emp-section">COWORK TASKS</div><div class="emp-cowork"><div class="cowork-task"><span class="cowork-icon">📚</span>Daily 10:30 — Check NBER+SSRN for new papers, translate top 3 using /prompts/paper-translator.md, save to /content/drafts/papers/</div></div></div><div class="emp-footer"><span class="emp-reports">Reports to: CCO</span><span class="emp-phase" style="color:var(--content)">PHASE 1</span></div></div>
+    <div class="emp-card" style="border-top:3px solid var(--content)"><div class="emp-top"><div class="emp-avatar" style="background:rgba(85,221,136,.1)">🔍</div><div><div class="emp-id">C-04</div><div class="emp-name">AI CONTENT REVIEWER</div><div class="emp-role">Claude API · Perplexity · daily 10% spot-check · EEAT</div></div><span class="badge b-ai">DAY 1</span></div><div class="emp-body"><div class="emp-section">TOOL & ACCESS</div><div class="emp-tools"><span class="emp-tool">Claude API (qa prompt)</span><span class="emp-tool">Perplexity Pro</span><span class="emp-tool">Sanity (read)</span><span class="emp-tool">Notion (write)</span></div><div class="emp-section">COWORK TASKS</div><div class="emp-cowork"><div class="cowork-task"><span class="cowork-icon">📋</span>Daily 10:00 — Pick 3 Sanity articles, run /prompts/qa-checklist.md, log pass/fail to Notion Content QA</div><div class="cowork-task"><span class="cowork-icon">🚨</span>On fail — Draft correction in Sanity, tag CCO. Log hallucination patterns to Notion.</div></div></div><div class="emp-footer"><span class="emp-reports">Reports to: QA Lead + CCO</span><span class="emp-phase" style="color:var(--content)">PHASE 1</span></div></div>
+    <div class="emp-card" style="border-top:3px solid var(--content)"><div class="emp-top"><div class="emp-avatar" style="background:rgba(85,221,136,.1)">🎙️</div><div><div class="emp-id">C-03</div><div class="emp-name">AUDIO PRODUCTION MANAGER</div><div class="emp-role">ElevenLabs · Cloudflare R2 · podcast feed · Spotify</div></div><span class="badge" style="background:rgba(85,221,136,.12);color:var(--content)">PHASE 2</span></div><div class="emp-body"><div class="emp-section">TOOL & ACCESS</div><div class="emp-tools"><span class="emp-tool">ElevenLabs API</span><span class="emp-tool">Cloudflare R2</span><span class="emp-tool">RSS Generator</span><span class="emp-tool">Make.com</span></div><div class="emp-section">STANDING ORDERS</div><div class="emp-cowork"><div class="cowork-task"><span class="cowork-icon">🎙️</span>Ph2: Sanity publish → ElevenLabs TTS → Cloudflare R2 → audio URL stored back in Sanity</div></div></div><div class="emp-footer"><span class="emp-reports">Reports to: CCO</span><span class="emp-phase" style="color:var(--content)">PHASE 2</span></div></div>
+  </div>
+</div>
+
+</div><!-- end .main -->
+
+<script>
+function show(id){
+  document.querySelectorAll('.pane').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.ntab').forEach(t=>t.classList.remove('active'));
+  document.getElementById('pane-'+id).classList.add('active');
+  event.currentTarget.classList.add('active');
+  window.scrollTo({top:document.querySelector('.nav').offsetTop-10,behavior:'smooth'});
+}
+</script>
+</body>
+</html>
