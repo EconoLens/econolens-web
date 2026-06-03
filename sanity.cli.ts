@@ -5,4 +5,5 @@ export default defineCliConfig({
     projectId: 'rvv43603',
     dataset: 'production',
   },
+  studioHost: 'econolens',
 })
