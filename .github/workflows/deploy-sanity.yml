@@ -25,10 +25,23 @@ jobs:
       - name: Install dependencies
         run: npm install
 
+      - name: Debug - Check environment
+        run: |
+          echo "=== Sanity CLI version ==="
+          ./node_modules/.bin/sanity --version
+          echo "=== Token present ==="
+          echo "Token length: ${#SANITY_AUTH_TOKEN}"
+          echo "=== sanity.config.ts exists ==="
+          ls -la sanity.config.ts sanity.cli.ts
+          echo "=== sanity.cli.ts content ==="
+          cat sanity.cli.ts
+        env:
+          SANITY_AUTH_TOKEN: ${{ secrets.SANITY_AUTH_TOKEN }}
+
       - name: Deploy Sanity Studio
         run: |
-          echo "Deploying studio to econolens.sanity.studio..."
-          ./node_modules/.bin/sanity deploy econolens --yes
-          echo "Exit code: $?"
+          echo "=== Running sanity deploy ==="
+          ./node_modules/.bin/sanity deploy --yes 2>&1
+          echo "=== Exit code: $? ==="
         env:
           SANITY_AUTH_TOKEN: ${{ secrets.SANITY_AUTH_TOKEN }}
