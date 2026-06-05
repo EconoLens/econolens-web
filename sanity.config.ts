@@ -1,6 +1,6 @@
 import { defineConfig } from 'sanity'
 import { structureTool } from 'sanity/structure'
-import { schemaTypes } from './src/sanity/schemas'
+import { schemaTypes } from './sanity/schemas'
 
 /**
  * Root-level Sanity Studio config — required by `sanity deploy`.
