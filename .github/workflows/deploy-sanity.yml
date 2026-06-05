@@ -31,22 +31,29 @@ jobs:
           cat sanity.cli.ts
           echo "=== sanity.config.ts ==="
           cat sanity.config.ts
-
-      - name: Build Sanity Studio
-        run: |
-          echo "Building studio..."
-          ./node_modules/.bin/sanity build 2>&1
-          echo "Build exit: $?"
-          echo "=== dist/ contents ==="
-          ls -la dist/ 2>&1 || echo "NO dist/ directory found"
-        env:
-          SANITY_AUTH_TOKEN: ${{ secrets.SANITY_AUTH_TOKEN }}
+          echo "=== package.json sanity version ==="
+          node -e "const p = require('./package.json'); console.log('sanity:', p.dependencies.sanity)"
 
       - name: Deploy Sanity Studio
         run: |
           echo "Token length: ${#SANITY_AUTH_TOKEN}"
-          echo "Deploying..."
-          ./node_modules/.bin/sanity deploy --yes 2>&1
-          echo "Deploy exit: $?"
+          echo "=== Starting deploy ==="
+          yes | ./node_modules/.bin/sanity deploy 2>&1 | tee /tmp/deploy.log
+          DEPLOY_EXIT=${PIPESTATUS[0]}
+          echo "=== Deploy exit: $DEPLOY_EXIT ==="
+          echo "=== Full deploy log ==="
+          cat /tmp/deploy.log
+          exit $DEPLOY_EXIT
         env:
           SANITY_AUTH_TOKEN: ${{ secrets.SANITY_AUTH_TOKEN }}
+          CI: "true"
+          FORCE_COLOR: "0"
+          NO_COLOR: "1"
+
+      - name: Upload deploy log
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: deploy-log
+          path: /tmp/deploy.log
+          retention-days: 3
