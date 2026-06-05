@@ -21,15 +21,14 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '20'
-          cache: 'npm'
 
       - name: Install dependencies
-        run: npm ci
+        run: npm install
 
       - name: Deploy Sanity Studio
         run: |
           echo "Deploying studio to econolens.sanity.studio..."
           ./node_modules/.bin/sanity deploy econolens --yes
-          echo "Deploy command exited with code $?"
+          echo "Exit code: $?"
         env:
           SANITY_AUTH_TOKEN: ${{ secrets.SANITY_AUTH_TOKEN }}
