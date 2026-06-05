@@ -25,23 +25,21 @@ jobs:
       - name: Install dependencies
         run: npm install
 
-      - name: Debug - Check environment
+      - name: Deploy Sanity Studio
         run: |
-          echo "=== Sanity CLI version ==="
-          ./node_modules/.bin/sanity --version
-          echo "=== Token present ==="
-          echo "Token length: ${#SANITY_AUTH_TOKEN}"
-          echo "=== sanity.config.ts exists ==="
-          ls -la sanity.config.ts sanity.cli.ts
-          echo "=== sanity.cli.ts content ==="
-          cat sanity.cli.ts
+          echo "Token length: ${#SANITY_AUTH_TOKEN}" > /tmp/deploy.log
+          echo "Sanity version:" >> /tmp/deploy.log
+          ./node_modules/.bin/sanity --version >> /tmp/deploy.log 2>&1
+          echo "Running deploy:" >> /tmp/deploy.log
+          ./node_modules/.bin/sanity deploy --yes >> /tmp/deploy.log 2>&1
+          echo "Exit: $?" >> /tmp/deploy.log
+          cat /tmp/deploy.log
         env:
           SANITY_AUTH_TOKEN: ${{ secrets.SANITY_AUTH_TOKEN }}
 
-      - name: Deploy Sanity Studio
-        run: |
-          echo "=== Running sanity deploy ==="
-          ./node_modules/.bin/sanity deploy --yes 2>&1
-          echo "=== Exit code: $? ==="
-        env:
-          SANITY_AUTH_TOKEN: ${{ secrets.SANITY_AUTH_TOKEN }}
+      - name: Upload deploy log
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: deploy-log
+          path: /tmp/deploy.log
