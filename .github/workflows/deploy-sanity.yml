@@ -1,11 +1,11 @@
 name: Deploy Sanity Studio
-
 on:
   push:
     branches:
       - main
     paths:
       - 'sanity/**'
+      - 'sanity.config.ts'
       - 'package.json'
   workflow_dispatch:
 
@@ -13,7 +13,6 @@ jobs:
   deploy:
     name: Deploy to Sanity Hosting
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -25,9 +24,12 @@ jobs:
           cache: 'npm'
 
       - name: Install dependencies
-        run: npm install
+        run: npm ci
 
       - name: Deploy Sanity Studio
-        run: npm run sanity:deploy -- --yes
+        run: |
+          echo "Deploying studio to econolens.sanity.studio..."
+          ./node_modules/.bin/sanity deploy econolens --yes
+          echo "Deploy command exited with code $?"
         env:
           SANITY_AUTH_TOKEN: ${{ secrets.SANITY_AUTH_TOKEN }}
