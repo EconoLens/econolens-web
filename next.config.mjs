@@ -16,7 +16,7 @@ const nextConfig = {
               "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
               "font-src 'self' https://fonts.gstatic.com",
               "img-src 'self' data: blob: https://cdn.sanity.io https://img.clerk.com",
-              "connect-src 'self' https://*.supabase.co wss://*.supabase.co https://clerk.econolens.co.in https://*.clerk.accounts.dev https://api.razorpay.com https://cdn.sanity.io",
+             "connect-src 'self' https://*.supabase.co wss://*.supabase.co https://clerk.econolens.co.in https://*.clerk.accounts.dev https://api.razorpay.com https://cdn.sanity.io https://*.api.sanity.io wss://*.api.sanity.io https://*.sanity.io",
               "frame-src https://checkout.razorpay.com https://accounts.google.com",
               "worker-src 'self' blob:",
               "object-src 'none'",
