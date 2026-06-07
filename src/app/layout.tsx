@@ -28,7 +28,7 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <ClerkProvider clerkJSUrl="https://unpkg.com/@clerk/clerk-js@5/dist/clerk.browser.js">
+    <ClerkProvider clerkJSUrl="https://clerk.econolens.co.in/npm/@clerk/clerk-js@5.125.12/dist/clerk.browser.js">
       <html lang="en" className={`${inter.variable} ${merriweather.variable}`}>
         <body className="bg-white text-gray-900 antialiased">
           {children}
