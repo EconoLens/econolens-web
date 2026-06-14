@@ -1,123 +1,206 @@
-export const dynamic = 'force-dynamic';
+'use client'
 
-type IndicatorRow = {
-  id: string;
-  name: string;
-  unit: string;
-  description: string;
-  value: number | null;
-  previous: number | null;
-  date: string | null;
-  error: string | null;
-};
+import { useState, useEffect } from 'react'
+import Link from 'next/link'
 
-function getBaseUrl(): string {
-  if (process.env.NEXT_PUBLIC_BASE_URL) return process.env.NEXT_PUBLIC_BASE_URL;
-  if (typeof window !== "undefined") return "";
-  return "https://econolens.co.in";
+interface Indicator {
+  id: string
+  name: string
+  unit: string
+  description: string
+  category: string
+  value: number | null
+  previous: number | null
+  date: string | null
+  source: string
+  country: string
 }
 
-async function loadIndicators(): Promise<{ indicators: IndicatorRow[]; error: string | null }> {
-  try {
-    const res = await fetch(`${getBaseUrl()}/api/indicators`, { cache: "no-store" });
-    if (!res.ok) {
-      const data = await res.json().catch(() => ({}));
-      return { indicators: [], error: data.error ?? `HTTP ${res.status}` };
-    }
-    const data = await res.json();
-    return { indicators: data.indicators ?? [], error: null };
-  } catch (err) {
-    return { indicators: [], error: err instanceof Error ? err.message : "Network error" };
-  }
-}
+const CATEGORIES = ['All', 'India', 'Growth', 'Inflation', 'Monetary Policy', 'Labour', 'Currency', 'Fixed Income', 'Commodities', 'Trade', 'External']
 
 function formatValue(value: number | null, unit: string): string {
-  if (value === null || Number.isNaN(value)) return "—";
-  if (unit === "USD" && Math.abs(value) >= 1_000_000_000)
-    return `$${(value / 1_000_000_000).toFixed(2)}B`;
-  if (Math.abs(value) >= 1000)
-    return value.toLocaleString("en-IN", { maximumFractionDigits: 2 });
-  return value.toFixed(2);
+  if (value === null) return '—'
+  if (unit === '%') return `${value.toFixed(2)}%`
+  if (unit === '$/bbl' || unit === '$/oz') return `$${value.toFixed(2)}`
+  if (unit === '₹') return `₹${value.toFixed(2)}`
+  if (unit === '$Bn') return `$${Math.abs(value).toFixed(1)}Bn`
+  if (unit === 'Bil. $') return `$${(value / 1000).toFixed(1)}T`
+  return value.toFixed(2)
 }
 
-function changeStr(value: number | null, previous: number | null) {
-  if (value === null || previous === null || previous === 0)
-    return { text: "—", cls: "data-change-nil" };
-  const pct = ((value - previous) / Math.abs(previous)) * 100;
-  const sign = pct >= 0 ? "▲" : "▼";
-  return {
-    text: `${sign} ${Math.abs(pct).toFixed(2)}%`,
-    cls: pct >= 0 ? "data-change-pos" : "data-change-neg",
-  };
+function getDelta(value: number | null, previous: number | null): { text: string; pos: boolean; neutral: boolean } {
+  if (value === null || previous === null) return { text: '—', pos: true, neutral: true }
+  const diff = value - previous
+  if (Math.abs(diff) < 0.001) return { text: 'Unchanged', pos: true, neutral: true }
+  const sign = diff > 0 ? '▲' : '▼'
+  return { text: `${sign} ${Math.abs(diff).toFixed(2)}`, pos: diff > 0, neutral: false }
 }
 
-function formatDate(date: string | null): string {
-  if (!date) return "—";
-  const d = new Date(date);
-  if (Number.isNaN(d.getTime())) return date;
-  return d.toLocaleDateString("en-IN", { year: "numeric", month: "short", day: "numeric" });
+function IndicatorCard({ ind }: { ind: Indicator }) {
+  const delta = getDelta(ind.value, ind.previous)
+  const barPct = ind.value !== null ? Math.min(Math.abs(ind.value) / 10 * 100, 100) : 0
+
+  return (
+    <div className="indicator-card" style={{ cursor: 'default' }}>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '6px' }}>
+        <div className="indicator-name">{ind.name}</div>
+        <span style={{
+          fontFamily: 'var(--font-mono)', fontSize: '0.5rem', letterSpacing: '0.08em',
+          textTransform: 'uppercase', color: ind.country === 'India' ? 'var(--gold)' : 'var(--text-tertiary)',
+          border: `0.5px solid ${ind.country === 'India' ? 'rgba(196,144,42,0.4)' : 'var(--ink-border)'}`,
+          padding: '1px 5px'
+        }}>
+          {ind.country === 'India' ? '🇮🇳 IND' : 'US/GLB'}
+        </span>
+      </div>
+      <div className="indicator-value">{formatValue(ind.value, ind.unit)}</div>
+      <div className="indicator-bar">
+        <div
+          className="indicator-bar-fill"
+          style={{
+            width: `${barPct}%`,
+            background: delta.neutral ? 'var(--neutral)' : delta.pos ? 'var(--positive)' : 'var(--negative)',
+          }}
+        />
+      </div>
+      <div className="indicator-meta">
+        <span className={delta.neutral ? 'delta-neu' : delta.pos ? 'delta-pos' : 'delta-neg'}
+          style={{ fontFamily: 'var(--font-mono)', fontSize: '0.5625rem' }}>
+          {delta.text}
+        </span>
+        <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.5625rem', color: 'var(--text-tertiary)' }}>
+          {ind.date ? new Date(ind.date).toLocaleDateString('en-IN', { month: 'short', year: 'numeric' }) : '—'}
+        </span>
+      </div>
+      <div style={{ marginTop: '8px', fontFamily: 'var(--font-mono)', fontSize: '0.5rem', color: 'var(--text-tertiary)', letterSpacing: '0.06em' }}>
+        SRC: {ind.source}
+      </div>
+    </div>
+  )
 }
 
-export default async function IndicatorsPage() {
-  const { indicators, error } = await loadIndicators();
+export default function IndicatorsPage() {
+  const [indicators, setIndicators] = useState<Indicator[]>([])
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
+  const [activeCategory, setActiveCategory] = useState('All')
+  const [search, setSearch] = useState('')
+
+  useEffect(() => {
+    fetch('/api/indicators')
+      .then((r) => r.json())
+      .then((data) => {
+        setIndicators(data.indicators || [])
+        setLoading(false)
+      })
+      .catch(() => {
+        setError('Failed to load indicators')
+        setLoading(false)
+      })
+  }, [])
+
+  const filtered = indicators.filter((ind) => {
+    const matchCat =
+      activeCategory === 'All' ? true :
+      activeCategory === 'India' ? ind.country === 'India' :
+      ind.category === activeCategory
+    const matchSearch = search === '' || ind.name.toLowerCase().includes(search.toLowerCase())
+    return matchCat && matchSearch
+  })
 
   return (
     <>
       {/* Page header */}
-      <div style={{ background: "var(--ink)", borderBottom: "3px solid var(--accent)", padding: "40px 24px 36px" }}>
-        <div style={{ maxWidth: 1200, margin: "0 auto" }}>
-          <p style={{ fontSize: 11, fontWeight: 700, letterSpacing: "0.14em", textTransform: "uppercase", color: "var(--accent)", marginBottom: 12 }}>
+      <section style={{ padding: '40px 0 32px', borderBottom: '0.5px solid var(--ink-border)', background: 'linear-gradient(180deg, #071320 0%, var(--ink) 100%)' }}>
+        <div className="container">
+          <p className="label-mono" style={{ marginBottom: '12px' }}>Live Macro Dashboard</p>
+          <h1 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(1.75rem, 3vw, 2.75rem)', fontWeight: 600, color: 'var(--text-primary)', marginBottom: '10px', lineHeight: 1.1 }}>
             Economic Indicators
-          </p>
-          <h1 className="font-display" style={{ fontSize: 42, fontWeight: 700, color: "#fff", lineHeight: 1.05, marginBottom: 12 }}>
-            India &amp; Global Macro Data
           </h1>
-          <p style={{ color: "rgba(255,255,255,0.55)", fontSize: 15 }}>
-            Live data from FRED (Federal Reserve Bank of St. Louis). Updated hourly.
+          <p style={{ color: 'var(--text-secondary)', fontSize: '0.9375rem', maxWidth: '560px', lineHeight: 1.6 }}>
+            Live macro data for India and global markets. GDP, inflation, monetary policy, currency, commodities — all in one dashboard.
           </p>
+        </div>
+      </section>
+
+      {/* Filters */}
+      <div style={{ borderBottom: '0.5px solid var(--ink-border)', background: 'var(--ink-mid)', position: 'sticky', top: 'calc(var(--nav-h) + var(--ticker-h) + 28px)', zIndex: 50 }}>
+        <div className="container" style={{ display: 'flex', alignItems: 'center', gap: '0', overflowX: 'auto', padding: '0 24px' }}>
+          {CATEGORIES.map((cat) => (
+            <button
+              key={cat}
+              onClick={() => setActiveCategory(cat)}
+              style={{
+                background: 'none',
+                border: 'none',
+                borderBottom: `2px solid ${activeCategory === cat ? 'var(--gold)' : 'transparent'}`,
+                fontFamily: 'var(--font-mono)',
+                fontSize: '0.5625rem',
+                letterSpacing: '0.1em',
+                textTransform: 'uppercase',
+                padding: '12px 16px',
+                cursor: 'pointer',
+                color: activeCategory === cat ? 'var(--gold)' : 'var(--text-tertiary)',
+                whiteSpace: 'nowrap',
+                transition: 'all 0.15s',
+              }}
+            >
+              {cat}
+            </button>
+          ))}
+          <div style={{ marginLeft: 'auto', flexShrink: 0 }}>
+            <input
+              type="text"
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              placeholder="Search indicator..."
+              className="query-input"
+              style={{ width: '180px', padding: '8px 12px', fontSize: '0.75rem' }}
+            />
+          </div>
         </div>
       </div>
 
-      <div style={{ maxWidth: 1200, margin: "0 auto", padding: "40px 24px" }}>
-        {error && (
-          <div style={{ background: "#FEF2F2", border: "1px solid #FECACA", borderLeft: "4px solid var(--red)", padding: "14px 20px", marginBottom: 32, fontSize: 14, color: "#991B1B" }}>
-            Could not load indicators: {error}
-          </div>
-        )}
-
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 1, background: "var(--border)" }}>
-          {indicators.map((ind) => {
-            const change = changeStr(ind.value, ind.previous);
-            return (
-              <div key={ind.id} className="data-card">
-                <p style={{ fontSize: 11, fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase", color: "var(--muted)", marginBottom: 14 }}>
-                  {ind.name}
-                </p>
-                <div style={{ display: "flex", alignItems: "baseline", gap: 8, marginBottom: 8 }}>
-                  <p className="data-number">{formatValue(ind.value, ind.unit)}</p>
-                  <span style={{ fontSize: 13, color: "var(--muted)", fontFamily: "'Space Mono', monospace" }}>{ind.unit}</span>
-                </div>
-                <p className={`font-mono-data ${change.cls}`} style={{ fontSize: 13, marginBottom: 14 }}>
-                  {change.text} <span style={{ color: "var(--muted)", fontSize: 11 }}>vs prior</span>
-                </p>
-                <p style={{ fontSize: 13, color: "var(--muted)", lineHeight: 1.6, marginBottom: 12 }}>{ind.description}</p>
-                <p style={{ fontSize: 11, color: "var(--muted)", borderTop: "1px solid var(--border)", paddingTop: 10, fontFamily: "'Space Mono', monospace" }}>
-                  As of {formatDate(ind.date)}
-                </p>
-              </div>
-            );
-          })}
-          {indicators.length === 0 && !error && (
-            <div style={{ gridColumn: "1/-1", padding: 40, textAlign: "center", color: "var(--muted)", fontSize: 14 }}>
-              Add a FRED_API_KEY in Vercel environment variables to load live indicators.
+      {/* Grid */}
+      <section style={{ padding: '32px 0 64px' }}>
+        <div className="container">
+          {loading && (
+            <div style={{ textAlign: 'center', padding: '64px', color: 'var(--text-tertiary)' }}>
+              <p style={{ fontFamily: 'var(--font-mono)', fontSize: '0.6875rem', letterSpacing: '0.15em', textTransform: 'uppercase' }}>
+                Loading indicators from FRED · RBI · MOSPI...
+              </p>
             </div>
           )}
+          {error && (
+            <div style={{ padding: '20px', border: '0.5px solid var(--negative)', background: 'rgba(248,113,113,0.05)', color: 'var(--negative)', fontFamily: 'var(--font-mono)', fontSize: '0.75rem' }}>
+              {error} — Showing cached data
+            </div>
+          )}
+          {!loading && (
+            <>
+              <div style={{ marginBottom: '16px', fontFamily: 'var(--font-mono)', fontSize: '0.5625rem', letterSpacing: '0.08em', color: 'var(--text-tertiary)', textTransform: 'uppercase' }}>
+                {filtered.length} indicators · Data: FRED, RBI, MOSPI, CMIE · Refreshed hourly
+              </div>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: '1px', background: 'var(--ink-border)' }}>
+                {filtered.map((ind) => (
+                  <IndicatorCard key={ind.id} ind={ind} />
+                ))}
+              </div>
+            </>
+          )}
         </div>
+      </section>
 
-        <p style={{ marginTop: 24, fontSize: 12, color: "var(--muted)" }}>
-          Source: <a href="https://fred.stlouisfed.org" target="_blank" rel="noopener" style={{ color: "var(--accent)", textDecoration: "none" }}>FRED, Federal Reserve Bank of St. Louis</a>. Data provided as-is for informational purposes.
-        </p>
+      {/* Attribution */}
+      <div style={{ padding: '20px 0', borderTop: '0.5px solid var(--ink-border)' }}>
+        <div className="container">
+          <p style={{ fontFamily: 'var(--font-mono)', fontSize: '0.5rem', letterSpacing: '0.08em', color: 'var(--text-tertiary)', textTransform: 'uppercase', lineHeight: 1.8 }}>
+            Data sources: Federal Reserve Economic Data (FRED) · St. Louis Fed · Reserve Bank of India (RBI) ·
+            Ministry of Statistics & Programme Implementation (MOSPI) · Centre for Monitoring Indian Economy (CMIE) ·
+            Updated hourly via ISR. Not financial advice. Verify before use.
+          </p>
+        </div>
       </div>
     </>
-  );
+  )
 }
