@@ -68,6 +68,7 @@ const NAV_LINKS = [
   { href: '/articles', label: 'News' },
   { href: '/indicators', label: 'Indicators' },
   { href: '/research', label: 'Research' },
+  { href: '/study', label: 'Study' },
   { href: '/pricing', label: 'Pricing' },
   { href: '/about', label: 'About' },
 ]
