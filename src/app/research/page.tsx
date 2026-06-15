@@ -212,7 +212,7 @@ export default function ResearchPage() {
                     <strong>Daily limit reached.</strong> Upgrade to Pro for unlimited AI research queries.
                   </p>
                   <a href="/pricing" className="btn-primary" style={{ flexShrink: 0, padding: '8px 16px', fontSize: '0.5625rem' }}>
-                    Upgrade ₺199/mo →
+                    Upgrade ₹199/mo →
                   </a>
                 </div>
               )}
@@ -228,7 +228,7 @@ export default function ResearchPage() {
                   <button
                     key={q}
                     onClick={() => { setQuery(q); handleQuery(q) }}
-                    disabled={queriesUsed >= FREE_LIMIT  || loading}
+                    disabled={queriesUsed >= FREE_LIMIT || loading}
                     style={{
                       background: 'var(--ink-mid)', border: 'none', padding: '12px 14px',
                       textAlign: 'left', cursor: 'pointer', color: 'var(--text-secondary)',
@@ -247,7 +247,7 @@ export default function ResearchPage() {
                 <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.5rem', letterSpacing: '0.1em', textTransform: 'uppercase', color: 'var(--text-tertiary)', marginBottom: '8px' }}>
                   Data Sources
                 </div>
-                {'['RBI �\�Reserve Bank of India', 'FRED · St. Louis Fed', 'IMF · World Economic Outlook', 'NBER · Working Papers', 'World Bank Open Data', 'MOSPI · India Statistics'].map((src) => (
+                {['RBI · Reserve Bank of India', 'FRED · St. Louis Fed', 'IMF · World Economic Outlook', 'NBER · Working Papers', 'World Bank Open Data', 'MOSPI · India Statistics'].map((src) => (
                   <p key={src} style={{ fontFamily: 'var(--font-mono)', fontSize: '0.5625rem', color: 'var(--text-tertiary)', marginBottom: '4px', letterSpacing: '0.04em' }}>
                     {src}
                   </p>
