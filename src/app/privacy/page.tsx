@@ -13,14 +13,14 @@ export default function PrivacyPage() {
         <h1 className="mt-3 text-4xl font-semibold tracking-tight text-neutral-900">
           Privacy Policy
         </h1>
-        <p className="mt-2 text-sm text-neutral-500">Last updated: May 2026</p>
+        <p className="mt-2 text-sm text-neutral-500">Last updated: June 2026</p>
       </header>
       <div className="mt-10 space-y-8 text-base leading-relaxed text-neutral-700">
         <section>
           <h2 className="mb-2 text-xl font-semibold text-neutral-900">Information we collect</h2>
           <p>
             When you sign up, we collect your email address and name via Clerk authentication. We
-            also collect the queries you submit to the AI research tool and your subscription status.
+            also collect the queries you submit to the research tool and your subscription status.
           </p>
         </section>
         <section>
@@ -50,6 +50,21 @@ export default function PrivacyPage() {
           <p>
             We retain your account data for as long as your account is active. You may request
             deletion of your account and associated data at any time by contacting us.
+          </p>
+        </section>
+        <section id="cookies">
+          <h2 className="mb-2 text-xl font-semibold text-neutral-900">Cookie Policy</h2>
+          <p>
+            EconoLens uses essential cookies to keep you signed in and remember your session
+            preferences. We also use analytics cookies to understand how visitors use the site,
+            helping us improve the experience over time. Non-essential cookies can be disabled in
+            your browser settings at any time without affecting core functionality.
+          </p>
+          <p className="mt-3">
+            <strong>Essential cookies</strong> are required for the site to function — they manage
+            authentication sessions and security tokens. <strong>Analytics cookies</strong> collect
+            anonymised usage data (pages visited, time on site) to help us understand audience
+            behaviour. We do not use advertising or tracking cookies.
           </p>
         </section>
         <section>
