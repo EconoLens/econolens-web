@@ -1,4 +1,5 @@
 import Link from 'next/link'
+
 import { getLatestArticles, getArticlesByCategory } from '@/lib/sanity'
 
 export const revalidate = 900
@@ -154,7 +155,6 @@ export default async function StudyPage() {
               New topics added every week
             </span>
           </div>
-
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: '24px' }}>
             {SUBJECTS.map((subject) => (
               <div key={subject.section} style={{
@@ -176,7 +176,6 @@ export default async function StudyPage() {
                     margin: 0,
                   }}>{subject.section}</h2>
                 </div>
-
                 {/* Topics */}
                 <ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
                   {subject.topics.map((topic, i) => (
@@ -205,9 +204,8 @@ export default async function StudyPage() {
                           gap: '10px',
                           padding: '11px 18px',
                         }}>
-                          <span style={{ fontSize: '0.875rem', flexShrink: 0, opacity: 0.5 }}>{topic.icon}</span>
+                          <span style={{ fontSize: '0.875rem', flexShrink: 0, opacity: 0.4 }}>{topic.icon}</span>
                           <span style={{ fontSize: '0.875rem', color: 'var(--text-tertiary)', lineHeight: 1.3 }}>{topic.label}</span>
-                          <span style={{ marginLeft: 'auto', fontFamily: 'var(--font-mono)', fontSize: '0.5rem', color: 'var(--ink-border-2)', textTransform: 'uppercase', letterSpacing: '0.08em' }}>Soon</span>
                         </div>
                       )}
                     </li>
@@ -241,7 +239,7 @@ export default async function StudyPage() {
         </section>
       )}
 
-      {/* ── CTA: Request a topic ── */}
+      {/* ── CTA ── */}
       <section style={{
         borderTop: '0.5px solid var(--ink-border)',
         background: 'var(--ink-mid)',
@@ -259,7 +257,7 @@ export default async function StudyPage() {
           <p style={{ fontSize: '0.9375rem', color: 'var(--text-secondary)', marginBottom: '20px' }}>
             We&apos;re building the complete economics curriculum — one rigorous, accessible explainer at a time.
           </p>
-          <Link href="/research" style={{
+          <Link href="/articles" style={{
             display: 'inline-block',
             fontFamily: 'var(--font-mono)',
             fontSize: '0.5625rem',
@@ -272,10 +270,10 @@ export default async function StudyPage() {
             border: '1px solid var(--gold)',
             transition: 'all 0.15s',
           }}>
-            Explore Research →
+            Browse All Articles →
           </Link>
         </div>
       </section>
     </>
   )
-}
+                  }
