@@ -1,21 +1,17 @@
 import Link from 'next/link'
 
 const FREE_FEATURES = [
-  '30 economics articles daily',
   'Three-layer reading (Overview · Explainer · Technical)',
-  '5 AI Research queries per day',
   'Live macro indicators dashboard',
-  'India-focus: RBI, SEBI, NITI Aayog coverage',
-  'Academic paper summaries (3/day)',
+  'Global coverage: central banks, multilateral institutions, research bodies',
+  'Original analysis grounded in official sources',
 ]
 
 const PRO_FEATURES = [
   'Everything in Free',
-  'Unlimited AI Research queries',
-  'Full academic paper archive',
+  'Full article archive access',
   'Priority data refresh (5-min)',
   'Export articles & data (PDF, CSV)',
-  'API access (Phase 2)',
   'Institutional research reports',
   'Cancel anytime',
 ]
@@ -31,7 +27,7 @@ export default function PricingPage() {
             Intelligence that pays for itself
           </h1>
           <p style={{ color: 'var(--text-secondary)', fontSize: '1rem', maxWidth: '480px', margin: '0 auto', lineHeight: 1.7 }}>
-            Start free. Upgrade when you want unlimited access to India&apos;s most comprehensive economics intelligence platform.
+            Start free. Upgrade when you want full access to our economics intelligence platform.
           </p>
         </div>
       </section>
@@ -47,11 +43,11 @@ export default function PricingPage() {
                 Free Plan
               </div>
               <div style={{ marginBottom: '6px' }}>
-                <span style={{ fontFamily: 'var(--font-display)', fontSize: '3rem', fontWeight: 600, color: 'var(--text-primary)', lineHeight: 1 }}>₹0</span>
+                <span style={{ fontFamily: 'var(--font-display)', fontSize: '3rem', fontWeight: 600, color: 'var(--text-primary)', lineHeight: 1 }}>&#x20B9;0</span>
                 <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.75rem', color: 'var(--text-tertiary)', marginLeft: '8px' }}>forever</span>
               </div>
               <p style={{ fontSize: '0.875rem', color: 'var(--text-secondary)', marginBottom: '28px', lineHeight: 1.5 }}>
-                Full access to news and indicators. 5 AI research queries daily.
+                Full access to articles and live indicators. No credit card required.
               </p>
               <div style={{ height: '0.5px', background: 'var(--ink-border)', marginBottom: '24px' }} />
               <ul style={{ listStyle: 'none', padding: 0, margin: '0 0 32px', display: 'flex', flexDirection: 'column', gap: '10px' }}>
@@ -78,14 +74,14 @@ export default function PricingPage() {
                 Pro Plan
               </div>
               <div style={{ marginBottom: '6px', display: 'flex', alignItems: 'baseline', gap: '6px' }}>
-                <span style={{ fontFamily: 'var(--font-display)', fontSize: '3rem', fontWeight: 600, color: 'var(--text-primary)', lineHeight: 1 }}>₹199</span>
+                <span style={{ fontFamily: 'var(--font-display)', fontSize: '3rem', fontWeight: 600, color: 'var(--text-primary)', lineHeight: 1 }}>&#x20B9;199</span>
                 <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.75rem', color: 'var(--text-tertiary)' }}>/month</span>
               </div>
               <p style={{ fontFamily: 'var(--font-mono)', fontSize: '0.5625rem', color: 'var(--text-tertiary)', letterSpacing: '0.06em', marginBottom: '4px' }}>
-                OR ₹1,799/year (save 25%)
+                OR &#x20B9;1,799/year (save 25%)
               </p>
               <p style={{ fontSize: '0.875rem', color: 'var(--text-secondary)', marginBottom: '28px', lineHeight: 1.5 }}>
-                Unlimited AI research. Full archive. No limits.
+                Full archive. Priority data. No limits.
               </p>
               <div style={{ height: '0.5px', background: 'rgba(196,144,42,0.3)', marginBottom: '24px' }} />
               <ul style={{ listStyle: 'none', padding: 0, margin: '0 0 32px', display: 'flex', flexDirection: 'column', gap: '10px' }}>
@@ -97,7 +93,7 @@ export default function PricingPage() {
                 ))}
               </ul>
               <Link href="/sign-up?plan=pro" className="btn-primary" style={{ width: '100%', justifyContent: 'center' }}>
-                Subscribe ₹199/month →
+                Subscribe &#x20B9;199/month →
               </Link>
               <p style={{ fontFamily: 'var(--font-mono)', fontSize: '0.5rem', letterSpacing: '0.06em', color: 'var(--text-tertiary)', textAlign: 'center', marginTop: '12px' }}>
                 SECURED VIA RAZORPAY · CANCEL ANYTIME · GST INCLUSIVE
@@ -112,10 +108,10 @@ export default function PricingPage() {
                 Institutional Access
               </div>
               <p style={{ fontFamily: 'var(--font-display)', fontSize: '1.125rem', color: 'var(--text-primary)', marginBottom: '4px' }}>
-                For IIMs, research institutes, and think tanks
+                For universities, research institutes, and think tanks
               </p>
               <p style={{ fontSize: '0.875rem', color: 'var(--text-secondary)' }}>
-                Bulk licences · SSO · API access · White-label reports · Custom data feeds
+                Bulk licences · SSO · White-label reports · Custom data feeds
               </p>
             </div>
             <a href="mailto:khagankp@gmail.com?subject=EconoLens Institutional Access" className="btn-outline" style={{ flexShrink: 0 }}>
@@ -133,7 +129,7 @@ export default function PricingPage() {
           </div>
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '24px', maxWidth: '800px' }}>
             {[
-              { q: 'Is the free plan really free?', a: 'Yes, forever. Full news access + 5 AI queries daily. No credit card required.' },
+              { q: 'Is the free plan really free?', a: 'Yes, forever. Full access to articles and live indicators. No credit card required.' },
               { q: 'What payment methods are accepted?', a: 'UPI, credit/debit cards, net banking, and wallets via Razorpay. Secure and instant.' },
               { q: 'Can I cancel anytime?', a: 'Yes. Cancel from your dashboard and your Pro access continues until the billing cycle ends.' },
               { q: 'Is this SEBI compliant?', a: 'EconoLens is an information platform, not a financial advisor. All content carries appropriate disclaimers.' },
@@ -148,4 +144,4 @@ export default function PricingPage() {
       </section>
     </>
   )
-}
+                                  }
