@@ -128,7 +128,7 @@ function Footer() {
           <div>
             <div className="footer-logo">Econo<span>Lens</span></div>
             <p style={{ fontSize: '0.8125rem', color: 'var(--text-tertiary)', marginTop: '10px', lineHeight: '1.6', maxWidth: '260px' }}>
-              World economics intelligence. Original analysis grounded in official sources.
+              World economics intelligence. Original analysis grounded in official sources — RBI, IMF, World Bank, Fed, and NBER.
             </p>
             <p style={{ fontFamily: 'var(--font-mono)', fontSize: '0.5625rem', letterSpacing: '0.1em', color: 'var(--text-tertiary)', marginTop: '16px', textTransform: 'uppercase' }}>
               Econolens Media and Technology · Sole Proprietorship
@@ -140,11 +140,13 @@ function Footer() {
             <a href="/indicators" className="footer-link">Indicators</a>
             <a href="/study" className="footer-link">Study</a>
             <a href="/pricing" className="footer-link">Pricing</a>
+            <a href="/articles?type=paper" className="footer-link">Research</a>
           </div>
           <div>
             <p style={{ fontFamily: 'var(--font-mono)', fontSize: '0.5625rem', letterSpacing: '0.12em', textTransform: 'uppercase', color: 'var(--text-tertiary)', marginBottom: '14px' }}>Company</p>
             <a href="/about" className="footer-link">About</a>
-            <a href="/about#contributors" className="footer-link">Contributors</a>
+            <a href="/about#founders" className="footer-link">Founders</a>
+            <a href="/about#mission" className="footer-link">Mission</a>
             <a href="mailto:khagankp@gmail.com" className="footer-link">Contact</a>
           </div>
           <div>
@@ -152,11 +154,12 @@ function Footer() {
             <a href="/privacy" className="footer-link">Privacy Policy</a>
             <a href="/terms" className="footer-link">Terms of Service</a>
             <a href="/disclaimer" className="footer-link">Disclaimer</a>
+            <a href="/privacy#cookies" className="footer-link">Cookie Policy</a>
           </div>
         </div>
         <div className="footer-bottom">
           <span className="footer-legal">© 2026 ECONOLENS MEDIA AND TECHNOLOGY. ALL RIGHTS RESERVED.</span>
-          <span className="footer-legal">SOURCES: RBI · IMF · WORLD BANK · NBER · ECB</span>
+          <span className="footer-legal">SOURCES: RBI · IMF · WORLD BANK · NBER · ECB · FED</span>
         </div>
       </div>
     </footer>
