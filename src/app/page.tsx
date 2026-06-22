@@ -76,33 +76,33 @@ export default async function HomePage() {
                                                                             }}
                                                                           >
                                                                           The World Economy,<br />
-                                                                          <em style={{ fontStyle: 'italic', color: 'var(--gold)' }}>Made Clear.</em>em>
-                                                          </h1>h1>
+                                                                          <em style={{ fontStyle: 'italic', color: 'var(--gold)' }}>Made Clear.</em>
+                                                          </h1>
                                                           <p
                                                                             className="animate-fade-up delay-200"
                                                                             style={{ fontSize: '1rem', color: 'var(--text-secondary)', maxWidth: '520px', lineHeight: 1.7, marginBottom: '32px' }}
                                                                           >
                                                                           Economics news, live macro indicators, and deep analysis — grounded in official sources from central banks, multilateral institutions, and top research bodies.
-                                                          </p>p>
+                                                          </p>
                                                           <div className="animate-fade-up delay-300" style={{ display: 'flex', gap: '12px', flexWrap: 'wrap' }}>
                                                                           <Link href="/articles" className="btn-primary">
                                                                                             Read Today&apos;s Analysis →
-                                                                          </Link>Link>
+                                                                          </Link>
                                                                           <Link href="/indicators" className="btn-outline">
                                                                                             Live Indicators
-                                                                          </Link>Link>
-                                                          </div>div>
-                                            </div>div>
+                                                                          </Link>
+                                                          </div>
+                                            </div>
                                 
                                   {/* Live indicator sidebar */}
                                             <div style={{ display: 'flex', flexDirection: 'column', gap: '1px', background: 'var(--ink-border)' }}>
                                                           <div style={{ padding: '10px 14px', background: '#071320', fontFamily: 'var(--font-mono)', fontSize: '0.5625rem', letterSpacing: '0.15em', textTransform: 'uppercase', color: 'var(--text-tertiary)' }}>
                                                                           Live Macro Indicators
-                                                          </div>div>
+                                                          </div>
                                               {FEATURED_INDICATORS.map((ind) => (
                                         <div key={ind.name} style={{ background: 'var(--ink-mid)', padding: '14px 16px' }}>
-                                                          <div className="indicator-name">{ind.name}</div>div>
-                                                          <div className="indicator-value">{ind.value}</div>div>
+                                                          <div className="indicator-name">{ind.name}</div>
+                                                          <div className="indicator-value">{ind.value}</div>
                                                           <div className="indicator-bar">
                                                                               <div
                                                                                                       className="indicator-bar-fill"
@@ -111,47 +111,47 @@ export default async function HomePage() {
                                                                                                                                 background: ind.neutral ? 'var(--neutral)' : ind.pos ? 'var(--positive)' : 'var(--negative)',
                                                                                                         }}
                                                                                                     />
-                                                          </div>div>
+                                                          </div>
                                                           <div className="indicator-meta">
                                                                               <span
                                                                                                       className={ind.neutral ? 'delta-neu' : ind.pos ? 'delta-pos' : 'delta-neg'}
                                                                                                       style={{ fontFamily: 'var(--font-mono)', fontSize: '0.5625rem' }}
                                                                                                     >
                                                                                 {ind.change}
-                                                                              </span>span>
+                                                                              </span>
                                                                               <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.5625rem', color: 'var(--text-tertiary)' }}>
                                                                                 {ind.date}
-                                                                              </span>span>
-                                                          </div>div>
-                                        </div>div>
+                                                                              </span>
+                                                          </div>
+                                        </div>
                                       ))}
                                                           <Link
                                                                             href="/indicators"
                                                                             style={{ padding: '10px 14px', background: '#071320', fontFamily: 'var(--font-mono)', fontSize: '0.5625rem', letterSpacing: '0.1em', textTransform: 'uppercase', color: 'var(--gold)', textDecoration: 'none', display: 'block', textAlign: 'center', borderTop: '0.5px solid var(--ink-border)' }}
                                                                           >
                                                                           View all 200+ indicators →
-                                                          </Link>Link>
-                                            </div>div>
-                                </div>div>
-                      </div>div>
-              </section>section>
+                                                          </Link>
+                                            </div>
+                                </div>
+                      </div>
+              </section>
         
           {/* ── Latest Articles ── */}
               <section style={{ padding: '56px 0' }}>
                       <div className="container">
                                 <div className="section-header">
-                                            <span className="section-title-gold">Today&apos;s Intelligence</span>span>
-                                </div>div>
+                                            <span className="section-title-gold">Today&apos;s Intelligence</span>
+                                </div>
                       
                         {articles.length === 0 ? (
                       <div style={{ padding: '48px', textAlign: 'center', border: '0.5px solid var(--ink-border)', background: 'var(--ink-mid)' }}>
                                     <p style={{ fontFamily: 'var(--font-display)', fontSize: '1.25rem', color: 'var(--text-secondary)', marginBottom: '8px' }}>
                                                     Articles coming soon
-                                    </p>p>
+                                    </p>
                                     <p style={{ fontFamily: 'var(--font-mono)', fontSize: '0.625rem', color: 'var(--text-tertiary)', letterSpacing: '0.08em' }}>
                                                     ECONOMICS INTELLIGENCE · GROUNDED IN OFFICIAL SOURCES
-                                    </p>p>
-                      </div>div>
+                                    </p>
+                      </div>
                     ) : (
                       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '1px', background: 'var(--ink-border)' }}>
                         {articles.map((article: any, i: number) => (
@@ -161,41 +161,41 @@ export default async function HomePage() {
                                                             className="article-card"
                                                             style={{ background: i === 0 ? 'var(--ink-light)' : undefined }}
                                                           >
-                                                          <div className="category">{article.category?.title || 'Economics'}</div>div>
+                                                          <div className="category">{article.category?.title || 'Economics'}</div>
                                                           <div className="title" style={{ fontSize: i === 0 ? '1.25rem' : undefined }}>
                                                             {article.title}
-                                                          </div>div>
+                                                          </div>
                                           {article.summary && (
-                                                                                <div className="summary">{article.summary}</div>div>
+                                                                                <div className="summary">{article.summary}</div>
                                                           )}
                                                           <div className="meta">
                                                                               <span>
                                                                                 {new Date(article.publishedAt).toLocaleDateString('en-GB', {
                                                                                     day: 'numeric', month: 'short',
                                                           })}
-                                                                              </span>span>
+                                                                              </span>
                                                                               <span style={{ width: 2, height: 2, background: 'var(--ink-border-2)', borderRadius: '50%', display: 'inline-block' }} />
-                                                                              <span>3 layers</span>span>
-                                                          </div>div>
-                                        </Link>Link>
+                                                                              <span>3 layers</span>
+                                                          </div>
+                                        </Link>
                                       ))}
-                      </div>div>
+                      </div>
                                 )}
                       
                                 <div style={{ marginTop: '20px', textAlign: 'center' }}>
                                             <Link href="/articles" className="btn-outline">
                                                           Browse all articles →
-                                            </Link>Link>
-                                </div>div>
-                      </div>div>
-              </section>section>
+                                            </Link>
+                                </div>
+                      </div>
+              </section>
         
           {/* ── Services Grid ── */}
               <section style={{ padding: '0 0 64px', borderTop: '0.5px solid var(--ink-border)' }}>
                       <div className="container" style={{ paddingTop: '56px' }}>
                                 <div className="section-header">
-                                            <span className="section-title">Platform Services</span>span>
-                                </div>div>
+                                            <span className="section-title">Platform Services</span>
+                                </div>
                                 <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '1px', background: 'var(--ink-border)' }}>
                                   {SERVICES.map((svc) => (
                         <Link
@@ -207,43 +207,43 @@ export default async function HomePage() {
                                         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '14px' }}>
                                                           <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.625rem', color: 'var(--text-tertiary)', letterSpacing: '0.08em' }}>
                                                             {svc.num}
-                                                          </span>span>
+                                                          </span>
                                                           <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.5625rem', letterSpacing: '0.1em', textTransform: 'uppercase', color: svc.tag === 'LIVE' ? 'var(--positive)' : svc.tag === 'FREE' ? 'var(--gold)' : 'var(--text-tertiary)', border: `0.5px solid ${svc.tag === 'LIVE' ? 'var(--positive)' : svc.tag === 'FREE' ? 'var(--gold)' : 'var(--ink-border-2)'}`, padding: '2px 7px' }}>
                                                             {svc.tag}
-                                                          </span>span>
-                                        </div>div>
+                                                          </span>
+                                        </div>
                                         <h3 style={{ fontFamily: 'var(--font-display)', fontSize: '1.375rem', fontWeight: 500, color: 'var(--text-primary)', marginBottom: '10px', lineHeight: 1.2 }}>
                                           {svc.title}
-                                        </h3>h3>
+                                        </h3>
                                         <p style={{ fontSize: '0.875rem', color: 'var(--text-secondary)', lineHeight: 1.6 }}>
                                           {svc.desc}
-                                        </p>p>
-                        </Link>Link>
+                                        </p>
+                        </Link>
                       ))}
-                                </div>div>
-                      </div>div>
-              </section>section>
+                                </div>
+                      </div>
+              </section>
         
           {/* ── CTA Strip ── */}
               <section style={{ padding: '48px 0', background: '#071320', borderTop: '0.5px solid var(--ink-border)', borderBottom: '0.5px solid var(--ink-border)' }}>
                       <div className="container" style={{ textAlign: 'center' }}>
-                                <p className="label-mono" style={{ marginBottom: '16px' }}>Start for free today</p>p>
+                                <p className="label-mono" style={{ marginBottom: '16px' }}>Start for free today</p>
                                 <h2 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(1.75rem, 3vw, 2.5rem)', fontWeight: 600, color: 'var(--text-primary)', marginBottom: '12px', lineHeight: 1.15 }}>
                                             Economics made clear. The world made legible.
-                                </h2>h2>
+                                </h2>
                                 <p style={{ color: 'var(--text-secondary)', fontSize: '0.9375rem', maxWidth: '480px', margin: '0 auto 28px', lineHeight: 1.6 }}>
                                             Join economists, students, and investors who read EconoLens to understand the global economy.
-                                </p>p>
+                                </p>
                                 <div style={{ display: 'flex', gap: '12px', justifyContent: 'center', flexWrap: 'wrap' }}>
                                             <Link href="/sign-up" className="btn-primary">
                                                           Get started — it&apos;s free
-                                            </Link>Link>
+                                            </Link>
                                             <Link href="/pricing" className="btn-outline">
                                                           View pricing
-                                            </Link>Link>
-                                </div>div>
-                      </div>div>
-              </section>section>
-        </>>
+                                            </Link>
+                                </div>
+                      </div>
+              </section>
+        </>
       )
 }</>
