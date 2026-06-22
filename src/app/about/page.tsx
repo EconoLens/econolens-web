@@ -2,7 +2,7 @@ import Link from 'next/link'
 
 const LAYERS = [
   { num: '01', title: 'Overview', desc: '200-word plain English summary. Every article starts here — no jargon, no prerequisites.' },
-  { num: '02', title: 'Explainer', desc: '600-word context layer. What it means for India. Historical precedents. Policy implications.' },
+  { num: '02', title: 'Explainer', desc: 'Economic context, historical precedents, and policy implications explained clearly.' },
   { num: '03', title: 'Technical', desc: 'Full academic depth. Econometric data. Policy frameworks. For professionals and researchers.' },
 ]
 
@@ -31,13 +31,13 @@ export default function AboutPage() {
             <p className="label-mono" style={{ marginBottom: '16px' }}>Our Mission</p>
             <h1 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(2rem, 4vw, 3.25rem)', fontWeight: 600, color: 'var(--text-primary)', lineHeight: 1.1, marginBottom: '20px', letterSpacing: '-0.02em' }}>
               Economics made clear.<br />
-              <em style={{ color: 'var(--gold)', fontStyle: 'italic' }}>India made central.</em>
+              <em style={{ color: 'var(--gold)', fontStyle: 'italic' }}>The world made legible.</em>
             </h1>
             <p style={{ fontSize: '1.0625rem', color: 'var(--text-secondary)', lineHeight: 1.75, marginBottom: '14px' }}>
-              EconoLens was built on a simple observation: the world&apos;s best economics intelligence is scattered across expensive terminals, paywalled journals, and English-first platforms designed for Western audiences.
+              EconoLens was built on a simple observation: the world&apos;s best economics intelligence is scattered across expensive terminals, paywalled journals, and English-first platforms designed for narrow audiences.
             </p>
             <p style={{ fontSize: '1.0625rem', color: 'var(--text-secondary)', lineHeight: 1.75 }}>
-              Indian students, investors, journalists, and policymakers deserve the same quality of insight — filtered through India&apos;s economic context, written at every level of depth, and priced for India.
+              Students, investors, journalists, and policymakers deserve the same quality of insight — written at every level of depth and grounded in official sources.
             </p>
           </div>
         </div>
@@ -70,7 +70,7 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* AI-assisted process */}
+      {/* Editorial process */}
       <section style={{ padding: '56px 0', borderBottom: '0.5px solid var(--ink-border)' }}>
         <div className="container">
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '48px', alignItems: 'start' }}>
@@ -79,14 +79,11 @@ export default function AboutPage() {
                 <span className="section-title">How It Works</span>
               </div>
               <p style={{ color: 'var(--text-secondary)', fontSize: '0.9375rem', lineHeight: 1.75, marginBottom: '16px' }}>
-                Every 15 minutes, our AI pipeline monitors 50+ official sources — central banks, multilateral institutions, and top research bodies. When new content is published, it&apos;s synthesised (never copied), checked for originality, and published within minutes.
+                Our editorial team monitors official sources — central banks, multilateral institutions, and leading research bodies — and synthesises developments into structured, original articles.
               </p>
               <p style={{ color: 'var(--text-secondary)', fontSize: '0.9375rem', lineHeight: 1.75, marginBottom: '24px' }}>
-                Every article undergoes: plagiarism check (Copyscape &lt;10%), India context review, three-layer structure verification, and SEBI disclaimer compliance for any price mentions.
+                Every article undergoes: plagiarism check, three-layer structure verification, and SEBI disclaimer compliance for any price mentions.
               </p>
-              <div style={{ padding: '16px', background: 'var(--ink-mid)', border: '0.5px solid var(--ink-border)', fontFamily: 'var(--font-mono)', fontSize: '0.5625rem', color: 'var(--text-tertiary)', letterSpacing: '0.06em', lineHeight: 1.8 }}>
-                RSS FEED → MAKE.COM → CLAUDE API (CACHED) → COPYSCAPE → SANITY CMS → BUFFER → BEEHIIV
-              </div>
             </div>
             <div>
               <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.5625rem', letterSpacing: '0.12em', textTransform: 'uppercase', color: 'var(--text-tertiary)', marginBottom: '16px', paddingBottom: '8px', borderBottom: '0.5px solid var(--ink-border)' }}>
@@ -109,13 +106,13 @@ export default function AboutPage() {
         <div className="container">
           <div style={{ maxWidth: '560px' }}>
             <div className="section-header" style={{ marginBottom: '20px' }}>
-              <span className="section-title">Legal & Compliance</span>
+              <span className="section-title">Legal &amp; Compliance</span>
             </div>
             <p style={{ color: 'var(--text-secondary)', fontSize: '0.875rem', lineHeight: 1.75, marginBottom: '12px' }}>
               EconoLens is operated by <strong style={{ color: 'var(--text-primary)' }}>Econolens Media and Technology</strong>, a sole proprietorship registered in India. We are an information platform — not a SEBI-registered investment advisor. All content is for educational purposes only.
             </p>
             <p style={{ color: 'var(--text-secondary)', fontSize: '0.875rem', lineHeight: 1.75, marginBottom: '24px' }}>
-              AI-generated content is clearly labelled. All articles carry source attribution. No content is reproduced verbatim — all articles are original syntheses grounded in official sources.
+              All articles carry source attribution. No content is reproduced verbatim — all articles are original syntheses grounded in official sources.
             </p>
             <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap' }}>
               <Link href="/privacy" className="btn-outline" style={{ padding: '8px 16px', fontSize: '0.5625rem' }}>Privacy Policy</Link>
@@ -127,4 +124,4 @@ export default function AboutPage() {
       </section>
     </>
   )
-}
+                             }
