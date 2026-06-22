@@ -25,7 +25,7 @@ export default function AboutPage() {
   return (
     <>
       {/* Header */}
-      <section style={{ padding: '64px 0 56px', borderBottom: '0.5px solid var(--ink-border)', background: 'linear-gradient(180deg, #071320 0%, var(--ink) 100%)' }}>
+      <section id="mission" style={{ padding: '64px 0 56px', borderBottom: '0.5px solid var(--ink-border)', background: 'linear-gradient(180deg, #071320 0%, var(--ink) 100%)' }}>
         <div className="container">
           <div style={{ maxWidth: '680px' }}>
             <p className="label-mono" style={{ marginBottom: '16px' }}>Our Mission</p>
@@ -101,7 +101,49 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* Legal entity */}
+      {/* Founders */}
+      <section id="founders" style={{ padding: '56px 0', borderBottom: '0.5px solid var(--ink-border)' }}>
+        <div className="container">
+          <div className="section-header" style={{ marginBottom: '40px' }}>
+            <span className="section-title-gold">Who We Are</span>
+          </div>
+          <div style={{ display: 'grid', gridTemplateColumns: '260px 1fr', gap: '48px', alignItems: 'start' }}>
+            <div style={{ background: 'var(--ink-mid)', border: '0.5px solid var(--ink-border)', padding: '28px' }}>
+              <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.5625rem', letterSpacing: '0.12em', textTransform: 'uppercase', color: 'var(--gold)', marginBottom: '12px' }}>Founder</div>
+              <div style={{ fontFamily: 'var(--font-display)', fontSize: '1.5rem', fontWeight: 600, color: 'var(--text-primary)', marginBottom: '6px' }}>Khagan Rao</div>
+              <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.625rem', color: 'var(--text-tertiary)', letterSpacing: '0.06em', marginBottom: '20px' }}>PhD Researcher · Econometrics</div>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '6px', marginBottom: '20px' }}>
+                {['Econometrics', 'Panel Data', 'VAR · ARDL', 'Quantitative Research'].map(tag => (
+                  <span key={tag} style={{ fontFamily: 'var(--font-mono)', fontSize: '0.5625rem', color: 'var(--text-tertiary)', border: '0.5px solid var(--ink-border-2)', padding: '3px 8px', display: 'inline-block', width: 'fit-content' }}>{tag}</span>
+                ))}
+              </div>
+              <a href="https://www.linkedin.com/in/khagan-raoab5a40183" target="_blank" rel="noopener noreferrer" style={{ fontFamily: 'var(--font-mono)', fontSize: '0.5625rem', color: 'var(--gold)', letterSpacing: '0.08em', textDecoration: 'none', textTransform: 'uppercase' }}>LinkedIn →</a>
+            </div>
+            <div>
+              <p style={{ color: 'var(--text-secondary)', fontSize: '1.0625rem', lineHeight: 1.75, marginBottom: '20px' }}>
+                EconoLens was founded by Khagan Rao, a PhD researcher in Econometrics at SV University with an MA in Econometrics and Quantitative Economics. With over four years of specialised experience in statistical modelling, panel data analysis, and academic research, Khagan built EconoLens to close the gap between high-quality economics research and the people who need it most.
+              </p>
+              <p style={{ color: 'var(--text-secondary)', fontSize: '0.9375rem', lineHeight: 1.75, marginBottom: '24px' }}>
+                The insight was clear: the world&apos;s best economics intelligence sits behind expensive terminals and paywalled journals. Students, journalists, investors, and policymakers deserve rigorous analysis — written at every level of depth and grounded in official sources.
+              </p>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '1px', background: 'var(--ink-border)' }}>
+                {[
+                  { label: 'Specialisation', value: 'Econometrics & Quantitative Economics' },
+                  { label: 'Education', value: 'MA · SV University · 2019–2021' },
+                  { label: 'Research Tools', value: 'Stata · R · EViews · Python' },
+                ].map(item => (
+                  <div key={item.label} style={{ background: 'var(--ink-mid)', padding: '16px 18px' }}>
+                    <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.5rem', color: 'var(--text-tertiary)', letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: '6px' }}>{item.label}</div>
+                    <div style={{ fontSize: '0.8125rem', color: 'var(--text-primary)', lineHeight: 1.4 }}>{item.value}</div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+            {/* Legal entity */}
       <section style={{ padding: '48px 0 64px' }}>
         <div className="container">
           <div style={{ maxWidth: '560px' }}>
