@@ -22,11 +22,10 @@ export const metadata: Metadata = {
     locale: 'en_US',
     type: 'website',
   },
-  twitter: { card: 'summary_large_image' },
+  twitter: { card: 'summary_large_image', site: '@EconoLens' },
   robots: { index: true, follow: true },
 }
 
-/* ── Ticker items — static; replace with real API data when live ── */
 const TICKER_ITEMS = [
   { label: 'SENSEX', value: '82,453', change: '+0.34%', pos: true },
   { label: 'NIFTY 50', value: '25,102', change: '+0.21%', pos: true },
@@ -49,11 +48,7 @@ function Ticker() {
           <span key={i} className="ticker-item">
             <span className="ticker-label">{item.label}</span>
             <span className="ticker-value">{item.value}</span>
-            <span
-              className={`ticker-change ${
-                item.neutral ? 'delta-neu' : item.pos ? 'delta-pos' : 'delta-neg'
-              }`}
-            >
+            <span className={`ticker-change ${item.neutral ? 'delta-neu' : item.pos ? 'delta-pos' : 'delta-neg'}`}>
               {item.change}
             </span>
             {i < doubled.length - 1 && <span className="ticker-sep" aria-hidden />}
@@ -76,22 +71,18 @@ function Navbar() {
   return (
     <nav className="nav-bar" role="navigation" aria-label="Main navigation">
       <div className="nav-inner">
-        <a href="/" className="nav-logo">
-          Econo<span>Lens</span>
-        </a>
+        <a href="/" className="nav-logo">Econo<span>Lens</span></a>
         <ul className="nav-links">
           {NAV_LINKS.map((link) => (
             <li key={link.href}>
-              <a href={link.href} className="nav-link">
-                {link.label}
-              </a>
+              <a href={link.href} className="nav-link">{link.label}</a>
             </li>
           ))}
         </ul>
         <div className="nav-actions">
           <SignedOut>
             <a href="/sign-in" className="nav-signin">Sign in</a>
-            <a href="/pricing" className="btn-subscribe">Subscribe ₹199</a>
+            <a href="/pricing" className="btn-subscribe">Subscribe</a>
           </SignedOut>
           <SignedIn>
             <a href="/dashboard" className="nav-signin">Dashboard</a>
@@ -106,12 +97,8 @@ function Navbar() {
 function DatelineBar() {
   const now = new Date()
   const dateStr = now.toLocaleDateString('en-GB', {
-    weekday: 'long',
-    day: 'numeric',
-    month: 'long',
-    year: 'numeric',
+    weekday: 'long', day: 'numeric', month: 'long', year: 'numeric',
   }).toUpperCase()
-
   return (
     <div className="dateline-bar">
       <span className="dateline-text">{dateStr}</span>
@@ -119,6 +106,19 @@ function DatelineBar() {
     </div>
   )
 }
+
+const SOCIAL_LINKS = [
+  {
+    href: 'https://x.com/EconoLens',
+    label: 'X',
+    icon: (<svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" /></svg>),
+  },
+  {
+    href: 'https://linkedin.com/company/econolens',
+    label: 'LinkedIn',
+    icon: (<svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" /></svg>),
+  },
+]
 
 function Footer() {
   return (
@@ -133,6 +133,14 @@ function Footer() {
             <p style={{ fontFamily: 'var(--font-mono)', fontSize: '0.5625rem', letterSpacing: '0.1em', color: 'var(--text-tertiary)', marginTop: '16px', textTransform: 'uppercase' }}>
               Econolens Media and Technology · Sole Proprietorship
             </p>
+            <div style={{ display: 'flex', gap: '8px', marginTop: '18px', flexWrap: 'wrap' }}>
+              {SOCIAL_LINKS.map((s) => (
+                <a key={s.label} href={s.href} target="_blank" rel="noopener noreferrer" aria-label={s.label}
+                  style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', color: 'var(--text-tertiary)', fontFamily: 'var(--font-mono)', fontSize: '0.5rem', letterSpacing: '0.1em', textTransform: 'uppercase', textDecoration: 'none', border: '0.5px solid var(--ink-border)', padding: '5px 10px' }}>
+                  {s.icon}{s.label}
+                </a>
+              ))}
+            </div>
           </div>
           <div>
             <p style={{ fontFamily: 'var(--font-mono)', fontSize: '0.5625rem', letterSpacing: '0.12em', textTransform: 'uppercase', color: 'var(--text-tertiary)', marginBottom: '14px' }}>Platform</p>
@@ -140,7 +148,7 @@ function Footer() {
             <a href="/indicators" className="footer-link">Indicators</a>
             <a href="/study" className="footer-link">Study</a>
             <a href="/pricing" className="footer-link">Pricing</a>
-            <a href="/articles?type=paper" className="footer-link">Research</a>
+            <a href="/articles" className="footer-link">Research</a>
           </div>
           <div>
             <p style={{ fontFamily: 'var(--font-mono)', fontSize: '0.5625rem', letterSpacing: '0.12em', textTransform: 'uppercase', color: 'var(--text-tertiary)', marginBottom: '14px' }}>Company</p>
@@ -173,10 +181,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <head>
           <link rel="preconnect" href="https://fonts.googleapis.com" />
           <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-          <link
-            href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,600&family=IBM+Plex+Mono:wght@400;500;700&display=swap"
-            rel="stylesheet"
-          />
+          <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,600&family=IBM+Plex+Mono:wght@400;500;700&display=swap" rel="stylesheet" />
         </head>
         <body style={{ background: 'var(--ink)', color: 'var(--text-primary)' }}>
           <Ticker />
