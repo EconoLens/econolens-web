@@ -124,7 +124,7 @@ export default async function StudyPage() {
             <p className="label-mono" style={{ marginBottom: '20px' }}>Latest Study Posts</p>
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))', gap: '1px', background: 'var(--ink-border)' }}>
               {studyArticles.map((article: any) => (
-                <Link key={article._id} href={`/news/${article.slug?.current}`} className="article-card">
+                <Link key={article._id} href={'/news/' + (article.slug?.current || '')} className="article-card">
                   <div className="category">Study</div>
                   <div className="title">{article.title}</div>
                   {Array.isArray(article.summary) && article.summary[0] && (
@@ -136,8 +136,6 @@ export default async function StudyPage() {
                     <span>{new Date(article.publishedAt).toLocaleDateString('en-GB', { day: 'numeric', month: 'short' })}</span>
                     <span style={{ width: 2, height: 2, background: 'var(--ink-border-2)', borderRadius: '50%', display: 'inline-block' }} />
                     <span>{article.author?.name || 'EconoLens'}</span>
-                    <span style={{ width: 2, height: 2, background: 'var(--ink-border-2)', borderRadius: '50%', display: 'inline-block' }} />
-                    <span>3 layers</span>
                   </div>
                 </Link>
               ))}
@@ -162,7 +160,6 @@ export default async function StudyPage() {
                 border: '0.5px solid var(--ink-border)',
                 padding: '0',
               }}>
-                {/* Section header */}
                 <div style={{
                   padding: '14px 18px',
                   borderBottom: '0.5px solid var(--ink-border)',
@@ -176,14 +173,13 @@ export default async function StudyPage() {
                     margin: 0,
                   }}>{subject.section}</h2>
                 </div>
-                {/* Topics */}
                 <ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
                   {subject.topics.map((topic, i) => (
                     <li key={topic.label} style={{
                       borderBottom: i < subject.topics.length - 1 ? '0.5px solid var(--ink-border)' : 'none',
                     }}>
                       {topic.slug ? (
-                        <Link href={`/news/${topic.slug}`} style={{
+                        <Link href={'/news/' + topic.slug} style={{
                           display: 'flex',
                           alignItems: 'center',
                           gap: '10px',
@@ -224,7 +220,7 @@ export default async function StudyPage() {
             <p className="label-mono" style={{ marginBottom: '20px' }}>Econometrics</p>
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '1px', background: 'var(--ink-border)' }}>
               {explainers.map((article: any) => (
-                <Link key={article._id} href={`/news/${article.slug?.current}`} className="article-card">
+                <Link key={article._id} href={'/news/' + (article.slug?.current || '')} className="article-card">
                   <div className="category">Econometrics</div>
                   <div className="title">{article.title}</div>
                   <div className="meta">
@@ -276,4 +272,4 @@ export default async function StudyPage() {
       </section>
     </>
   )
-                  }
+}
