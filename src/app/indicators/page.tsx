@@ -1,13 +1,12 @@
 export const dynamic = 'force-dynamic';
 
-// Shape returned by /api/indicators
 type IndicatorRow = {
   id: string;
   name: string;
   unit: string;
   country: string;
   category: string;
-  value: string; // e.g. "6.40" or "N/A"
+  value: string;
   change: number;
   trend: 'up' | 'down' | 'stable';
   date?: string;
@@ -59,7 +58,7 @@ function formatDate(date?: string): string {
   if (!date) return '—';
   const d = new Date(date);
   if (isNaN(d.getTime())) return date;
-  return d.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
+  return d.toLocaleDateString('en-GB', { year: 'numeric', month: 'short', day: 'numeric' });
 }
 
 export default async function IndicatorsPage() {
@@ -84,8 +83,8 @@ export default async function IndicatorsPage() {
 
       <div style={{ maxWidth: 1200, margin: '0 auto', padding: '40px 24px' }}>
         {error && (
-          <div style={{ background: '#FEF2F2', border: '1px solid #FECACA', borderLeft: '4px solid var(--red)', padding: '14px 20px', marginBottom: 32, fontSize: 14, color: '#991B1B' }}>
-            Could not load indicators: {error}
+          <div style={{ background: 'var(--ink-mid)', border: '0.5px solid var(--ink-border)', borderLeft: '3px solid var(--negative)', padding: '14px 20px', marginBottom: 32, fontSize: 14, color: 'var(--text-secondary)' }}>
+            Indicator data temporarily unavailable. Please check back shortly.
           </div>
         )}
 
@@ -112,7 +111,7 @@ export default async function IndicatorsPage() {
           })}
           {indicators.length === 0 && !error && (
             <div style={{ gridColumn: '1/-1', padding: 40, textAlign: 'center', color: 'var(--muted)', fontSize: 14 }}>
-              No indicator data available. Configure data source API keys in environment variables to load live data.
+              Indicator data loading — please refresh in a moment.
             </div>
           )}
         </div>
