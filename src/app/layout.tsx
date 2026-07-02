@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 import { ClerkProvider, SignedIn, SignedOut } from '@clerk/nextjs'
 import './globals.css'
+import { GoogleAnalytics } from 'next/third-parties/google'
 
 const inter = Inter({
   subsets: ['latin'],
@@ -189,6 +190,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <DatelineBar />
           <main>{children}</main>
           <Footer />
+          <GoogleAnalytics gaId="G-JKGQJFE2X0" />
         </body>
       </html>
     </ClerkProvider>
