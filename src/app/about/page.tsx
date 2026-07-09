@@ -140,10 +140,44 @@ export default function AboutPage() {
               </div>
             </div>
           </div>
+
+          <div style={{ display: 'grid', gridTemplateColumns: '260px 1fr', gap: '48px', alignItems: 'start', marginTop: '48px' }}>
+            <div style={{ background: 'var(--ink-mid)', border: '0.5px solid var(--ink-border)', padding: '28px' }}>
+              <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.5625rem', letterSpacing: '0.12em', textTransform: 'uppercase', color: 'var(--gold)', marginBottom: '12px' }}>Co-Founder</div>
+              <div style={{ fontFamily: 'var(--font-display)', fontSize: '1.5rem', fontWeight: 600, color: 'var(--text-primary)', marginBottom: '6px' }}>Jalakam Venkata Hari Priya</div>
+              <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.625rem', color: 'var(--text-tertiary)', letterSpacing: '0.06em', marginBottom: '20px' }}>Content Reviewer & Data Analyst</div>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '6px', marginBottom: '20px' }}>
+                {['Content & Compliance Review', 'Data Analysis & Visualization', 'Fact-Checking', 'Trust & Safety'].map(tag => (
+                  <span key={tag} style={{ fontFamily: 'var(--font-mono)', fontSize: '0.5625rem', color: 'var(--text-tertiary)', border: '0.5px solid var(--ink-border-2)', padding: '3px 8px', display: 'inline-block', width: 'fit-content' }}>{tag}</span>
+                ))}
+              </div>
+              <a href="https://www.linkedin.com/in/hari-priya-jalakam-837161349/" target="_blank" rel="noopener noreferrer" style={{ fontFamily: 'var(--font-mono)', fontSize: '0.5625rem', color: 'var(--gold)', letterSpacing: '0.08em', textDecoration: 'none', textTransform: 'uppercase' }}>LinkedIn →</a>
+            </div>
+            <div>
+              <p style={{ color: 'var(--text-secondary)', fontSize: '1.0625rem', lineHeight: 1.75, marginBottom: '20px' }}>
+                Jalakam Venkata Hari Priya co-founded EconoLens bringing a rare combination of quantitative training and content-integrity experience. She holds a Master&apos;s in Econometrics, with coursework spanning applied statistics, regression analysis, time series analysis, and research methodology, alongside a B.Sc. in Mathematics, Statistics &amp; Computer Science, and brings over four years of professional experience to EconoLens.
+              </p>
+              <p style={{ color: 'var(--text-secondary)', fontSize: '0.9375rem', lineHeight: 1.75, marginBottom: '24px' }}>
+                Her experience includes three years as a Senior Content Reviewer &amp; Compliance Analyst, working within Trust &amp; Safety operations to enforce platform policies around data privacy, child welfare, online fraud, and anti-bullying — fact-checking claims against trusted databases and journals, and preparing compliance reports for internal audits and regulatory inspections. At EconoLens, she applies this background to fact-checking and reviewing every article before publication, and to data analysis supporting the platform&apos;s research and indicators.
+              </p>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '1px', background: 'var(--ink-border)' }}>
+                {[
+                  { label: 'Specialisation', value: 'Content Review & Data Analysis' },
+                  { label: 'Education', value: 'MSc Econometrics' },
+                  { label: 'Experience', value: '4+ Years · Trust & Safety & Compliance' },
+                ].map(item => (
+                  <div key={item.label} style={{ background: 'var(--ink-mid)', padding: '16px 18px' }}>
+                    <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.5rem', color: 'var(--text-tertiary)', letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: '6px' }}>{item.label}</div>
+                    <div style={{ fontSize: '0.8125rem', color: 'var(--text-primary)', lineHeight: 1.4 }}>{item.value}</div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
         </div>
       </section>
 
-            {/* Legal entity */}
+      {/* Legal entity */}
       <section style={{ padding: '48px 0 64px' }}>
         <div className="container">
           <div style={{ maxWidth: '560px' }}>
@@ -166,4 +200,4 @@ export default function AboutPage() {
       </section>
     </>
   )
-                             }
+}
