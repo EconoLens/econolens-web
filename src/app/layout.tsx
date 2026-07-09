@@ -3,6 +3,7 @@ import { Inter } from 'next/font/google'
 import { ClerkProvider, SignedIn, SignedOut } from '@clerk/nextjs'
 import './globals.css'
 import Script from 'next/script'
+import CookieConsent from '@/components/CookieConsent'
 
 const inter = Inter({
   subsets: ['latin'],
@@ -27,38 +28,15 @@ export const metadata: Metadata = {
   robots: { index: true, follow: true },
 }
 
-const TICKER_ITEMS = [
-  { label: 'SENSEX', value: '82,453', change: '+0.34%', pos: true },
-  { label: 'NIFTY 50', value: '25,102', change: '+0.21%', pos: true },
-  { label: 'USD/INR', value: '₹83.42', change: '−0.08%', pos: false },
-  { label: 'RBI REPO', value: '6.50%', change: 'HOLD', neutral: true },
-  { label: 'CPI', value: '4.1%', change: '▼0.3', pos: true },
-  { label: 'GDP', value: '6.4%', change: '▲0.2', pos: true },
-  { label: 'WTI OIL', value: '$78.20', change: '+1.2%', pos: true },
-  { label: 'GOLD', value: '$2,380', change: '+0.6%', pos: true },
-  { label: 'US 10Y', value: '4.42%', change: '−0.04', pos: true },
-  { label: 'BSE SMALL', value: '47,210', change: '+0.58%', pos: true },
-]
-
-function Ticker() {
-  const doubled = [...TICKER_ITEMS, ...TICKER_ITEMS]
-  return (
-    <div className="ticker-wrap" aria-label="Live market data">
-      <div className="ticker-track">
-        {doubled.map((item, i) => (
-          <span key={i} className="ticker-item">
-            <span className="ticker-label">{item.label}</span>
-            <span className="ticker-value">{item.value}</span>
-            <span className={`ticker-change ${item.neutral ? 'delta-neu' : item.pos ? 'delta-pos' : 'delta-neg'}`}>
-              {item.change}
-            </span>
-            {i < doubled.length - 1 && <span className="ticker-sep" aria-hidden />}
-          </span>
-        ))}
-      </div>
-    </div>
-  )
-}
+// NOTE (2026-07-08): the old hardcoded TICKER_ITEMS array + <Ticker /> component
+// was removed here. It rendered fixed, never-changing numbers (SENSEX, NIFTY, GOLD,
+// etc.) on every single page under an aria-label of "Live market data" — none of it
+// was real. Real live figures now live only on /indicators, which is backed by
+// src/app/api/indicators/route.ts (FRED for global series; India series are static
+// and clearly labeled as manually maintained there, not faked as live).
+//
+// If a real site-wide ticker is wanted again, it needs an actual market-data feed
+// (e.g. NSE/BSE index API) — do not restore this with placeholder numbers.
 
 const NAV_LINKS = [
   { href: '/articles', label: 'News' },
@@ -72,7 +50,16 @@ function Navbar() {
   return (
     <nav className="nav-bar" role="navigation" aria-label="Main navigation">
       <div className="nav-inner">
-        <a href="/" className="nav-logo">Econo<span>Lens</span></a>
+        <a href="/" className="nav-logo" style={{ display: 'inline-flex', alignItems: 'center', gap: '8px' }}>
+          <svg width="24" height="24" viewBox="0 0 40 40" fill="none" aria-hidden="true" focusable="false">
+            <polyline points="4,26 14,18 22,24 36,8" stroke="#C4902A" strokeWidth="3.4" strokeLinecap="round" strokeLinejoin="round" fill="none" />
+            <circle cx="4" cy="26" r="3.2" fill="none" stroke="#C4902A" strokeWidth="2.6" />
+            <circle cx="14" cy="18" r="3.2" fill="none" stroke="#C4902A" strokeWidth="2.6" />
+            <circle cx="22" cy="24" r="3.2" fill="none" stroke="#C4902A" strokeWidth="2.6" />
+            <circle cx="36" cy="8" r="3.2" fill="none" stroke="#C4902A" strokeWidth="2.6" />
+          </svg>
+          <span>Econo<span>Lens</span><sup style={{ fontSize: '0.55em', marginLeft: '1px' }}>&trade;</sup></span>
+        </a>
         <ul className="nav-links">
           {NAV_LINKS.map((link) => (
             <li key={link.href}>
@@ -149,7 +136,6 @@ function Footer() {
             <a href="/indicators" className="footer-link">Indicators</a>
             <a href="/study" className="footer-link">Study</a>
             <a href="/pricing" className="footer-link">Pricing</a>
-            <a href="/articles" className="footer-link">Research</a>
           </div>
           <div>
             <p style={{ fontFamily: 'var(--font-mono)', fontSize: '0.5625rem', letterSpacing: '0.12em', textTransform: 'uppercase', color: 'var(--text-tertiary)', marginBottom: '14px' }}>Company</p>
@@ -183,13 +169,21 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <link rel="preconnect" href="https://fonts.googleapis.com" />
           <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
           <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,600&family=IBM+Plex+Mono:wght@400;500;700&display=swap" rel="stylesheet" />
+          {/*
+            Google Consent Mode default — MUST run before the gtag.js loader and
+            before the gtag('config', ...) call below, so analytics/ad storage
+            start out denied until CookieConsent.tsx calls gtag('consent','update').
+            Added 2026-07-08 alongside the consent banner; previously there was no
+            consent infrastructure at all despite linking to a Cookie Policy page.
+          */}
+          <Script id="consent-default" strategy="beforeInteractive" dangerouslySetInnerHTML={{ __html: "window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('consent','default',{analytics_storage:'denied',ad_storage:'denied',ad_user_data:'denied',ad_personalization:'denied',wait_for_update:500});" }} />
         </head>
         <body style={{ background: 'var(--ink)', color: 'var(--text-primary)' }}>
-          <Ticker />
           <Navbar />
           <DatelineBar />
           <main>{children}</main>
           <Footer />
+          <CookieConsent />
 <Script src="https://www.googletagmanager.com/gtag/js?id=G-JKGQJFE2X0" strategy="afterInteractive" />
           <Script id="ga4-init" strategy="afterInteractive" dangerouslySetInnerHTML={{ __html: "window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-JKGQJFE2X0');" }} />
         </body>
