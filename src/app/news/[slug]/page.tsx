@@ -1,6 +1,6 @@
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
-import { getArticleBySlug, getAllArticleSlugs } from '@/lib/sanity'
+import { getArticleBySlug, getAllArticleSlugs, urlFor } from '@/lib/sanity'
 
 export const revalidate = 900
 
@@ -193,8 +193,56 @@ export default async function ArticlePage({
   const summaryItems: string[] = Array.isArray(article.summary) ? article.summary : []
   const articleUrl = `https://econolens.co.in/news/${params.slug}`
 
+  // GEO fix (2026-07-11): NewsArticle structured data. This is what lets AI
+  // engines (ChatGPT, Perplexity, Google AI Overviews) and search crawlers
+  // confidently attribute this analysis to EconoLens with a named, credentialed
+  // reviewer, a publish date, and the actual primary sources — rather than
+  // treating it as anonymous, undated prose.
+  let coverImageUrl: string | undefined
+  try {
+    coverImageUrl = article.coverImage ? urlFor(article.coverImage).width(1200).height(630).url() : undefined
+  } catch {
+    coverImageUrl = undefined
+  }
+
+  const articleJsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'NewsArticle',
+    headline: article.title,
+    description: article.metaDescription || summaryItems[0] || '',
+    ...(coverImageUrl ? { image: [coverImageUrl] } : {}),
+    datePublished: article.publishedAt,
+    dateModified: article._updatedAt || article.publishedAt,
+    author: {
+      '@type': 'Person',
+      name: authorName,
+      ...(authorCreds ? { jobTitle: authorCreds } : {}),
+    },
+    publisher: {
+      '@type': 'Organization',
+      name: 'EconoLens',
+      url: 'https://econolens.co.in',
+    },
+    mainEntityOfPage: { '@type': 'WebPage', '@id': articleUrl },
+    ...(article.sourceAttribution?.length
+      ? {
+          citation: article.sourceAttribution.map((s: any) => ({
+            '@type': 'CreativeWork',
+            name: s.title || s.institution,
+            ...(s.url ? { url: s.url } : {}),
+            ...(s.publishedDate ? { datePublished: s.publishedDate } : {}),
+          })),
+        }
+      : {}),
+  }
+
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(articleJsonLd) }}
+      />
+
       {/* ── Breadcrumb ── */}
       <div style={{ background: 'var(--ink)', borderBottom: '0.5px solid var(--ink-border)', padding: '10px 0' }}>
         <div className="container" style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
