@@ -10,8 +10,6 @@ const FREE_FEATURES = [
 const PRO_FEATURES = [
   'Everything in Free',
   'Full article archive access',
-  'Priority data refresh (5-min)',
-  'Export articles & data (PDF, CSV)',
   'Institutional research reports',
   'Cancel anytime',
 ]
