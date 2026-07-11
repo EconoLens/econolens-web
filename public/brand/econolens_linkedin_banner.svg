@@ -1,0 +1,45 @@
+<svg width="1128" height="191" viewBox="0 0 1128 191" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1128" y2="191" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#0b1a2b"/>
+      <stop offset="55%" stop-color="#081522"/>
+      <stop offset="100%" stop-color="#050d16"/>
+    </linearGradient>
+    <linearGradient id="chartFade" x1="0" y1="0" x2="1128" y2="0" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#C4902A" stop-opacity="0"/>
+      <stop offset="55%" stop-color="#C4902A" stop-opacity="0.14"/>
+      <stop offset="100%" stop-color="#C4902A" stop-opacity="0.30"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="1128" height="191" fill="url(#bg)"/>
+
+  <!-- faint grid texture, full width -->
+  <g stroke="#ffffff" stroke-opacity="0.03" stroke-width="1">
+    <line x1="0" y1="47" x2="1128" y2="47"/>
+    <line x1="0" y1="95" x2="1128" y2="95"/>
+    <line x1="0" y1="143" x2="1128" y2="143"/>
+  </g>
+
+  <!-- rising line-chart motif, full width, purely decorative/background -->
+  <polyline points="0,150 140,120 260,132 380,90 520,104 660,58 800,72 940,34 1128,46"
+    fill="none" stroke="url(#chartFade)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+  <g fill="#C4902A" fill-opacity="0.28">
+    <circle cx="660" cy="58" r="3.5"/>
+    <circle cx="800" cy="72" r="3.5"/>
+    <circle cx="940" cy="34" r="3.5"/>
+  </g>
+
+  <!-- LEFT HALF (x < 564) deliberately left clear of text/logo — LinkedIn
+       overlays the company profile photo across this zone on the live page. -->
+
+  <!-- wordmark + tagline, positioned in the safe right-hand zone -->
+  <g transform="translate(600, 0)">
+    <text x="0" y="90" font-family="DejaVu Serif, Georgia, serif" font-size="38" font-weight="700" fill="#F2F0EA">Econo<tspan fill="#C4902A">Lens</tspan></text>
+    <line x1="2" y1="108" x2="300" y2="108" stroke="#C4902A" stroke-opacity="0.35" stroke-width="1"/>
+    <text x="0" y="128" font-family="DejaVu Sans Mono, monospace" font-size="10.5" letter-spacing="2.3" fill="#8A9AAE">WORLD ECONOMICS INTELLIGENCE</text>
+    <text x="0" y="158" font-family="DejaVu Sans Mono, monospace" font-size="12.5" letter-spacing="2" fill="#C9CFD6">ONE WORLD ECONOMY. <tspan fill="#C4902A">ONE CLEAR LENS.</tspan></text>
+  </g>
+
+  <rect x="0" y="0" width="1128" height="191" fill="none" stroke="#C4902A" stroke-opacity="0.12" stroke-width="1"/>
+</svg>
