@@ -199,4 +199,23 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             Added 2026-07-08 alongside the consent banner; previously there was no
             consent infrastructure at all despite linking to a Cookie Policy page.
           */}
-          <Script id="consent-default" strategy="beforeInteractive" dang
+          <Script id="consent-default" strategy="beforeInteractive" dangerouslySetInnerHTML={{ __html: "window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('consent','default',{analytics_storage:'denied',ad_storage:'denied',ad_user_data:'denied',ad_personalization:'denied',wait_for_update:500});" }} />
+          {/* GEO fix (2026-07-11): site-wide Organization JSON-LD — see ORGANIZATION_JSON_LD above */}
+          <script
+            type="application/ld+json"
+            dangerouslySetInnerHTML={{ __html: JSON.stringify(ORGANIZATION_JSON_LD) }}
+          />
+        </head>
+        <body style={{ background: 'var(--ink)', color: 'var(--text-primary)' }}>
+          <Navbar />
+          <DatelineBar />
+          <main>{children}</main>
+          <Footer />
+          <CookieConsent />
+          <Script src="https://www.googletagmanager.com/gtag/js?id=G-JKGQJFE2X0" strategy="afterInteractive" />
+          <Script id="ga4-init" strategy="afterInteractive" dangerouslySetInnerHTML={{ __html: "window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-JKGQJFE2X0');" }} />
+        </body>
+      </html>
+    </ClerkProvider>
+  )
+}
