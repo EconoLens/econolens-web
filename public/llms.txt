@@ -1,0 +1,27 @@
+# EconoLens
+
+> World economics intelligence platform. Original analysis and explainers on global macroeconomics — monetary policy, trade, inflation, growth, and central bank decisions — grounded in official sources (IMF, World Bank, RBI, Fed, ECB, NBER). Every article discloses its AI-assistance level and is reviewed by a named, credentialed economist before publication, with full source attribution (institution, title, URL, publication date).
+
+## About
+- [About EconoLens](https://econolens.co.in/about): Mission, editorial approach, and the people behind the site.
+
+## Content
+- [News & Analysis](https://econolens.co.in/news): Full article archive — three-layer format (plain-English overview, deep analysis, technical deep dive) on every piece.
+- [Articles Index](https://econolens.co.in/articles): Browsable article listing by category.
+- [Economic Indicators](https://econolens.co.in/indicators): Tracked macro indicators (growth, inflation, rates, trade).
+- [Study](https://econolens.co.in/study): Longer-form research and explainer content.
+
+## Recent analysis (examples)
+- [IMF July 2026 WEO: growth holds, inflation forecast jumps](https://econolens.co.in/news/imf-weo-july-2026-inflation-growth)
+- [ECB's first rate hike in three years, driven by war not demand](https://econolens.co.in/news/ecb-rate-hike-june-2026-middle-east-war)
+- [China Q1 2026 growth and the World Bank's rebalancing warning](https://econolens.co.in/news/china-q1-growth-world-bank-rebalancing-2026)
+- [Global trade fragmentation: three rule changes converging in July 2026](https://econolens.co.in/news/global-trade-fragmentation-july-2026)
+- [The Strait of Hormuz shock and the 2026 global growth outlook](https://econolens.co.in/news/strait-of-hormuz-shock-2026-global-outlook)
+
+## Editorial standards
+Every article names a human reviewer with stated credentials, discloses its AI-assistance level, and cites primary institutional sources with publication dates rather than secondary summaries. EconoLens does not publish anonymous or unsourced macroeconomic claims.
+
+## Contact
+- Email: khagankp@gmail.com
+- X: https://x.com/EconoLens
+- LinkedIn: https://linkedin.com/company/econolens

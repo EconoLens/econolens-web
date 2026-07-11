@@ -38,6 +38,29 @@ export const metadata: Metadata = {
 // If a real site-wide ticker is wanted again, it needs an actual market-data feed
 // (e.g. NSE/BSE index API) — do not restore this with placeholder numbers.
 
+// GEO fix (2026-07-11): site-wide Organization structured data. Without this,
+// AI engines (ChatGPT, Perplexity, Google AI Overviews) and search crawlers have
+// no machine-readable signal for what EconoLens is, who publishes it, or which
+// social profiles are authoritative — they're left guessing from prose alone.
+const ORGANIZATION_JSON_LD = {
+  '@context': 'https://schema.org',
+  '@type': 'Organization',
+  name: 'EconoLens',
+  legalName: 'Econolens Media and Technology',
+  url: 'https://econolens.co.in',
+  description:
+    'Economics news, research, and macro indicators grounded in official sources — RBI, IMF, World Bank, Fed, and top research institutions.',
+  sameAs: [
+    'https://x.com/EconoLens',
+    'https://linkedin.com/company/econolens',
+  ],
+  contactPoint: {
+    '@type': 'ContactPoint',
+    email: 'khagankp@gmail.com',
+    contactType: 'editorial',
+  },
+}
+
 const NAV_LINKS = [
   { href: '/articles', label: 'News' },
   { href: '/indicators', label: 'Indicators' },
@@ -176,18 +199,4 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             Added 2026-07-08 alongside the consent banner; previously there was no
             consent infrastructure at all despite linking to a Cookie Policy page.
           */}
-          <Script id="consent-default" strategy="beforeInteractive" dangerouslySetInnerHTML={{ __html: "window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('consent','default',{analytics_storage:'denied',ad_storage:'denied',ad_user_data:'denied',ad_personalization:'denied',wait_for_update:500});" }} />
-        </head>
-        <body style={{ background: 'var(--ink)', color: 'var(--text-primary)' }}>
-          <Navbar />
-          <DatelineBar />
-          <main>{children}</main>
-          <Footer />
-          <CookieConsent />
-<Script src="https://www.googletagmanager.com/gtag/js?id=G-JKGQJFE2X0" strategy="afterInteractive" />
-          <Script id="ga4-init" strategy="afterInteractive" dangerouslySetInnerHTML={{ __html: "window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-JKGQJFE2X0');" }} />
-        </body>
-      </html>
-    </ClerkProvider>
-  )
-}
+          <Script id="consent-default" strategy="beforeInteractive" dang
