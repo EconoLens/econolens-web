@@ -168,6 +168,18 @@ export async function createPost(input: CreatePostInput): Promise<CreatePostResu
  * genuinely free to automate; X/Twitter is deliberately excluded here
  * because X now charges per post at the API level — add "twitter" only
  * once that's a cost you've decided to accept).
+ *
+ * IMPORTANT (2026-07-11): Buffer's channels query has no field that
+ * distinguishes a LinkedIn Company Page from a personal LinkedIn Profile —
+ * both simply report `service: "linkedin"` (confirmed against
+ * developers.buffer.com/guides/data-model.html and the Get Filtered
+ * Channels example, whose full field list is id/name/displayName/service/
+ * avatar/isQueuePaused — no page-vs-profile flag anywhere). Since EconoLens
+ * now has two LinkedIn channels connected in Buffer ("Khagan Rao" personal
+ * profile + "Econolens" company Page — deliberate, so articles reach both),
+ * a naive channels.find() would silently post to only whichever one Buffer
+ * happens to list first and drop the other with no error. Post to every
+ * channel matching each requested service, not just the first match.
  */
 export async function postArticleToBuffer(article: {
   title: string
@@ -178,17 +190,23 @@ export async function postArticleToBuffer(article: {
   const results: Record<string, CreatePostResult | { ok: false; error: string }> = {}
 
   for (const service of services) {
-    const channel = channels.find((c) => c.service.toLowerCase() === service.toLowerCase())
-    if (!channel) {
+    const matches = channels.filter((c) => c.service.toLowerCase() === service.toLowerCase())
+    if (matches.length === 0) {
       results[service] = { ok: false, error: `No ${service} channel connected in Buffer` }
       continue
     }
 
-    results[service] = await createPost({
-      channelId: channel.id,
-      text: `${article.title}\n\nRead the full analysis: ${article.url}`,
-      imageUrl: article.imageUrl,
-    })
+    for (const channel of matches) {
+      // Key by service + channel name so multiple channels on the same
+      // service (e.g. two LinkedIn channels) each get their own result
+      // instead of overwriting each other.
+      const key = matches.length > 1 ? `${service}:${channel.name}` : service
+      results[key] = await createPost({
+        channelId: channel.id,
+        text: `${article.title}\n\nRead the full analysis: ${article.url}`,
+        imageUrl: article.imageUrl,
+      })
+    }
   }
 
   return results
