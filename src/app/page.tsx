@@ -1,18 +1,12 @@
 import Link from 'next/link'
 import { getLatestArticles } from '@/lib/sanity'
+import { getIndicators, INDICATOR_COUNT, INDICATOR_REGION_LABEL } from '@/lib/indicators'
 
 export const revalidate = 900
 
-const FEATURED_INDICATORS = [
-  { name: 'GDP Growth',   value: '6.4%',   change: '+0.2pp',    pos: true,  bar: 64, date: 'Q1 2026'   },
-  { name: 'CPI Inflation', value: '4.1%',  change: '▼0.3pp',   pos: true,  bar: 41, date: 'May 2026'  },
-  { name: 'RBI Repo Rate', value: '6.50%', change: 'UNCHANGED', neutral: true, bar: 65, date: 'June 2026' },
-  { name: 'USD / INR',    value: '₹83.42', change: '▲0.17',     pos: false, bar: 55, date: 'Today'     },
-]
-
 const SERVICES = [
   { num: '01', title: 'Economics News',   desc: 'Economics news from RBI, IMF, World Bank, NBER, Fed, and ECB. Global developments analysed at every level of depth.', href: '/articles',  tag: 'LIVE' },
-  { num: '02', title: 'Macro Indicators', desc: '200+ live economic indicators across 50 countries. GDP, inflation, monetary policy, trade balances — all in one dashboard.', href: '/indicators', tag: 'LIVE' },
+  { num: '02', title: 'Macro Indicators', desc: `${INDICATOR_COUNT} live economic indicators across ${INDICATOR_REGION_LABEL}. GDP, inflation, monetary policy, trade balances — all in one dashboard.`, href: '/indicators', tag: 'LIVE' },
   { num: '03', title: 'Study Economics',  desc: 'Rigorous explanations of every major economics and econometrics concept — written for curious minds. From GDP to GARCH.', href: '/study',      tag: 'FREE' },
   { num: '04', title: 'Academic Papers',  desc: 'NBER and SSRN research translated into plain English. No PhD required to understand cutting-edge economics.', href: '/articles',  tag: 'COMING SOON' },
 ]
@@ -23,9 +17,55 @@ function getSummary(s: any): string {
   return String(s)
 }
 
+// NOTE (2026-07-08 ops audit, fixed 2026-07-11): this homepage sidebar used to
+// carry its own third hardcoded copy of GDP/CPI/Repo/USD-INR — a separate,
+// never-changing set of numbers from what /indicators actually showed. It now
+// calls the same getIndicators() function the API route uses, so there's one
+// source of truth. `bar` stays a fixed illustrative width (it's a decorative
+// bar-chart fill, not derived from the value) rather than invented "real" data.
+async function getFeaturedIndicators() {
+  let all: any[] = []
+  try {
+    all = await getIndicators()
+  } catch {
+    return []
+  }
+  const byId = (id: string) => all.find((i: any) => i.id === id)
+  const gdp = byId('IN_GDP')
+  const cpi = byId('IN_CPI')
+  const repo = byId('IN_REPO')
+  const fx = byId('DEXINUS')
+
+  const rows = [
+    gdp && {
+      name: 'GDP Growth', value: `${gdp.value}%`,
+      change: `${gdp.change >= 0 ? '+' : ''}${gdp.change}pp`, pos: gdp.trend !== 'down', bar: 64,
+      date: gdp.isStatic ? gdp.date : 'Live',
+    },
+    cpi && {
+      name: 'CPI Inflation', value: `${cpi.value}%`,
+      change: `${cpi.trend === 'down' ? '▼' : '▲'}${Math.abs(cpi.change)}pp`, pos: cpi.trend === 'down', bar: 41,
+      date: cpi.isStatic ? cpi.date : 'Live',
+    },
+    repo && {
+      name: 'RBI Repo Rate', value: `${repo.value}%`,
+      change: repo.trend === 'stable' ? 'UNCHANGED' : `${repo.change >= 0 ? '+' : ''}${repo.change}`, neutral: repo.trend === 'stable', bar: 65,
+      date: repo.isStatic ? repo.date : 'Live',
+    },
+    fx && {
+      name: 'USD / INR', value: `₹${fx.value}`,
+      change: `${fx.trend === 'up' ? '▲' : '▼'}${Math.abs(fx.change)}`, pos: fx.trend !== 'up', bar: 55,
+      date: fx.isStatic ? fx.date : 'Live',
+    },
+  ].filter(Boolean) as any[]
+
+  return rows
+}
+
 export default async function HomePage() {
   let articles: any[] = []
   try { articles = (await getLatestArticles(9)) || [] } catch { articles = [] }
+  const featuredIndicators = await getFeaturedIndicators()
 
   const lead = articles[0]
   const sub  = articles.slice(1, 4)
@@ -103,7 +143,7 @@ export default async function HomePage() {
               <div style={{ padding: '10px 14px', background: '#071320', fontFamily: 'var(--font-mono)', fontSize: '0.5625rem', letterSpacing: '0.15em', textTransform: 'uppercase', color: 'var(--text-tertiary)' }}>
                 Live Macro
               </div>
-              {FEATURED_INDICATORS.map((ind) => (
+              {featuredIndicators.map((ind) => (
                 <div key={ind.name} style={{ background: 'var(--ink-mid)', padding: '14px 16px' }}>
                   <div className="indicator-name">{ind.name}</div>
                   <div className="indicator-value">{ind.value}</div>
@@ -117,7 +157,7 @@ export default async function HomePage() {
                 </div>
               ))}
               <Link href="/indicators" style={{ padding: '10px 14px', background: '#071320', fontFamily: 'var(--font-mono)', fontSize: '0.5625rem', letterSpacing: '0.1em', textTransform: 'uppercase', color: 'var(--gold)', textDecoration: 'none', display: 'block', textAlign: 'center', borderTop: '0.5px solid var(--ink-border)' }}>
-                All 200+ indicators →
+                All indicators →
               </Link>
             </div>
 
