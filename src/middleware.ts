@@ -19,6 +19,7 @@ const isPublicRoute = createRouteMatcher([
   '/subscribe(.*)',
   '/api/webhooks(.*)',
   '/api/indicators(.*)',
+  '/api/newsletter(.*)',
   // Fixed 2026-07-12: sitemap.xml, robots.txt, and llms.txt are Next.js
   // metadata routes, not pages — they were falling through to
   // auth.protect() because they weren't in this allowlist AND the matcher
