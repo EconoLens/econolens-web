@@ -1,7 +1,10 @@
+import Link from 'next/link';
+
 export const dynamic = 'force-dynamic';
 
 type IndicatorRow = {
   id: string;
+  slug: string;
   name: string;
   unit: string;
   country: string;
@@ -92,7 +95,7 @@ export default async function IndicatorsPage() {
           {indicators.map((ind) => {
             const ch = formatChange(ind.change, ind.trend);
             return (
-              <div key={ind.id} className="data-card">
+              <Link key={ind.id} href={`/indicators/${ind.slug}`} className="data-card" style={{ textDecoration: 'none', color: 'inherit', display: 'block' }}>
                 <p style={{ fontSize: 11, fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', color: 'var(--muted)', marginBottom: 14 }}>
                   {ind.name}
                 </p>
@@ -106,7 +109,7 @@ export default async function IndicatorsPage() {
                 <p style={{ fontSize: 11, color: 'var(--muted)', borderTop: '1px solid var(--border)', paddingTop: 10, fontFamily: "'Space Mono', monospace" }}>
                   As of {formatDate(ind.date)}
                 </p>
-              </div>
+              </Link>
             );
           })}
           {indicators.length === 0 && !error && (

@@ -1,6 +1,8 @@
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { getArticleBySlug, getAllArticleSlugs, urlFor } from '@/lib/sanity'
+import CiteThisArticle from '@/components/article/CiteThisArticle'
+import NewsletterInline from '@/components/article/NewsletterInline'
 
 export const revalidate = 900
 
@@ -93,6 +95,70 @@ function RenderBlocks({ blocks }: { blocks: any[] }) {
       })}
     </>
   )
+}
+
+/**
+ * Same rendering as RenderBlocks, but drops `insert` (the inline
+ * newsletter form) in right after the 4th paragraph-style block — only
+ * counts normal-style blocks toward that position, so headings/images
+ * don't throw off the count. Used for Layer 1 only (see call site below):
+ * layers render as tabs, so "after paragraph 4 of every article" means
+ * Layer 1, the default/most-read tab, not all three layers at once.
+ */
+function RenderBlocksWithInsert({ blocks, insert, afterParagraph = 4 }: { blocks: any[]; insert: React.ReactNode; afterParagraph?: number }) {
+  if (!blocks?.length) return <p style={{ color: 'var(--text-tertiary)' }}>Content unavailable.</p>
+  let seen = 0
+  let insertedAlready = false
+  const nodes: React.ReactNode[] = []
+
+  blocks.forEach((block, i) => {
+    const text = block.children?.map((c: any) => c.text).join('') || ''
+    const key = block._key || i
+
+    if (block.style === 'h2') {
+      nodes.push(
+        <h2 key={key} style={{
+          fontFamily: 'var(--font-display)',
+          fontSize: 'clamp(1.25rem, 1.8vw, 1.625rem)',
+          fontWeight: 600,
+          color: 'var(--text-primary)',
+          margin: '2.25rem 0 0.875rem',
+          lineHeight: 1.25,
+          letterSpacing: '-0.01em',
+          borderLeft: '2px solid var(--gold)',
+          paddingLeft: '14px',
+        }}>{text}</h2>
+      )
+    } else if (block.style === 'h3') {
+      nodes.push(
+        <h3 key={key} style={{
+          fontFamily: 'var(--font-display)',
+          fontSize: '1.125rem',
+          fontWeight: 500,
+          color: 'var(--text-primary)',
+          margin: '1.75rem 0 0.625rem',
+        }}>{text}</h3>
+      )
+    } else {
+      seen += 1
+      nodes.push(
+        <p key={key} style={{
+          fontSize: '1.0625rem',
+          color: 'var(--text-secondary)',
+          lineHeight: 1.8,
+          marginBottom: '1.25rem',
+        }}>{text}</p>
+      )
+      if (seen === afterParagraph && !insertedAlready) {
+        nodes.push(<div key={`${key}-insert`}>{insert}</div>)
+        insertedAlready = true
+      }
+    }
+  })
+
+  if (!insertedAlready) nodes.push(<div key="insert-fallback">{insert}</div>)
+
+  return <>{nodes}</>
 }
 
 const LAYER_META = [
@@ -425,7 +491,11 @@ export default async function ArticlePage({
             maxWidth: '720px',
             margin: '0 auto',
           }}>
-            <RenderBlocks blocks={layerContent[activeLayer]} />
+            {activeLayer === '1' ? (
+              <RenderBlocksWithInsert blocks={layerContent[activeLayer]} insert={<NewsletterInline />} />
+            ) : (
+              <RenderBlocks blocks={layerContent[activeLayer]} />
+            )}
           </div>
         </div>
       </main>
@@ -492,6 +562,14 @@ export default async function ArticlePage({
           </div>
         </section>
       )}
+
+      {/* ── Cite This Article ── */}
+      <CiteThisArticle
+        title={article.title}
+        slug={params.slug}
+        publishedAt={article.publishedAt}
+        authorName={authorName}
+      />
 
       {/* ── Share ── */}
       <section style={{ borderTop: '0.5px solid var(--ink-border)', padding: '24px 0' }}>
