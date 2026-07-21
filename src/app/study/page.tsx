@@ -14,7 +14,7 @@ const SUBJECTS = [
     section: 'Macroeconomics',
     topics: [
       { label: 'GDP & National Accounts', icon: '📊', slug: 'study-understanding-gdp-explained' },
-      { label: 'Inflation & Price Theory', icon: '📈', slug: null },
+      { label: 'Inflation & Price Theory', icon: '📈', slug: 'study-understanding-inflation-explained' },
       { label: 'Business Cycles', icon: '🔄', slug: null },
       { label: 'Monetary Policy', icon: '🏦', slug: null },
       { label: 'Fiscal Policy & Multipliers', icon: '🏛️', slug: null },

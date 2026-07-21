@@ -52,7 +52,7 @@ export default function NewsletterInline() {
           color: 'var(--text-primary)',
         }}
       >
-        You&apos;re on the list — check your inbox to confirm EconoLens Intel.
+        You&apos;re on the list — thanks for subscribing to EconoLens Intel.
       </div>
     )
   }
