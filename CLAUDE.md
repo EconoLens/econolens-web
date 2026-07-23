@@ -1,8 +1,8 @@
 # ECONOLENS — CLOUD HQ MASTER CONTEXT FILE v2.0
 # ═══════════════════════════════════════════════════════════════════════════════
-# THE SINGLE SOURCE OF TRUTH FOR ALL 52 AI EMPLOYEES
+# THE SINGLE SOURCE OF TRUTH FOR THE AI ORG DESIGN (43 roles actually detailed below)
 # Read by: Claude Code · Claude Cowork · Claude.ai Projects · All AI Tools
-# Last updated: July 2026 | Version: 2.6 — SESSION 12 BRAIN SYNC + REALITY-CHECK CONSOLIDATION
+# Last updated: 2026-07-24 | Version: 2.9 — SESSION 13: NEWS DESK LIVE + OPS SECURITY FIX
 # ═══════════════════════════════════════════════════════════════════════════════
 # HOW THE CLOUD OFFICE WORKS:
 # Every AI employee below has:
@@ -15,8 +15,8 @@
 
 ## 🧭 REALITY CHECK — CONSOLIDATED CURRENT STATE (single source of truth, updated 2026-07-23)
 
-**Read this section first, before anything below it.** Everything past this point (the 52-role
-org, the Make.com flows, the recurring task calendar) is a **target-state design doc** written
+**Read this section first, before anything below it.** Everything past this point (the AI-org
+design, the Make.com flows, the recurring task calendar) is a **target-state design doc** written
 in Session 5 (May 2026) and never fully reconciled against what actually got built. Four separate
 trackers tried to be "the real status" since then — the Notion **Founder Task List**, the Notion
 **Services Bible**, the **`EconoHub_PMO_Master`** Google Sheet, and this file itself — and all
@@ -83,9 +83,144 @@ misfired before — always verify a deploy landed rather than assuming it did.
 
 ---
 
+## 🧩 SERVICE SEGMENTS — SEGMENT-BASED OPERATIONS (NEW STRUCTURE, started 2026-07-24)
+
+**This is a new organizing principle, decided by KP Session 13, replacing the department-based
+view below for operational SOPs.** Instead of organizing around functional departments (Tech/
+Marketing/Finance/etc.), each live service becomes its own **segment**: a self-contained unit with
+its own operational instructions, its own team, and its own do/don't rules. Segments are built one
+at a time, in order, as each service is actually specified — this is not a retroactive rename of
+the department structure above, which stays as historical/reference org design until more segments
+replace pieces of it. Each new segment gets added here following the same four-part shape: **What
+it is → Team → Do/Don't → Workflow & cadence.**
+
+### SEGMENT 01 — Daily News Desk (5-Category Rolling News)
+
+**What it is:** Daily economics news production across five categories — Monetary Policy, Fiscal
+Policy, Trade, Inflation & Markets, Global Economy — sourced exclusively from official government
+and international-institution releases, run three times a day. Supersedes the three-layer News
+Writer SOP (v2.4) for this segment specifically; `/study` explainer articles keep the existing
+three-layer Overview/Explainer/Technical format unaffected by this change.
+
+**Team & approval chain** (all nine roles below are Claude session/prompt personas executed by
+Claude, not separate hired people — see the reality check at the top of this file; the role
+definitions transfer directly to real hires later without changing the SOP):
+- **5 Content Preparation roles**, one per category: N-MON, N-FIS, N-TRD, N-INF, N-GLB
+- **3 Content Review/Audit roles**: REV-1 (Monetary + Fiscal), REV-2 (Trade + Inflation & Markets),
+  REV-3 (Global Economy + floating backup for the other four) — *coverage split proposed by
+  Claude, not yet explicitly confirmed by KP, flag if you want it changed*
+- **1 C-Suite Reviewer** — reviews the auditor's report and the article, submits the package to KP
+- **KP** — final approval → Sanity publish
+
+Flow: Writer drafts → Auditor checks data/sourcing/style, files the Audit Report below → C-Suite
+reviews the audit + article, submits → KP approves → publish live.
+
+**Do**
+- Source only from official government releases, government publications, or international bodies
+  (IMF, World Bank, WTO, BIS, OECD, UN, central banks — Fed, ECB, BoE, RBA, RBI, etc.)
+- Actively monitor major official channels across countries, with particular attention to European
+  and other developed-economy institutions, not just US/India sources
+- Verify every cited figure directly against the primary source before submission
+- Use images of institutions, central banks, currency symbols, market imagery, country flags —
+  anything royalty-free with no copyright issues
+- **Institutional/terminology accuracy per country is mandatory regardless of house style** — e.g.
+  UK gilts vs US Treasuries, BoE's MPC vs the Fed's FOMC, Governor vs Chair. Getting the wrong
+  country's institutional term is a factual error, not a style choice, and fails the audit.
+
+**Don't**
+- Never copy or closely paraphrase third-party news outlets, blogs, or aggregators — official
+  primary sources only
+- Never use copyrighted images (stock photos of named individuals, paywalled chart screenshots,
+  other outlets' graphics)
+- Never publish without the auditor's data-accuracy sign-off
+- **Do not switch spelling convention per country.** Decided 2026-07-24 (trial basis, revisit
+  after a few days of real use): house style is **American English, site-wide, regardless of
+  which country an article covers.** Per-country spelling switching was considered and rejected —
+  Trade and Global Economy stories routinely cover multiple countries in one piece, making a
+  per-story convention unworkable, and neither Bloomberg nor Reuters (American English
+  site-wide) nor the FT (British English site-wide) switch spelling per story either. Terminology
+  accuracy (above) is the real per-country requirement; spelling is fixed.
+
+**Format (this segment only — `/study` keeps three-layer):**
+- Layer 1: Headline + key highlights (the "outer view")
+- Layer 2: Full explanation, written at the level of a professional news desk at a high-end
+  publication — not the Overview/Explainer/Technical structure used elsewhere
+
+**Cadence:** 3 runs/day at **07:00 / 13:00 / 19:00 IST** (defaults proposed by Claude, confirm or
+adjust). Minimum 2 articles/day per category (10/day minimum across 5 categories), scaling once
+the flow is steady.
+
+**Audit Report template** (fixed checklist REV-1/2/3 fill out per article, not freeform):
+
+| Field | What goes here |
+|---|---|
+| Article ID / headline / category / writer | Basic identification |
+| Sources cited | List each with direct link; confirm official government/institution source, not third-party |
+| Data verification | Per numeric claim: source confirms it exactly? Any discrepancy? |
+| Originality | Manual side-by-side check against sources (Copyscape not yet funded — known gap, see reality check) |
+| Style/locale check | American English house style followed? Institutional terminology correct for the country covered? |
+| Structural check | Layer 1 present · Layer 2 present · source attribution block · byline · image legally clear · SEBI disclaimer if a price/instrument is mentioned |
+| Verdict | PASS / REVISE / ESCALATE |
+| Auditor | Name/role + timestamp |
+| C-Suite countersignature | Notes before forwarding to KP |
+
+**QA-checklist enforcement (resolves the open question from `EconoLens_QA_Checklist_DRAFT.docx`,
+never decided as of 07-13):** manual process for now — the Audit Report above — but the verdict
+gets written into the existing Sanity `qaChecklist` fields at publish time so there's a permanent,
+queryable record, rather than a hard schema gate blocking publish. Revisit a hard gate once this
+segment has run long enough to know the manual version isn't just adding friction.
+
+**Notifications to KP:** as of 2026-07-24, land in the same Notion "EconoLens HQ" dashboard the
+rest of the ops automation already uses (Ops Log sub-page + "Recent Employee Activity" and "📝
+Pending Article Drafts" sections on the CEO Office page) — not a separate Cowork-only channel.
+Superseded the earlier "Cowork only" line above.
+
+**Live automation (since 2026-07-24):** scheduled task `econolens-daily-news-desk` runs at
+07:00/13:00/19:00 IST via Claude's native scheduler. It researches, verifies against primary
+sources, checks existing Sanity content for duplication/conflicts (see pilot result below), and
+creates **drafts only** (`qaStatus: "draft"`) — it never calls `publish_documents`. This is a
+deliberate deviation from the full 9-role chain above: there are no separate human auditors/
+C-Suite yet, so the automation does the writer+dedup-check role and stops one step short of
+"submits for review," landing straight in KP's Notion queue instead. **KP is the only one who
+moves a draft to live**: review the draft in Sanity Studio or via the Notion queue, then either
+ask Claude to patch `qaStatus` to `"passed"` and call `publish_documents`, or do the equivalent
+in Studio directly.
+
+**Verified Sanity connection details** (previously undocumented, caused repeated rediscovery):
+project `rvv43603`, dataset `production`, **workspace name is `"econolens"`, not `"default"`** —
+`get_schema`/`list_workspace_schemas` fail against `"default"`. The article field shape that
+actually renders on the live frontend (confirmed 2026-07-23 by reading a real published document,
+not by trusting Studio's newer form) is documented in the `project-sanity-schema-bug` memory and
+now battle-tested by a real publish: `articleType`, `accessLevel`, `aiLabel`, `author` (reference),
+`category` (reference to `category-<slug>`), `feedSource`, `publishedAt`, `qaStatus`, `slug`,
+`title`, `summary` (string array), `indiaContext` (plain string, omit if not relevant),
+`sourceAttribution` (object array), `layerOne`/`layerTwo` (portable text). No `layerThree` is
+needed for this segment — the frontend still renders a "Layer 3" tab on 2-layer articles, but it
+shows a clean "Content unavailable" state rather than erroring, so this is safe to leave as-is.
+
+**Known gap — no image upload tool.** Neither the connected Sanity MCP nor any other currently
+loaded tool can upload a local image (e.g. a matplotlib-generated chart) as a Sanity asset;
+articles publish text-only until this is resolved. Reported to Sanity via `give_sanity_feedback`
+2026-07-23. A second, official Sanity connector (`mcp.sanity.io`) was surfaced for KP to connect
+in case it exposes an asset-upload tool the current one doesn't — check its tool list once
+connected before assuming the gap is closed.
+
+**Pilot result (2026-07-23):** first 3 candidate articles (Monetary Policy/Fed, Fiscal Policy/
+Treasury, Trade/WTO) were researched and drafted manually as a dry run before automating. Fiscal
+Policy published clean (see live URL in Session 13 log). Monetary Policy and Trade were **held
+back after query_documents found real conflicts** with already-published articles — a Fed-rate
+figure that didn't match an existing June article, and a WTO trade-growth figure that didn't
+match an existing June article — exactly the failure mode this segment's audit step exists to
+catch. Neither conflict has been resolved yet; don't assume either the new drafts or the old
+published articles are correct without re-verifying.
+
+---
+
 ## 🏢 CLOUD OFFICE INFRASTRUCTURE — THE SHARED FOUNDATION (target-state design, see reality check above)
 
-All 52 AI employees operate on these shared cloud systems.
+All 43 detailed AI-employee roles operate on these shared cloud systems (org headers below were
+previously over-claiming role counts per department — e.g. "12 Marketing roles" when only 4 were
+ever written out; corrected Session 12 addendum, 2026-07-23).
 Every tool connects to at least one of these. Nothing runs in isolation.
 
 ### TIER 1 — CORE INFRASTRUCTURE (All employees use these)
@@ -462,7 +597,7 @@ CLAUDE CODE:
 
 ---
 
-## 📈 MARKETING TEAM — 12 ROLES (All report to CMO)
+## 📈 MARKETING TEAM — 4 ROLES DETAILED (All report to CMO)
 
 > **Reality:** M-02 (Buffer→LinkedIn posting) is the only one of these four roles with a live
 > tool behind it. M-01 (SE Ranking/Ahrefs), M-03 (Beehiiv newsletter — account exists, zero send
@@ -515,7 +650,7 @@ COWORK TASKS:
 
 ---
 
-## 💰 FINANCE & BUSINESS TEAM — 8 ROLES (All report to CFO)
+## 💰 FINANCE & BUSINESS TEAM — 4 ROLES DETAILED (All report to CFO)
 
 > **Reality:** none of these four roles are active yet — all of Razorpay/Stripe/Zoho Books/the
 > unit-economics model are blocked behind the GST → LUT → IEC → HDFC account chain (see reality
@@ -567,7 +702,7 @@ COWORK TASKS:
 
 ---
 
-## 🎯 PRODUCT & UX TEAM — 6 ROLES (All report to CPO)
+## 🎯 PRODUCT & UX TEAM — 3 ROLES DETAILED (All report to CPO)
 
 > **Reality:** all three roles are target-state — no Hotjar, no formal sprint board, no A/B
 > testing infrastructure exists. Product decisions currently happen ad hoc between KP and Claude,
@@ -607,7 +742,7 @@ COWORK TASKS:
 
 ---
 
-## ✍️ CONTENT OPS TEAM — 8 ROLES (All report to CCO)
+## ✍️ CONTENT OPS TEAM — 5 ROLES DETAILED (All report to CCO)
 
 > **Reality:** none of these run as automated pipelines — C-01's Make.com/Feedly/Copyscape
 > automation is abandoned (see reality check at top). The real content process is KP + Claude
@@ -1150,6 +1285,51 @@ Operations Checklist before publish. Prepared by Claude Cowork — not committed
 (per standing rule); KP reviews and deploys manually. **Action needed:** log this decision in
 Notion Decision Log per the locked-prompt governance rule, once Notion is connected.
 
+### Session 13 — July 23–24, 2026 — Daily News Desk Goes Live + Ops Security Fix
+
+**Segment 01 (Daily News Desk) automated end-to-end for the first time.** See the full detail in
+the "🧩 SERVICE SEGMENTS" section above (Sanity connection specifics, field shape, image-upload
+gap, the draft-then-approve model). Summary: 3 pilot articles researched and drafted manually as
+a dry run; Fiscal Policy (Treasury) published live and verified rendering correctly at
+`econolens.co.in/news/us-treasury-june-2026-deficit-fiscal-policy`; Monetary Policy (Fed) and
+Trade (WTO) were **not published** because checking existing Sanity content first surfaced real
+figure conflicts with already-published articles (unresolved — see Segment 01 section). SOP doc
+(`ops/reports/EconoLens-Daily-News-Desk-SOP-2026-07-24.docx`) updated with two new rules: never
+re-cover an already-published story without framing it as an explicit update, and never copy text
+from any source directly or indirectly (including via a paraphrased intermediary). Scheduled task
+`econolens-daily-news-desk` created (07:00/13:00/19:00 IST, drafts only) and wired into the
+existing Notion "EconoLens HQ" dashboard rather than a separate channel.
+
+**Discovered a pre-existing ops-automation layer this session had no record of.** A Notion
+"EconoLens HQ" workspace with a "CEO Office" page and "Ops Log" already existed, fed by numerous
+scheduled Claude tasks (content QA, GEO/SEO sync, security guard, tool scout, weekly ops recap,
+plus 7 daily per-category "econolens-publish-*" tasks). None of this was in `CLAUDE.md` or any
+memory file before now — a real documentation gap, not something newly built this session.
+
+**Security finding — live GitHub PAT hardcoded in 4 scheduled-task files.**
+`econolens-geo-seo-sync-weekly`, `econolens-security-guard-weekly`, `econolens-cto-tool-scout-weekly`,
+and `econolens-ops-log-weekly` all had the same GitHub PAT embedded directly in a `git clone` URL,
+used unattended on a recurring schedule. This is a materially worse exposure than a token pasted
+once in chat (already flagged for rotation earlier) — a credential sitting permanently in plaintext
+files that run autonomously. Fixed this session: token stripped from all 4 files, replaced with a
+safe fallback ("if clone fails on auth, log that a fresh token is needed and skip repo-dependent
+steps" rather than silently using a stored credential). Added a check to the security-guard task
+to watch for this exact pattern recurring in future runs. **KP still needs to rotate this PAT on
+GitHub — removing it from the files does not invalidate the token itself.**
+
+**7 stale auto-publish tasks disabled.** `econolens-publish-{monetary-policy,fiscal-policy,trade,
+inflation,markets,research,global-economy}` had all stopped running since 2026-06-24 (contents
+inaccessible this session to confirm exactly what they did) and were disabled rather than
+deleted, so they can be inspected before ever being re-enabled. If they really were auto-publishing
+without duplicate/conflict checks, that's a plausible explanation for the Fed-rate and WTO
+figure conflicts found this session — not confirmed, worth checking their file contents directly
+next time they're accessible.
+
+**Why this matters:** KP's instruction this session was "implement this SOP from tomorrow daily
+at any cost" — but the responsible version of "at any cost" is draft-then-approve, not
+full-auto-publish, given this session found two live examples of exactly the accuracy failure
+mode (conflicting figures) that unattended publishing would make worse, not better.
+
 ### Session 12 — July 21–23, 2026 — Brain Sync + Post-Audit Fixes Confirmed Merged
 
 **CRITICAL FINDING — THIS FILE WAS NEVER ACTUALLY LIVE:** The v2.2–2.4 updates (Sessions 8–11,
@@ -1220,7 +1400,7 @@ same session it's made, not left as a local-only artifact.
 EconoLens's day-one-to-today work "is not stored anywhere, very distributed, many out of focus,
 many ideas outdated" — accurate. By this point there were **four independent trackers** that had
 each separately tried to be "the real status" and drifted: the Notion Founder Task List, the
-Notion Services Bible, the `EconoHub_PMO_Master` Google Sheet, and this file's own 52-role design
+Notion Services Bible, the `EconoHub_PMO_Master` Google Sheet, and this file's own AI-org design
 (written Session 5, describing Make.com automation, Feedly, Uptime Robot, SE Ranking, and dozens
 of other tools/roles that were either abandoned or never actually set up). Fix applied this
 session: added a **"REALITY CHECK — CONSOLIDATED CURRENT STATE"** section right after this file's
@@ -1235,9 +1415,22 @@ file) plus `ops/reports/PENDING-TASKS-MASTER-2026-07-21.md` are now the only two
 and both should be edited in place going forward rather than superseded by yet another new dated
 file each session.
 
+**Addendum 2 — role-count cleanup (same session, KP's "clean it" follow-up):** while summarizing
+this file's contents back to KP, found the org design's own numbers didn't add up. The title
+claimed "ALL 52 AI EMPLOYEES," and Marketing/Finance/Product/Content-Ops section headers claimed
+12/8/6/8 roles respectively — but only 4/4/3/5 roles were ever actually written out in those four
+sections (Tech's claimed 18 and C-Suite's 9 were both accurate). Actual total detailed: **43**,
+not 52, and not even 61 if you'd summed the per-section claims instead. Fixed: corrected the file
+title and all four section headers to state the real number of roles detailed, rather than
+padding out fake roles just to hit a round number. Also verified this session's full unshallowed
+`git log` (239 commits back to the true 2026-05-22 project start) against several existing
+CLAUDE.md claims — see the full-history-sweep memory for the complete timeline and three newly
+found open items (GST SAC code conflict, undecided QA-checklist enforcement, unconfirmed GitHub
+2FA deadline) that still need a decision from KP but weren't in scope to fix in this file directly.
+
 ---
 
-*ECONOLENS CLOUD HQ — CLAUDE.md v2.6*
+*ECONOLENS CLOUD HQ — CLAUDE.md v2.7*
 *Next update trigger: new tool adoption, pricing change, schema change, phase transition*
 *File location: /econolens/CLAUDE.md (root of project)*
 *This file must be committed and pushed to GitHub in the same session it's edited — a local-only
