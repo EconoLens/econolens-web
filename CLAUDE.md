@@ -2,7 +2,7 @@
 # ═══════════════════════════════════════════════════════════════════════════════
 # THE SINGLE SOURCE OF TRUTH FOR ALL 52 AI EMPLOYEES
 # Read by: Claude Code · Claude Cowork · Claude.ai Projects · All AI Tools
-# Last updated: May 2026 | Version: 2.1 — DOMAIN UPDATED TO econolens.co.in
+# Last updated: July 2026 | Version: 2.6 — SESSION 12 BRAIN SYNC + REALITY-CHECK CONSOLIDATION
 # ═══════════════════════════════════════════════════════════════════════════════
 # HOW THE CLOUD OFFICE WORKS:
 # Every AI employee below has:
@@ -13,7 +13,77 @@
 #   [COWORK]    → Tasks assigned to Claude Cowork for execution
 # ═══════════════════════════════════════════════════════════════════════════════
 
-## 🏢 CLOUD OFFICE INFRASTRUCTURE — THE SHARED FOUNDATION
+## 🧭 REALITY CHECK — CONSOLIDATED CURRENT STATE (single source of truth, updated 2026-07-23)
+
+**Read this section first, before anything below it.** Everything past this point (the 52-role
+org, the Make.com flows, the recurring task calendar) is a **target-state design doc** written
+in Session 5 (May 2026) and never fully reconciled against what actually got built. Four separate
+trackers tried to be "the real status" since then — the Notion **Founder Task List**, the Notion
+**Services Bible**, the **`EconoHub_PMO_Master`** Google Sheet, and this file itself — and all
+four drifted out of sync with reality independently (the PMO sheet showed 43/43 tasks 0% complete
+when ~16 were already done; the Services Bible showed every Phase 1 service "Not started" when
+4 were shipped). That drift is the actual problem KP flagged 2026-07-23: work has been getting
+done since day one, but the record of it is scattered across chat history, dated snapshot files,
+and three abandoned Notion/Sheet trackers instead of living in one place that's kept current.
+
+**Going forward, there are exactly two living documents. Nothing else is authoritative:**
+1. **This file (`CLAUDE.md`)** — architecture, org design, and the reality-check below. Edited
+   in place; the Session Log at the bottom is the append-only history, everything above it is
+   current state, not a snapshot.
+2. **`ops/reports/PENDING-TASKS-MASTER-2026-07-21.md`** (or whatever date supersedes it) — the
+   live, tiered, actionable task list. Update this file in place going forward instead of writing
+   a new dated file each time; only start a new one if the old one becomes genuinely unwieldy.
+
+The Notion Founder Task List, Notion Services Bible, and `EconoHub_PMO_Master` Sheet are
+**retired** — treat them as historical inputs that were reconciled into the two files above, not
+as something to check status against anymore.
+
+### What's actually live (infrastructure, verified against the real repo + live site)
+
+| Layer | Tool | Reality |
+|---|---|---|
+| Domain / hosting | econolens.co.in on Vercel (`khagan-s-projects` team), Hostinger DNS | ✅ Live |
+| Source control | `github.com/EconoLens/econolens-web`, single `main`, PR-gated (TypeScript check on push/PR since 07-08) | ✅ Live — direct-push-only description in old ops docs is outdated |
+| Framework | Next.js 14.2.25 (patched for CVE-2025-29927), App Router, TypeScript, Tailwind | ✅ Live |
+| Auth | Clerk — gates `/dashboard` (restored 07-21 after being stubbed since 05-29) and some API routes; rest of site public by design | ✅ Live, Google Sign-In sub-issue open (see below) |
+| CMS | Sanity, embedded Studio, article/contributor/category/economicIndicator/siteSettings schemas | ✅ Live |
+| Database | Supabase — AI query cache, plan/rate-limit data, newsletter signup capture | ✅ Live |
+| Payments | Razorpay checkout UI on `/pricing` | ⚠️ UI only — very likely not processing real payments (no GST/bank account behind it yet) |
+| Analytics | GA4 | ✅ Live (fixed 07-02, CSP block fixed 07-08) |
+| Economic data | FRED API (US/global indicators), India series static/manual | ✅ Live — 13 of 14 indicators show real data; Gold Price series still shows none |
+| Content pipeline | Manual — KP + Claude draft, publish via Sanity | ✅ This is the real process — **not** the automated Make.com pipeline described later in this file |
+| Social | Buffer → LinkedIn only (X excluded by design, per-post cost) | ✅ Live, LinkedIn admin access separately blocked |
+| Newsletter | Beehiiv account + API keys exist | ❌ Zero integration code — no signup form, no send pipeline, no confirmation email |
+| SE Ranking, Semrush, Ahrefs, Frase, Hotjar, Apollo.io | Named throughout the Marketing/Product role sections below | ❌ None ever actually set up — aspirational tooling only |
+| Feedly, Uptime Robot, Copyscape | Named throughout the C-Suite/Tech/Content role sections below | ❌ None ever actually set up (Copyscape has env-var placeholders and a schema field, no funded account) |
+| Make.com | Automated news pipeline (FLOW-01 through FLOW-05, later in this file) | ⚠️ Was built, then **explicitly abandoned as a strategy** — not running, kept below for historical/reference value only |
+| 1Password | Named as the key-storage system throughout | ❌ Not actually set up — 4 real secrets were caught sitting in plaintext in Notion 2026-07-12 |
+
+### What's actually blocking revenue
+
+GST application submitted 2026-07-13, **not yet approved**. LUT filing → IEC code → HDFC business
+account → Razorpay live keys / Stripe / Zoho Books all sequence behind it. This is a CEO-only
+action — nothing technical is in the way. Full detail: `ops/reports/PENDING-TASKS-MASTER-2026-07-21.md`.
+
+### Content reality
+
+29 articles live as of 2026-07-08 (three-layer format: Overview/Analysis/Technical, real
+citations). The `/study` curriculum page is fully built (24 topics across Macro, Micro,
+Econometrics, International) but only 2 of 24 have actual articles linked (GDP, Inflation) — the
+rest are placeholder text. This is the concrete, current scope of "content production," not the
+30-articles/day automated volume described in the C-01 role below, which was never realized.
+
+### Deploy reality
+
+KP runs PowerShell scripts (`ops/push-to-github.ps1`, `ops/deploy-all-fixes.ps1`) that clone the
+real repo fresh, copy in changes, commit, and push using his own GitHub credentials — this is the
+actual deploy path, separate from Claude Cowork's scoped-PAT feature-branch-and-PR workflow (see
+Session 12 log entry). Vercel auto-deploys on push to `main`, but the GitHub→Vercel webhook has
+misfired before — always verify a deploy landed rather than assuming it did.
+
+---
+
+## 🏢 CLOUD OFFICE INFRASTRUCTURE — THE SHARED FOUNDATION (target-state design, see reality check above)
 
 All 52 AI employees operate on these shared cloud systems.
 Every tool connects to at least one of these. Nothing runs in isolation.
@@ -23,8 +93,8 @@ Every tool connects to at least one of these. Nothing runs in isolation.
 |--------|-------------|---------|-------------|
 | CLOUD HQ Brain | CLAUDE.md (this file) | Single source of truth | All Claude tools |
 | Notion HQ | notion.econolens.co.in | Decision log, task tracking, docs | All departments |
-| Vercel Dashboard | vercel.com/econolens | Deployments, env vars, logs | CTO, DevOps |
-| GitHub Repo | github.com/econolens/econolens-web | All code, CI/CD | CTO, all devs |
+| Vercel Dashboard | vercel.com/khagan-s-projects/econolens-web | Deployments, env vars, logs | CTO, DevOps |
+| GitHub Repo | github.com/EconoLens/econolens-web | All code, CI/CD | CTO, all devs |
 | 1Password Vault | EconoLens Team vault | All API keys, credentials | COO, Security |
 | Supabase | supabase.econolens.co.in | Database, auth, analytics | All backend |
 | Cloudflare | cloudflare.com | DNS, CDN, WAF, SSL | COO, DevOps |
@@ -133,7 +203,7 @@ COWORK TASKS:
 ```
 ROLE:    30 articles/day pipeline, EEAT compliance, editorial standards
 DAILY:   Verify pipeline ran (Sanity has 30 new articles)
-         Spot-check 3 articles: India context present, three layers complete
+         Spot-check 3 articles: source+author present, three layers complete, India context correct (present if relevant, omitted if not)
          Confirm Copyscape scores all under 10%
 ACCESSES: Feedly, Sanity CMS, Copyscape dashboard, Claude API logs
 COWORK TASKS:
@@ -165,6 +235,13 @@ COWORK TASKS:
 ---
 
 ## 💻 TECH TEAM — 18 ROLES (All report to CTO)
+
+> **Reality:** T-01 (frontend), T-03 (backend), T-09 (deploy/CI), T-13 (Sanity schema), T-14
+> (auth/payments) reflect real, ongoing work done via Claude Code sessions. T-06 (QA/Playwright),
+> T-08 (security), T-11 (dataviz beyond the basic indicators dashboard), T-15 (Phase 2, not
+> started), T-17 (design), T-18 (bundle analysis) are target-state — no one is actually doing
+> these on a cadence. There is no dedicated person/tool per role; it's KP + Claude Code sessions
+> covering whichever domain is needed.
 
 ### T-01: Lead Frontend Developer — Claude Code + Next.js + Tailwind
 ```
@@ -243,7 +320,7 @@ CLAUDE CODE:
 ```
 DOMAIN:   Content quality assurance (NOT codebase)
 DAILY:    10% spot-check of published articles via Sanity API
-          Verify: India context, three layers, no hallucinations, Copyscape <10%
+          Verify: source+author present, three layers, India context (if relevant), graph/chart (if warranted), no hallucinations, Copyscape <10%
 TOOL:     Claude API with reviewer system prompt (see locked prompts)
 ACCESSES: Sanity CMS (read), Copyscape dashboard, Notion (log)
 COWORK TASKS:
@@ -387,6 +464,11 @@ CLAUDE CODE:
 
 ## 📈 MARKETING TEAM — 12 ROLES (All report to CMO)
 
+> **Reality:** M-02 (Buffer→LinkedIn posting) is the only one of these four roles with a live
+> tool behind it. M-01 (SE Ranking/Ahrefs), M-03 (Beehiiv newsletter — account exists, zero send
+> pipeline), M-04 (BD/outreach — draft templates exist in `/ops/outreach/`, not an active
+> cadence) are all target-state, not currently staffed or running.
+
 ### M-01: SEO Strategist — SE Ranking + Ahrefs + Frase + GSC
 ```
 DAILY:    SE Ranking auto-report → positions 11-20 → priority content list
@@ -434,6 +516,10 @@ COWORK TASKS:
 ---
 
 ## 💰 FINANCE & BUSINESS TEAM — 8 ROLES (All report to CFO)
+
+> **Reality:** none of these four roles are active yet — all of Razorpay/Stripe/Zoho Books/the
+> unit-economics model are blocked behind the GST → LUT → IEC → HDFC account chain (see reality
+> check at top). This section is the plan for once that chain clears, not current work.
 
 ### F-01: Revenue Planner — Gemini Sheets + Stripe + Razorpay + Looker Studio
 ```
@@ -483,6 +569,10 @@ COWORK TASKS:
 
 ## 🎯 PRODUCT & UX TEAM — 6 ROLES (All report to CPO)
 
+> **Reality:** all three roles are target-state — no Hotjar, no formal sprint board, no A/B
+> testing infrastructure exists. Product decisions currently happen ad hoc between KP and Claude,
+> not through this structure.
+
 ### P-01: Platform Product Manager — Notion AI + Claude Projects
 ```
 WEEKLY:   Sprint board update: completed services → next 5 services
@@ -519,21 +609,32 @@ COWORK TASKS:
 
 ## ✍️ CONTENT OPS TEAM — 8 ROLES (All report to CCO)
 
+> **Reality:** none of these run as automated pipelines — C-01's Make.com/Feedly/Copyscape
+> automation is abandoned (see reality check at top). The real content process is KP + Claude
+> manually drafting three-layer articles and publishing via Sanity; the Operations Checklist and
+> locked prompts further below (Session 11 SOP) are what actually govern that manual process, not
+> the automated triggers described in C-01/C-03/C-05.
+
 ### C-01: News Pipeline Operator — Feedly + Claude API + Copyscape + Sanity
 ```
 AUTOMATED: RSS polling every 15 min via Make.com
 TRIGGER:   New Feedly entry → Make.com → Claude API (with caching) → Copyscape → Sanity publish
 SOURCES:   RBI, IMF, World Bank, Fed, ECB, NBER, PIIE, Brookings, MEA (50+ feeds)
 RULES:     Reject if Copyscape > 10%. Regenerate once. Escalate if > 15%.
+           Global framing by default (see Operations Checklist) — India context only when
+           the topic is genuinely India-related, not forced into every article.
+           Source attribution + author/byline mandatory on every article, always.
 ACCESSES: Feedly, Claude API, Copyscape, Sanity API, Make.com
 MONITORING: Make.com scenario success rate must be 100%
 ```
 
 ### C-02: Academic Paper Translator — Claude API + pdf.js
 ```
-DAILY:    10 papers from NBER/SSRN/REPEC → plain English + India context
+DAILY:    10 papers from NBER/SSRN/REPEC → plain English, India section only if relevant
 RULES:    Never reproduce > 15 words from source. Synthesise only.
-          Add "Why this matters for India's economy" section mandatory.
+          Add "Why this matters for India's economy" section ONLY if the paper's findings
+          are actually India-related or have material India implications — otherwise omit.
+          Source attribution (author, institution, year, link) mandatory on every translation.
 ACCESSES: Claude API, pdf.js, Sanity CMS
 COWORK TASKS:
   Daily: "Check NBER + SSRN for today's new economics papers, translate top 3 using /prompts/paper-translator.md, save drafts to /content/drafts/"
@@ -550,10 +651,13 @@ ACCESSES: ElevenLabs API, Cloudflare R2, Sanity API
 ### C-04: AI Content Reviewer — Claude API + Perplexity
 ```
 DAILY:    Spot-check 10% of published articles (3 minimum per day)
-CHECKLIST: ✓ India context paragraph present
+CHECKLIST: ✓ Source attribution block present (mandatory, always)
+           ✓ Author/byline present (mandatory, always)
            ✓ Three layers complete (Overview/Explainer/Technical)
+           ✓ Economist-reviewer framing present, carried through Layer 1/2
+           ✓ India context paragraph present IF India-related, correctly omitted if not
+           ✓ Graph/chart/image present IF article type/data warrants it
            ✓ No factual hallucinations (verify with Perplexity)
-           ✓ Source attribution block present
            ✓ SEBI disclaimer on any price mention
 ACCESSES: Sanity CMS (read), Perplexity Pro, Notion (QA log)
 COWORK TASKS:
@@ -571,6 +675,11 @@ ACCESSES: Claude API, Supabase, Sanity (article content)
 ---
 
 ## ⚙️ MAKE.COM AUTOMATION FLOWS — THE NERVOUS SYSTEM
+
+> ⚠️ **NOT RUNNING.** This automation was built, then explicitly abandoned as a content
+> strategy — too unreliable. Content is produced manually (KP + Claude) and published straight
+> to Sanity. Kept below as historical/reference design only — do not treat any of FLOW-01
+> through FLOW-05 as live. See the reality check at the top of this file.
 
 ### FLOW-01: News Article Pipeline (runs every 15 minutes)
 ```
@@ -701,13 +810,56 @@ Never:      In code, in git, in Notion, in emails, in Slack
 
 ### NEWS WRITER (CCO / News Pipeline Operator)
 ```
-You are EconoLens's economics news writer. You receive official press releases
-and announcements from central banks and economic institutions.
+# v2.4 — updated 2026-07-10 (KP decision — see Session 11 log)
+You are EconoLens's economics news/analysis writer. You receive official press releases,
+reports, and announcements from central banks, IMF/World Bank, and economic institutions.
 Rules: 1. Do NOT quote any sentence from source. 2. Synthesise into original sentences.
-3. Add India-specific context paragraph. 4. Structure: Headline → 3-bullet summary
-→ Layer 1 (200w plain English) → Layer 2 (600w context). 5. Source attribution block.
-6. Label: "AI-assisted · Source: [Institution]". 7. Never mirror source sentence structure.
-8. Append SEBI disclaimer if any asset price mentioned.
+3. India-specific context paragraph — INCLUDE ONLY IF the article's topic is genuinely
+   related to India (Indian policy, Indian data, or a direct/material effect on India's
+   economy). If not related, OMIT the section entirely — do not force it in.
+4. Structure: Headline → 3-bullet summary → "Reviewed by: EconoLens Economics Desk" framing
+   → Layer 1 (200w plain English, written IN the reviewer's voice) → Layer 2 (600w context,
+   including a "where economists reviewing this same report disagree" subsection) →
+   Layer 3 (technical/data). The economist-reviewer framing runs through the explanation
+   itself — it is not a bolted-on section appended after a neutral summary.
+5. Source attribution block — ALWAYS MANDATORY, every article, no exceptions.
+6. Author/byline — ALWAYS MANDATORY. AI-generated pieces: "AI-assisted · Source: [Institution]".
+   Human/contributor pieces: named contributor byline. Never publish without one or the other.
+7. Never mirror source sentence structure.
+8. Append SEBI disclaimer if any asset price or investment instrument mentioned.
+9. Graph/chart/image — include when the article type or underlying data warrants visual
+   representation (data-story, econometrics, research-guide, or any piece citing a forecast
+   series, time series, or comparative statistics). Not mandatory for pure explainer/opinion
+   pieces with no numeric series to visualise. Use real data (FRED/World Bank/IMF/source
+   institution) — never a screenshot of a paywalled chart.
+10. GLOBAL FRAMING DEFAULT — EconoLens is a global economics platform, not India-first
+    (see brand positioning decision). Write for an international reader by default. India
+    is one country among many in coverage, not the default lens — apply Indian tone/context
+    only per Rule 3 above.
+```
+
+#### ⚠️ OPERATIONS CHECKLIST — CONTENT QUALITY (Check every article before publish)
+```
+# v2.4 — updated 2026-07-10
+□ Plagiarism score < 10% via Copyscape (MANDATORY — do not publish without this check)
+  → If 10–15%: regenerate once, re-check
+  → If > 15%: escalate to CCO, do NOT publish
+□ Source attribution block present (MANDATORY — every article, every time)
+□ Author/byline present (MANDATORY — AI label or named contributor, every article)
+□ Three-layer structure complete (Overview / Explainer / Technical)
+□ Economist-reviewer framing present (opening "Reviewed by" framing + reviewer voice
+  carried through Layer 1/2, including a "where economists disagree" read where relevant)
+□ India-specific context paragraph — present IF topic is India-related, OMITTED (not forced)
+  if not. Check relevance before requiring this section.
+□ Graph/chart/image present IF article type or data warrants visualisation (data-story,
+  econometrics, forecast/time-series content); OK to omit for pure explainer/opinion pieces
+  with no series to chart
+□ SEBI disclaimer appended if any asset price mentioned
+□ No sentence mirrors source structure (paraphrase fully)
+□ (Optional, not gating) Data & Working: for data-heavy pieces, show the actual derivation
+  of any computed figure (percentage-point deltas, unit conversions, cross-report
+  comparisons) rather than just stating the final number — encouraged when it aids
+  transparency, not required on every article
 ```
 
 ### AI RESEARCH TOOL (CPO / AI Systems Engineer)
@@ -737,18 +889,34 @@ You receive an academic economics paper extract. Your job:
 
 ### CONTENT QA REVIEWER (QA Lead / AI Content Reviewer)
 ```
+# v2.4 — updated 2026-07-10
 You are reviewing an EconoLens article for quality. Check:
-1. India-specific context paragraph — present? (YES/NO)
-2. Three-layer structure — all three layers complete? (YES/NO)
-3. Source attribution — institution + link present? (YES/NO)
-4. SEBI disclaimer — present if any price mentioned? (YES/NO)
-5. Factual accuracy — any claims that seem wrong? (list or NONE)
-Output JSON: {india_context: bool, three_layers: bool, source_attr: bool, sebi: bool, issues: []}
+1. Source attribution — institution + link present? (YES/NO) — MANDATORY, always
+2. Author/byline — AI label or named contributor present? (YES/NO) — MANDATORY, always
+3. Three-layer structure — all three layers complete? (YES/NO)
+4. Economist-reviewer framing — opening "Reviewed by" frame present, and is the reviewer
+   voice carried through Layer 1/2 rather than appended as a separate section? (YES/NO)
+5. India-specific context paragraph — is the topic actually India-related? If YES, is the
+   paragraph present? If NOT India-related, confirm it was correctly omitted. (YES/NO/NA)
+6. Graph/chart/image — does this article type/data warrant a visual, and if so is one
+   present? (YES/NO/NA)
+7. SEBI disclaimer — present if any price mentioned? (YES/NO/NA)
+8. Factual accuracy — any claims that seem wrong? (list or NONE)
+Output JSON: {source_attribution: bool, author_byline: bool, three_layers: bool,
+  reviewer_framing: bool, india_context: bool|"na", graph_or_image: bool|"na",
+  sebi: bool|"na", issues: [], verdict: "PASS"|"FAIL", action: "publish"|"revise"|"escalate"}
 ```
 
 ---
 
 ## 🗓️ RECURRING TASK CALENDAR — WHEN WHAT RUNS
+
+> ⚠️ **ASPIRATIONAL — most of this calendar is not actually being executed.** No one is running
+> the SE Ranking, competitor-scan, sprint-board, 1Password-audit, or GSC-check cadences below;
+> those tools/processes were never set up (see reality check at top). What's real: Sanity
+> publishing (manual, bursty — not a fixed cadence), Buffer→LinkedIn auto-post on publish, GA4
+> collection, and ad-hoc Cowork sessions like this one. Treat this table as target design for
+> once the org is actually staffed, not a report of what's happening today.
 
 | Task | Frequency | Time (IST) | Owner | System |
 |------|-----------|------------|-------|--------|
@@ -842,6 +1010,7 @@ Notion ◄───────────────────────�
 - Three-layer architecture locked (Overview/Explainer/Technical)
 - AI articles: synthesise only, India context mandatory, Copyscape mandatory
 - AdSense requirements: 20+ articles, PageSpeed 90+, GA4, Privacy Policy
+- **Superseded by Session 11 (2026-07-10)** — India context is now conditional, not mandatory
 
 ### Session 3 — May 2026 — Claude Tool Interlinking
 - CLAUDE.md as shared context bridge for Code + Cowork + Projects
@@ -866,6 +1035,14 @@ Notion ◄───────────────────────�
 - All internal URLs updated to econolens.co.in
 - Next step: point Hostinger DNS to Vercel (add A record or CNAME)
 
+### Session 8 — June 2026 — Entity Structure Decided
+- Legal entity: **Sole Proprietorship** under the name **Econolens Media and Technology**
+- Name confirmed available on MCA — no existing company/LLP registered with this name
+- No MCA incorporation required at this stage
+- Plan: MSME Udyam registration + GST (voluntary or at ₹20L turnover) + current bank account
+- Conversion path: Sole Prop → Private Limited Company once revenue justifies it
+- Background scheduled tasks paused until website is live and fully operational
+
 ### Session 5 — May 2026 — Cloud HQ v2.0 (THIS SESSION)
 - CLAUDE.md upgraded to full Cloud Office brief (this file)
 - Every AI employee has: tool, reports-to, accesses, daily job, Cowork tasks
@@ -875,9 +1052,193 @@ Notion ◄───────────────────────�
 - Recurring task calendar locked
 - Cloud interlink diagram documented
 
+### Session 10 — June 10, 2026 — Operational State Confirmed + CTO Activated
+
+**SANITY STUDIO — NOW LIVE** ✅
+- Fixed: SANITY_AUTH_TOKEN upgraded from Editor → Developer level in GitHub Secrets
+- Studio deployed successfully to https://econolens.sanity.studio/
+- Confirmed: EconoLens CMS loads, content structure accessible, logged in as khagankp@gmail.com
+- GitHub Actions exit code 1 warning is cosmetic — deploy itself succeeded
+
+**CTO (CLAUDE CODE) — ACTIVATED** ✅
+- GitHub Codespaces connected to econolens/econolens-web repo
+- devcontainer.json auto-installs Claude Code on container start
+- Authenticated via Anthropic Claude.ai login (not API key — browser auth used)
+- CTO is on-demand (not continuous) — summon via Codespaces terminal → `claude`
+
+**CURRENT LIVE STATUS SUMMARY:**
+- econolens.co.in ✅ Live
+- econolens.sanity.studio ✅ Live
+- Vercel auto-deploy ✅ Active
+- Supabase (11 tables) ✅ Active
+- GitHub CI/CD ✅ Active
+- Make.com flows ❌ Not yet configured
+- Buffer/Beehiiv connections ❌ Not yet configured
+- News pipeline (FLOW-01) ❌ Pending Make.com setup
+
+**NEXT ACTIONS QUEUED:**
+1. Set up Make.com FLOW-01 (news pipeline — 30 articles/day)
+2. Connect Buffer + Beehiiv to Make.com
+3. Verify Clerk auth on live site
+4. Add remaining Codespaces secrets
+
+### Session 9 — June 6, 2026 — Full Infrastructure Audit + Deployment Review
+
+**PLATFORM STATUS: LIVE** ✅
+- econolens.co.in is live and serving the homepage
+- Full editorial luxury redesign deployed (Cormorant Garamond, ink navy + gold)
+- 140 commits on main branch including all pages: about, pricing, privacy, terms, articles, dashboard, research, indicators, sign-in, sign-up
+
+**VERCEL — CORRECTED:**
+- Account slug is `khagan-s-projects` (NOT `econolens` as previously recorded)
+- Project: vercel.com/khagan-s-projects/econolens-web
+- GitHub connected ✅, domain connected ✅, auto-deploy active ✅
+- All env vars confirmed present (page lazy-loads — must scroll to see all)
+- Env vars split: newer ones (May 28-30) = Production+Preview | older ones (May 23) = Production only
+
+**SUPABASE — COMPLETE:**
+- 11 tables created and live: users, subscriptions, ai_query_log, ai_response_cache, articles, contributors, economic_data_cache, page_events, quiz_scores, content_suspension_log, ai_cache
+- Env var names in code: SUPABASE_URL, SUPABASE_ANON_KEY, SUPABASE_SERVICE_KEY (no NEXT_PUBLIC prefix — server-side only)
+- Grievances table (IT Rules 2021) not yet run — pending
+
+**SANITY STUDIO — BLOCKED (1 user action needed):**
+- 25 GitHub Actions runs all failed: "Forbidden - User is missing required grant sanity.project.deployStudio"
+- Root cause: SANITY_AUTH_TOKEN in GitHub Secrets is an Editor-level token — needs Developer level
+- Fix: Go to sanity.io/manage → project rvv43603 → API → Add token → Role: Developer → Copy → GitHub → Settings → Secrets → Update SANITY_AUTH_TOKEN
+- Studio will be at: econolens.sanity.studio (studioHost = 'econolens')
+
+**CLAUDE CODE CONNECTION (GitHub Codespaces):**
+- devcontainer.json already configured: auto-installs claude-code on container start
+- To connect: github.com/econolens/econolens-web → green Code button → Codespaces tab → Create codespace on main
+- In terminal: `claude` → "Read CLAUDE.md and tell me what to build first"
+- Codespaces secrets needed (one-time setup): go to github.com/settings/codespaces and add: ANTHROPIC_API_KEY, NEXT_PUBLIC_SANITY_PROJECT_ID, NEXT_PUBLIC_SANITY_DATASET, SUPABASE_URL, SUPABASE_ANON_KEY, SUPABASE_SERVICE_KEY, CLERK_SECRET_KEY, NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY
+
+**KEY CORRECTION:**
+- CLAUDE.md previously said Vercel = vercel.com/econolens — WRONG. Correct: vercel.com/khagan-s-projects
+
+### Session 11 — July 10, 2026 — Article SOP Revision (Economist-Review Format + Conditional India Context)
+
+**DECISION (KP, via Cowork):** Updated the locked News Writer prompt, Operations Checklist, and
+Content QA Reviewer prompt (all three: this file, /prompts/news-writer.md, /prompts/qa-checklist.md)
+plus the Sanity article schema:
+
+1. **Economist-reviewer framing is now the required article structure.** Every article opens
+   "Reviewed by: EconoLens Economics Desk" and Layers 1–2 are written IN that reviewer's voice
+   (including a "where economists reviewing this same report disagree" read) — not as a neutral
+   summary with commentary bolted on afterward.
+2. **India context is now CONDITIONAL, not mandatory.** Include only if the article's topic is
+   genuinely India-related (Indian policy/data, or material effect on India's economy). Omit
+   entirely otherwise — do not force it in. (Consistent with the existing global-positioning
+   brand rule: EconoLens is a global platform, India is one country among many in coverage.)
+3. **Graph/chart/image is now required when article type or data warrants visualisation**
+   (data-story, econometrics, forecast/time-series pieces) — optional for pure explainer/opinion
+   pieces with no numeric series to chart. Use real data only, no paywalled-chart screenshots.
+4. **Source attribution + author/byline are ALWAYS mandatory, every article, no exceptions**
+   (this was already the rule for source attribution — now made explicit for byline/AI-label too).
+5. Sanity schema (`sanity/schemas/article.ts`) updated: `indiaContext` field validation relaxed
+   from hard-required to conditional/optional; `qaChecklist` object fields renamed/added to match
+   (`indiaContextPresentOrNA`, `graphOrImagePresentOrNA`); `aiLabel` description updated to note
+   it's mandatory alongside `sourceAttribution`.
+
+**Why:** Forcing India context into every article undermined the global-platform positioning and
+read as filler on non-India topics. Mandating a visual only when data actually warrants one avoids
+decorative/unnecessary charts. The economist-reviewer framing was requested to make analysis read
+as expert-reviewed rather than plain news summary.
+
+**How to apply:** All future article generation (manual or automated) must pass the updated
+Operations Checklist before publish. Prepared by Claude Cowork — not committed/pushed to GitHub
+(per standing rule); KP reviews and deploys manually. **Action needed:** log this decision in
+Notion Decision Log per the locked-prompt governance rule, once Notion is connected.
+
+### Session 12 — July 21–23, 2026 — Brain Sync + Post-Audit Fixes Confirmed Merged
+
+**CRITICAL FINDING — THIS FILE WAS NEVER ACTUALLY LIVE:** The v2.2–2.4 updates (Sessions 8–11,
+including the corrected Vercel slug, the conditional-India-context SOP revision, and the full
+session log) existed only in the local Cowork working folder and were **never committed or
+pushed to GitHub**. `origin/main` was still serving the original **May 2026 v2.1** — wrong
+Vercel account slug (`econolens` instead of `khagan-s-projects`), mandatory India-context rule,
+no session log past Session 2. Anyone spinning up a fresh Codespaces session and running
+`claude` was reading a five-version-old brain. Fixed this session: content reconciled and
+pushed via PR (see below) so GitHub main is now the actual source of truth again, matching the
+file's own governance rule ("re-upload/re-sync after every update").
+
+**Verified merged to `origin/main` since Session 11 (2026-07-10), confirmed via `git log`:**
+- **Dashboard auth gating restored** (PR #12, commit `6e71300`, 2026-07-21). `/dashboard` had
+  shown a static "sign in" placeholder to *every* visitor, logged in or not, since 2026-05-29 —
+  the Clerk `useUser` check was pulled pending env vars and never restored. Clerk is confirmed
+  live in production, so the check is back. The old fake hardcoded "saved articles" list was
+  deliberately **not** restored alongside it — replaced with an honest empty state per the
+  no-fake-data rule from the 2026-07-08 ops audit.
+- **CSP fix for Clerk CAPTCHA** (PR #13, commit `cb390f7`, 2026-07-21) — allowed
+  `challenges.cloudflare.com` so Clerk's CAPTCHA actually loads.
+- **Study page link fix** (same PR #12) — the `/study` "Inflation & Price Theory" tile had
+  `slug: null` since scaffolding even though `study-understanding-inflation-explained` has been
+  live since 07-13; one-line fix, was never a missing-content gap for that topic.
+- **Newsletter success copy fixed** (same PR #12) — no longer claims "check your inbox to
+  confirm" when no confirmation email exists (Beehiiv not wired up yet).
+- **Indicator detail pages + article growth hooks** (PR #11, 2026-07-16) — Cite This Article,
+  newsletter CTA on articles.
+- **3 hardcoded fake "live" indicator values fixed** (PR #6, from the 07-08 audit) —
+  `/indicators` now shows 13 of 14 series with real, varying as-of dates. Only **Gold Price**
+  still shows no data — needs checking whether it's actually a FRED series.
+- `package-lock.json`/`next` version mismatch resolved — both now resolve `next@14.2.25`
+  (the CVE-2025-29927-patched version).
+
+**Still open (verified against live repo/site 2026-07-21, not carried over blind):**
+- **GST**: applied 2026-07-13, **not yet approved/registered**. Blocks LUT → IEC → HDFC business
+  account → Razorpay/Stripe/Zoho Books in sequence — this is the single highest-leverage
+  CEO-only blocker right now.
+- **Google Sign-In**: diagnosed 2026-07-19 ("Missing required parameter: client_id"), walkthrough
+  written in `ops/reports/Google-Signin-Fix-2026-07-19.md`, requires KP in Clerk Dashboard +
+  Google Cloud Console — not something Claude Code/Cowork can fix from the repo side.
+  Not yet confirmed fixed.
+- **GitHub push token**: not persisted in the Cowork sandbox — has been a recurring bottleneck
+  since the 2026-07-11 PAT grant (each new session needs it supplied again). Ask KP for it
+  early in any session expected to ship code.
+- **Stale branches needing a decision, not a merge**: `fix/nextjs-cve-2025-29927` (superseded —
+  the real CVE fix already landed via the `next@14.2.25` bump; this branch predates the `src/`
+  refactor and its `middleware.ts` looks corrupted — close, don't merge). `Khagan-kp-patch-1`
+  (adds an unauthenticated `/api/debug-buffer-channels` route, confirmed not live on main —
+  formally merge-with-fix or close). `fix/llms-txt-refresh-2026-07-16` (same stale-fork issue —
+  redo fresh off current main if still wanted). `vercel/install-vercel-speed-insights-3vubjy`
+  (already merged — delete the stale ref).
+- **1Password**: still not set up for real — 4 secrets were caught sitting in plaintext in
+  Notion on 2026-07-12.
+- **Beehiiv Phase 0** unblocks the whole newsletter build: rotate the exposed API key, confirm
+  sender domain auth (SPF/DKIM/DMARC), check subscriber count, lock a send day.
+- Full current-priority list lives in `ops/reports/PENDING-TASKS-MASTER-2026-07-21.md` —
+  treat that file, not this session log, as the live task tracker; this log is for
+  architecture/decision history.
+
+**Why this matters for the brain itself:** this file's own footer says "re-upload after every
+update" and lists schema/phase changes as update triggers — but there was no mechanism catching
+that the file wasn't in git at all. Going forward: any edit to this file made in a Cowork or
+Claude.ai Projects session must be committed and pushed (feature branch → PR → KP merges) in the
+same session it's made, not left as a local-only artifact.
+
+**Addendum — reality-check consolidation (same session, KP's follow-up ask):** KP flagged that
+EconoLens's day-one-to-today work "is not stored anywhere, very distributed, many out of focus,
+many ideas outdated" — accurate. By this point there were **four independent trackers** that had
+each separately tried to be "the real status" and drifted: the Notion Founder Task List, the
+Notion Services Bible, the `EconoHub_PMO_Master` Google Sheet, and this file's own 52-role design
+(written Session 5, describing Make.com automation, Feedly, Uptime Robot, SE Ranking, and dozens
+of other tools/roles that were either abandoned or never actually set up). Fix applied this
+session: added a **"REALITY CHECK — CONSOLIDATED CURRENT STATE"** section right after this file's
+header (before the org design), pulling together and reconciling `EconoLens_Operations_Workflow.md`
+(2026-07-08), the `master-status-csuite-assignments-2026-07-13.md` reconciliation, and this
+session's own verified `git log` findings into one place. Tagged the Make.com flows section, the
+Recurring Task Calendar, and each of the five non-C-Suite department sections (Tech/Marketing/
+Finance/Product/Content-Ops) with brief reality notes distinguishing what's actually running from
+target-state design, rather than deleting the design work (it's still useful as a roadmap). The
+Notion Founder Task List, Services Bible, and PMO Sheet are declared retired — `CLAUDE.md` (this
+file) plus `ops/reports/PENDING-TASKS-MASTER-2026-07-21.md` are now the only two living trackers,
+and both should be edited in place going forward rather than superseded by yet another new dated
+file each session.
+
 ---
 
-*ECONOLENS CLOUD HQ — CLAUDE.md v2.0*
+*ECONOLENS CLOUD HQ — CLAUDE.md v2.6*
 *Next update trigger: new tool adoption, pricing change, schema change, phase transition*
 *File location: /econolens/CLAUDE.md (root of project)*
-*Re-upload to Claude.ai Projects after every update*
+*This file must be committed and pushed to GitHub in the same session it's edited — a local-only
+copy is not the source of truth, see Session 12 finding above*
