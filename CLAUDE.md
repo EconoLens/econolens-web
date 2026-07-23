@@ -1,8 +1,8 @@
 # ECONOLENS — CLOUD HQ MASTER CONTEXT FILE v2.0
 # ═══════════════════════════════════════════════════════════════════════════════
-# THE SINGLE SOURCE OF TRUTH FOR ALL 52 AI EMPLOYEES
+# THE SINGLE SOURCE OF TRUTH FOR THE AI ORG DESIGN (43 roles actually detailed below)
 # Read by: Claude Code · Claude Cowork · Claude.ai Projects · All AI Tools
-# Last updated: July 2026 | Version: 2.6 — SESSION 12 BRAIN SYNC + REALITY-CHECK CONSOLIDATION
+# Last updated: July 2026 | Version: 2.7 — SESSION 12 BRAIN SYNC + REALITY-CHECK + ROLE-COUNT CLEANUP
 # ═══════════════════════════════════════════════════════════════════════════════
 # HOW THE CLOUD OFFICE WORKS:
 # Every AI employee below has:
@@ -15,8 +15,8 @@
 
 ## 🧭 REALITY CHECK — CONSOLIDATED CURRENT STATE (single source of truth, updated 2026-07-23)
 
-**Read this section first, before anything below it.** Everything past this point (the 52-role
-org, the Make.com flows, the recurring task calendar) is a **target-state design doc** written
+**Read this section first, before anything below it.** Everything past this point (the AI-org
+design, the Make.com flows, the recurring task calendar) is a **target-state design doc** written
 in Session 5 (May 2026) and never fully reconciled against what actually got built. Four separate
 trackers tried to be "the real status" since then — the Notion **Founder Task List**, the Notion
 **Services Bible**, the **`EconoHub_PMO_Master`** Google Sheet, and this file itself — and all
@@ -85,7 +85,9 @@ misfired before — always verify a deploy landed rather than assuming it did.
 
 ## 🏢 CLOUD OFFICE INFRASTRUCTURE — THE SHARED FOUNDATION (target-state design, see reality check above)
 
-All 52 AI employees operate on these shared cloud systems.
+All 43 detailed AI-employee roles operate on these shared cloud systems (org headers below were
+previously over-claiming role counts per department — e.g. "12 Marketing roles" when only 4 were
+ever written out; corrected Session 12 addendum, 2026-07-23).
 Every tool connects to at least one of these. Nothing runs in isolation.
 
 ### TIER 1 — CORE INFRASTRUCTURE (All employees use these)
@@ -462,7 +464,7 @@ CLAUDE CODE:
 
 ---
 
-## 📈 MARKETING TEAM — 12 ROLES (All report to CMO)
+## 📈 MARKETING TEAM — 4 ROLES DETAILED (All report to CMO)
 
 > **Reality:** M-02 (Buffer→LinkedIn posting) is the only one of these four roles with a live
 > tool behind it. M-01 (SE Ranking/Ahrefs), M-03 (Beehiiv newsletter — account exists, zero send
@@ -515,7 +517,7 @@ COWORK TASKS:
 
 ---
 
-## 💰 FINANCE & BUSINESS TEAM — 8 ROLES (All report to CFO)
+## 💰 FINANCE & BUSINESS TEAM — 4 ROLES DETAILED (All report to CFO)
 
 > **Reality:** none of these four roles are active yet — all of Razorpay/Stripe/Zoho Books/the
 > unit-economics model are blocked behind the GST → LUT → IEC → HDFC account chain (see reality
@@ -567,7 +569,7 @@ COWORK TASKS:
 
 ---
 
-## 🎯 PRODUCT & UX TEAM — 6 ROLES (All report to CPO)
+## 🎯 PRODUCT & UX TEAM — 3 ROLES DETAILED (All report to CPO)
 
 > **Reality:** all three roles are target-state — no Hotjar, no formal sprint board, no A/B
 > testing infrastructure exists. Product decisions currently happen ad hoc between KP and Claude,
@@ -607,7 +609,7 @@ COWORK TASKS:
 
 ---
 
-## ✍️ CONTENT OPS TEAM — 8 ROLES (All report to CCO)
+## ✍️ CONTENT OPS TEAM — 5 ROLES DETAILED (All report to CCO)
 
 > **Reality:** none of these run as automated pipelines — C-01's Make.com/Feedly/Copyscape
 > automation is abandoned (see reality check at top). The real content process is KP + Claude
@@ -1220,7 +1222,7 @@ same session it's made, not left as a local-only artifact.
 EconoLens's day-one-to-today work "is not stored anywhere, very distributed, many out of focus,
 many ideas outdated" — accurate. By this point there were **four independent trackers** that had
 each separately tried to be "the real status" and drifted: the Notion Founder Task List, the
-Notion Services Bible, the `EconoHub_PMO_Master` Google Sheet, and this file's own 52-role design
+Notion Services Bible, the `EconoHub_PMO_Master` Google Sheet, and this file's own AI-org design
 (written Session 5, describing Make.com automation, Feedly, Uptime Robot, SE Ranking, and dozens
 of other tools/roles that were either abandoned or never actually set up). Fix applied this
 session: added a **"REALITY CHECK — CONSOLIDATED CURRENT STATE"** section right after this file's
@@ -1235,9 +1237,22 @@ file) plus `ops/reports/PENDING-TASKS-MASTER-2026-07-21.md` are now the only two
 and both should be edited in place going forward rather than superseded by yet another new dated
 file each session.
 
+**Addendum 2 — role-count cleanup (same session, KP's "clean it" follow-up):** while summarizing
+this file's contents back to KP, found the org design's own numbers didn't add up. The title
+claimed "ALL 52 AI EMPLOYEES," and Marketing/Finance/Product/Content-Ops section headers claimed
+12/8/6/8 roles respectively — but only 4/4/3/5 roles were ever actually written out in those four
+sections (Tech's claimed 18 and C-Suite's 9 were both accurate). Actual total detailed: **43**,
+not 52, and not even 61 if you'd summed the per-section claims instead. Fixed: corrected the file
+title and all four section headers to state the real number of roles detailed, rather than
+padding out fake roles just to hit a round number. Also verified this session's full unshallowed
+`git log` (239 commits back to the true 2026-05-22 project start) against several existing
+CLAUDE.md claims — see the full-history-sweep memory for the complete timeline and three newly
+found open items (GST SAC code conflict, undecided QA-checklist enforcement, unconfirmed GitHub
+2FA deadline) that still need a decision from KP but weren't in scope to fix in this file directly.
+
 ---
 
-*ECONOLENS CLOUD HQ — CLAUDE.md v2.6*
+*ECONOLENS CLOUD HQ — CLAUDE.md v2.7*
 *Next update trigger: new tool adoption, pricing change, schema change, phase transition*
 *File location: /econolens/CLAUDE.md (root of project)*
 *This file must be committed and pushed to GitHub in the same session it's edited — a local-only
