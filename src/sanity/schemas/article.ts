@@ -408,6 +408,16 @@ export default defineType({
         defineField({ name: 'sourceAttributionPresent', type: 'boolean', title: '📎 Source attribution present', initialValue: false }),
         defineField({ name: 'sebiCompliant', type: 'boolean', title: '⚖️ SEBI compliant (disclaimer if needed)', initialValue: false }),
         defineField({ name: 'noHallucinations', type: 'boolean', title: '🔍 Fact-checked (no hallucinations)', initialValue: false }),
+
+        defineField({
+          name: 'sourceComplianceChecked',
+          title: '©️ Source-use compliance checked',
+          description:
+            'Only for research-guide (paper translation) articles. Confirms: no verbatim quote over 15 words, abstract paraphrased not copied, no reproduced figures/tables/images from the original, © notice included if any direct quote is used, and -- for paywalled journal sources without a stated quotation policy -- near-zero direct quoting applied by default.',
+          type: 'boolean',
+          initialValue: false,
+          hidden: ({ parent }) => parent?.articleType !== 'research-guide',
+        }),
       ],
     }),
 
