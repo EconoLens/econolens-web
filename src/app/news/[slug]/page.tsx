@@ -302,12 +302,31 @@ export default async function ArticlePage({
       : {}),
   }
 
+  // GEO: FAQPage structured data -- only emitted when the article actually has
+  // a faqSection, so pages without one don't get an empty/invalid FAQPage block.
+  const faqItems: { question: string; answer: string }[] = Array.isArray(article.faqSection) ? article.faqSection : []
+  const faqJsonLd = faqItems.length > 0 ? {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: faqItems.map((item) => ({
+      '@type': 'Question',
+      name: item.question,
+      acceptedAnswer: { '@type': 'Answer', text: item.answer },
+    })),
+  } : null
+
   return (
     <>
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(articleJsonLd) }}
       />
+      {faqJsonLd && (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
+        />
+      )}
 
       {/* ── Breadcrumb ── */}
       <div style={{ background: 'var(--ink)', borderBottom: '0.5px solid var(--ink-border)', padding: '10px 0' }}>
@@ -559,6 +578,37 @@ export default async function ArticlePage({
                 <p style={{ fontSize: '0.9375rem', color: 'var(--text-secondary)', lineHeight: 1.75, margin: 0 }}>
                   {article.indiaContext}
                 </p>
+              </div>
+            </div>
+          </div>
+        </section>
+      )}
+
+      {/* ── FAQ (GEO + on-page SEO) ── */}
+      {faqItems.length > 0 && (
+        <section style={{ borderTop: '0.5px solid var(--ink-border)', padding: '32px 0' }}>
+          <div className="container-narrow">
+            <div style={{ maxWidth: '720px', margin: '0 auto' }}>
+              <p style={{
+                fontFamily: 'var(--font-mono)', fontSize: '0.5625rem', letterSpacing: '0.12em',
+                textTransform: 'uppercase', color: 'var(--gold)', marginBottom: '16px',
+              }}>
+                Frequently Asked Questions
+              </p>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '1px', background: 'var(--ink-border)' }}>
+                {faqItems.map((item, i) => (
+                  <div key={i} style={{ background: 'var(--ink-mid)', padding: '18px 20px' }}>
+                    <p style={{
+                      fontFamily: 'var(--font-display)', fontSize: '0.9375rem', fontWeight: 600,
+                      color: 'var(--text-primary)', marginBottom: '8px',
+                    }}>
+                      {item.question}
+                    </p>
+                    <p style={{ fontSize: '0.875rem', color: 'var(--text-secondary)', lineHeight: 1.7, margin: 0 }}>
+                      {item.answer}
+                    </p>
+                  </div>
+                ))}
               </div>
             </div>
           </div>

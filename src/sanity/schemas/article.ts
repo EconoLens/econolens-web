@@ -476,6 +476,26 @@ export default defineType({
     }),
 
     defineField({
+      name: 'faqSection',
+      title: 'FAQ / Q&A (GEO)',
+      description:
+        'Question & answer pairs. Rendered as an on-page FAQ and emitted as FAQPage structured data -- this is what AI answer engines (ChatGPT, Perplexity, Google AI Overviews) pull direct-answer snippets from, not just search crawlers.',
+      type: 'array',
+      group: 'meta',
+      of: [
+        {
+          type: 'object',
+          name: 'faqItem',
+          fields: [
+            defineField({ name: 'question', title: 'Question', type: 'string', validation: (R) => R.required() }),
+            defineField({ name: 'answer', title: 'Answer', type: 'text', rows: 4, validation: (R) => R.required() }),
+          ],
+          preview: { select: { title: 'question' } },
+        },
+      ],
+    }),
+
+    defineField({
       name: 'relatedArticles',
       title: 'Related Articles',
       type: 'array',
