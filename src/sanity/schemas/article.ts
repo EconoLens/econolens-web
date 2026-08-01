@@ -94,6 +94,45 @@ export default defineType({
       options: { layout: 'tags' },
     }),
 
+    // ── PAPER METADATA (shown only for Reading Research / research-guide) ────
+
+    defineField({
+      name: 'paperAuthors',
+      title: 'Original Paper Authors',
+      description: 'Authors of the academic paper/thesis being translated (not the EconoLens writer).',
+      type: 'array',
+      group: 'content',
+      of: [{ type: 'string' }],
+      options: { layout: 'tags' },
+      hidden: ({ parent }) => parent?.articleType !== 'research-guide',
+    }),
+
+    defineField({
+      name: 'paperSource',
+      title: 'Journal / Repository',
+      description: 'Where the original paper was published, e.g. NBER Working Paper, SSRN, AER, a university thesis repository.',
+      type: 'string',
+      group: 'content',
+      hidden: ({ parent }) => parent?.articleType !== 'research-guide',
+    }),
+
+    defineField({
+      name: 'paperUrl',
+      title: 'Original Paper URL',
+      description: 'Link to the original paper/thesis (DOI, SSRN, NBER, arXiv, etc.)',
+      type: 'url',
+      group: 'content',
+      hidden: ({ parent }) => parent?.articleType !== 'research-guide',
+    }),
+
+    defineField({
+      name: 'paperPublishedDate',
+      title: 'Original Paper Publication Date',
+      type: 'date',
+      group: 'content',
+      hidden: ({ parent }) => parent?.articleType !== 'research-guide',
+    }),
+
     defineField({
       name: 'coverImage',
       title: 'Cover Image',

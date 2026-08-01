@@ -1237,7 +1237,56 @@ file each session.
 
 ---
 
-*ECONOLENS CLOUD HQ — CLAUDE.md v2.6*
+### Session 13 — August 1, 2026 — New Content Vertical: Research Papers, Explained
+
+KP asked for a new "branch of service": detailed, plain-language economic analysis of academic
+research papers and theses — same idea as the abandoned-on-paper C-02 "Academic Paper
+Translator" role and the `research-guide` articleType (S105, "Reading Research") that already
+existed in the article schema but had never been surfaced anywhere on the site (no landing page,
+not in nav, zero published articles).
+
+**Route conflict found and resolved with KP:** `/research` already exists in code as a paid AI
+Q&A chat tool (`src/app/research/page.tsx`, backed by `/api/research`) — built, but not linked
+from nav, so effectively dormant. Using "Research" as the nav label for the new section would
+have silently pointed users at the wrong feature. KP chose: nav label **"Research"** now points to
+a **new route, `/papers`**; the existing AI chat tool stays at `/research`, still unlinked,
+untouched, to be dealt with separately.
+
+**What shipped this session (branch `feat/research-papers-section`, PR pending KP merge):**
+- Added optional paper-metadata fields to the `article` schema (both `sanity/schemas/article.ts`
+  and its `src/sanity/schemas/article.ts` duplicate — see note below): `paperAuthors`,
+  `paperSource`, `paperUrl`, `paperPublishedDate`. All `hidden` unless
+  `articleType === 'research-guide'`, so they don't clutter every other article type in Studio.
+- New `/papers` landing page — lists all `research-guide` articles via the existing
+  `getArticlesByType()` helper (already in `lib/sanity.ts`, previously unused for this purpose).
+- Nav + footer updated: "Research" link added to `NAV_LINKS` in `src/app/layout.tsx`, pointing
+  to `/papers`.
+- `/news/[slug]` detail page: added a conditional "Original Paper" info block (authors, journal/
+  repository, link to the source paper) shown only when `articleType === 'research-guide'`.
+  Layer 1/2/3 rendering, source attribution, and India/Global context sections were already
+  generic and needed no changes — `research-guide` already rendered correctly as "Journal
+  Review" via the existing `TYPE_LABELS` map.
+- `ARTICLE_PROJECTION` in `lib/sanity.ts` extended with the four new fields so listings/detail
+  pages can read them.
+
+**Note on the duplicate schema directory:** `src/sanity/schemas/` mirrors root `sanity/schemas/`
+almost field-for-field (only comments/formatting differ) but nothing in the codebase imports
+from it (`sanity.config.ts` imports the root `sanity/schemas`) — confirmed via grep, it's dead
+code. Updated both to keep them in sync rather than deleting the unused copy, since deleting
+wasn't in scope this session; worth a follow-up decision on whether to remove it outright.
+
+**Not done yet — the actual content pipeline:** this session only shipped the container (schema
+fields, nav, landing page, detail-page rendering). Zero `research-guide` articles exist yet.
+The `/prompts/paper-translator.md` locked prompt referenced in the Content Ops section below
+(C-02) has never actually existed as a file — same "designed on paper, never built" pattern as
+the Make.com flows. Writing that prompt and the first 1-3 translated-paper articles is the
+next step, and per [[feedback_no_duplicate_articles]] / [[feedback_verify_before_writing_code]]
+should follow the same three-layer + India/global-context + source-attribution rules as every
+other article, not a separate standard.
+
+---
+
+*ECONOLENS CLOUD HQ — CLAUDE.md v2.7*
 *Next update trigger: new tool adoption, pricing change, schema change, phase transition*
 *File location: /econolens/CLAUDE.md (root of project)*
 *This file must be committed and pushed to GitHub in the same session it's edited — a local-only
