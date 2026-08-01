@@ -1284,6 +1284,38 @@ next step, and per [[feedback_no_duplicate_articles]] / [[feedback_verify_before
 should follow the same three-layer + India/global-context + source-attribution rules as every
 other article, not a separate standard.
 
+**Addendum — source-use legal standard for paper translations (same day, KP asked):** KP asked
+what legal standards govern using an original paper's words/data/figures in a research-guide
+article. Checked NBER's actual policy on the live PDF for WP 35536 rather than assuming it:
+"Short sections of text, not to exceed two paragraphs, may be quoted without explicit permission
+provided that full credit, including © notice, is given to the source." That's NBER's ceiling,
+specific to NBER — it does not automatically extend to paywalled journal articles without their
+own stated quotation policy. Standard adopted (stricter than NBER's own allowance):
+
+- Never quote more than 15 words verbatim from any source (existing C-02 rule, now the actual
+  operating limit, not NBER's two-paragraph one).
+- If a direct quote is used, include the literal © notice format ("© [year] by [authors]. All
+  rights reserved.") next to it, not just an institution/URL citation.
+- Never reproduce figures, charts, or tables from the original as images or copied layouts —
+  facts/numbers are freely usable, the rendered table/figure itself is not. Rebuild any table
+  from the underlying numbers instead.
+- Never copy the abstract verbatim, even under the two-paragraph allowance — always paraphrase it.
+- Formulas/equations/named methodologies are procedure, not protected expression — fine to state
+  exactly; it's the prose describing them that needs paraphrasing.
+- For paywalled journal sources with no stated quotation policy (unlike NBER/SSRN preprints),
+  default to near-zero direct quoting — don't assume NBER's allowance carries over.
+
+Added a `sourceComplianceChecked` field to the `qaChecklist` object in the article schema (both
+`sanity/schemas/article.ts` and its `src/sanity/schemas/article.ts` duplicate), hidden unless
+`articleType === 'research-guide'`, so this is checked per-article going forward alongside the
+existing India-context/SEBI/source-attribution checks. Reviewed the published Congo article
+(`congo-progressive-property-tax-experiment`) against this standard: zero direct quotes anywhere
+in the three layers, both tables self-built from the reported percentage rather than copied from
+the paper, abstract paraphrased not copied — compliant, checklist field set to true on that
+document. This is Claude's read of the standards, not a lawyer's — if this content type scales up
+as a real revenue-driving section (AdSense, Pro subscriptions), a short paid IP-lawyer consult is
+worth getting rather than relying on this note indefinitely.
+
 ---
 
 *ECONOLENS CLOUD HQ — CLAUDE.md v2.7*
