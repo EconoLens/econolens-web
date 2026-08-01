@@ -432,6 +432,44 @@ export default async function ArticlePage({
         </div>
       </header>
 
+      {/* ── Original paper info (Reading Research / research-guide only) ── */}
+      {article.articleType === 'research-guide' && (article.paperAuthors?.length || article.paperSource || article.paperUrl) && (
+        <section style={{ borderBottom: '0.5px solid var(--ink-border)', background: 'var(--ink-mid)', padding: '20px 0' }}>
+          <div className="container-narrow">
+            <div style={{ maxWidth: '720px', margin: '0 auto', display: 'flex', gap: '12px', alignItems: 'flex-start' }}>
+              <div style={{
+                fontFamily: 'var(--font-mono)',
+                fontSize: '0.5625rem',
+                letterSpacing: '0.12em',
+                textTransform: 'uppercase',
+                color: 'var(--gold)',
+                whiteSpace: 'nowrap',
+                paddingTop: '3px',
+              }}>
+                Original Paper
+              </div>
+              <div style={{ width: '0.5px', background: 'var(--ink-border-2)', alignSelf: 'stretch', flexShrink: 0 }} />
+              <div style={{ fontSize: '0.875rem', color: 'var(--text-secondary)', lineHeight: 1.7 }}>
+                {article.paperAuthors?.length > 0 && (
+                  <div>{article.paperAuthors.join(', ')}</div>
+                )}
+                {article.paperSource && (
+                  <div style={{ color: 'var(--text-tertiary)' }}>
+                    {article.paperSource}
+                    {article.paperPublishedDate && ` · ${new Date(article.paperPublishedDate).getFullYear()}`}
+                  </div>
+                )}
+                {article.paperUrl && (
+                  <a href={article.paperUrl} target="_blank" rel="noopener noreferrer" style={{ color: 'var(--gold)', textDecoration: 'none' }}>
+                    Read the original paper →
+                  </a>
+                )}
+              </div>
+            </div>
+          </div>
+        </section>
+      )}
+
       {/* ── Layer tabs ── */}
       <div style={{
         background: 'var(--ink-mid)',

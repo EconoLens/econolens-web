@@ -57,7 +57,11 @@ const ARTICLE_PROJECTION = `{
   qaStatus,
   copyscoreScore,
   indiaContext,
-  audioUrl
+  audioUrl,
+  paperAuthors,
+  paperSource,
+  paperUrl,
+  paperPublishedDate
 }`
 
 const ARTICLE_FULL_PROJECTION = `{

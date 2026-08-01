@@ -65,6 +65,7 @@ const NAV_LINKS = [
   { href: '/articles', label: 'News' },
   { href: '/indicators', label: 'Indicators' },
   { href: '/study', label: 'Study' },
+  { href: '/papers', label: 'Research' },
   { href: '/pricing', label: 'Pricing' },
   { href: '/about', label: 'About' },
 ]
@@ -158,6 +159,7 @@ function Footer() {
             <a href="/articles" className="footer-link">News</a>
             <a href="/indicators" className="footer-link">Indicators</a>
             <a href="/study" className="footer-link">Study</a>
+            <a href="/papers" className="footer-link">Research</a>
             <a href="/pricing" className="footer-link">Pricing</a>
           </div>
           <div>
