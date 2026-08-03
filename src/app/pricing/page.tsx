@@ -1,4 +1,9 @@
 import Link from 'next/link'
+import { redirect } from 'next/navigation'
+
+// Pricing/subscriptions temporarily disabled (KP, 2026-08-03) — Razorpay/GST
+// aren't live yet. Hidden from the site for ~6 months; page content kept
+// below so it's a one-line revert (delete the redirect) once billing is ready.
 
 const FREE_FEATURES = [
   'Three-layer reading (Overview · Explainer · Technical)',
@@ -15,6 +20,9 @@ const PRO_FEATURES = [
 ]
 
 export default function PricingPage() {
+  redirect('/')
+
+  // eslint-disable-next-line no-unreachable
   return (
     <>
       {/* Header */}

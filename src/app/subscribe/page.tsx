@@ -1,4 +1,8 @@
 import Link from "next/link";
+import { redirect } from "next/navigation";
+
+// Pricing/subscriptions temporarily disabled (KP, 2026-08-03) — see src/app/pricing/page.tsx.
+// This page also pointed at /api/checkout, which was never built.
 
 const tiers = [
   {
@@ -33,6 +37,9 @@ const tiers = [
 ];
 
 export default function SubscribePage() {
+  redirect('/')
+
+  // eslint-disable-next-line no-unreachable
   return (
     <main className="min-h-screen">
       <section className="border-b border-neutral-200 bg-gradient-to-b from-neutral-50 to-white">

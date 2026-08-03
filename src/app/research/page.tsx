@@ -45,7 +45,7 @@ export default function ResearchPage() {
       if (res.status === 402) {
         setMessages((prev) => [...prev, {
           role: 'assistant',
-          content: '**Query limit reached.** You\'ve used your 5 free daily queries. Upgrade to EconoLens Pro for unlimited access at ₹199/month.',
+          content: '**Query limit reached.** You\'ve used your 5 free daily queries. More queries unlock tomorrow.',
           timestamp: new Date(),
         }])
       } else {
@@ -99,12 +99,12 @@ export default function ResearchPage() {
                 <div style={{ height: '100%', width: `${(queriesUsed / FREE_LIMIT) * 100}%`, background: queriesUsed >= FREE_LIMIT ? 'var(--negative)' : 'var(--gold)', borderRadius: '1px', transition: 'width 0.3s' }} />
               </div>
               {queriesUsed >= FREE_LIMIT ? (
-                <a href="/pricing" className="btn-primary" style={{ width: '100%', justifyContent: 'center', fontSize: '0.625rem' }}>
-                  Upgrade to Pro ₹199/mo →
-                </a>
+                <p style={{ fontSize: '0.75rem', color: 'var(--text-tertiary)', lineHeight: 1.5 }}>
+                  Daily limit reached. More free queries tomorrow.
+                </p>
               ) : (
                 <p style={{ fontSize: '0.75rem', color: 'var(--text-tertiary)', lineHeight: 1.5 }}>
-                  {FREE_LIMIT - queriesUsed} queries remaining. <a href="/pricing" style={{ color: 'var(--gold)', textDecoration: 'none' }}>Upgrade for unlimited →</a>
+                  {FREE_LIMIT - queriesUsed} queries remaining today.
                 </p>
               )}
             </div>
@@ -209,11 +209,8 @@ export default function ResearchPage() {
               {queriesUsed >= FREE_LIMIT && (
                 <div className="paywall-notice" style={{ marginTop: '12px' }}>
                   <p className="paywall-text">
-                    <strong>Daily limit reached.</strong> Upgrade to Pro for unlimited AI research queries.
+                    <strong>Daily limit reached.</strong> Come back tomorrow for more free AI research queries.
                   </p>
-                  <a href="/pricing" className="btn-primary" style={{ flexShrink: 0, padding: '8px 16px', fontSize: '0.5625rem' }}>
-                    Upgrade ₹199/mo →
-                  </a>
                 </div>
               )}
             </div>

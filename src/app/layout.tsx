@@ -66,7 +66,6 @@ const NAV_LINKS = [
   { href: '/indicators', label: 'Indicators' },
   { href: '/study', label: 'Study' },
   { href: '/papers', label: 'Research' },
-  { href: '/pricing', label: 'Pricing' },
   { href: '/about', label: 'About' },
 ]
 
@@ -94,11 +93,10 @@ function Navbar() {
         <div className="nav-actions">
           <SignedOut>
             <a href="/sign-in" className="nav-signin">Sign in</a>
-            <a href="/pricing" className="btn-subscribe">Subscribe</a>
+            <a href="/sign-up" className="btn-subscribe">Sign up</a>
           </SignedOut>
           <SignedIn>
             <a href="/dashboard" className="nav-signin">Dashboard</a>
-            <a href="/pricing" className="btn-subscribe">Upgrade</a>
           </SignedIn>
         </div>
       </div>
@@ -160,7 +158,6 @@ function Footer() {
             <a href="/indicators" className="footer-link">Indicators</a>
             <a href="/study" className="footer-link">Study</a>
             <a href="/papers" className="footer-link">Research</a>
-            <a href="/pricing" className="footer-link">Pricing</a>
           </div>
           <div>
             <p style={{ fontFamily: 'var(--font-mono)', fontSize: '0.5625rem', letterSpacing: '0.12em', textTransform: 'uppercase', color: 'var(--text-tertiary)', marginBottom: '14px' }}>Company</p>

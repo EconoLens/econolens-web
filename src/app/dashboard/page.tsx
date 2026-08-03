@@ -68,14 +68,8 @@ export default function DashboardPage() {
             {subscriptionStatus}
           </p>
           <p className="mt-2 text-sm text-neutral-600">
-            Upgrade to Pro for full Layer 2 access and unlimited research queries.
+            Pro plans aren&apos;t available right now — check back soon.
           </p>
-          <Link
-            href="/pricing"
-            className="mt-4 inline-flex items-center rounded-md bg-neutral-900 px-4 py-2 text-sm font-medium text-white hover:bg-neutral-800"
-          >
-            View plans
-          </Link>
         </div>
 
         <div className="rounded-lg border border-neutral-200 bg-white p-6">
