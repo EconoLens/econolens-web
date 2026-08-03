@@ -145,6 +145,18 @@ export default defineType({
     defineField({ name: 'metaDescription', title: 'Meta Description', type: 'text', group: 'meta', rows: 3, validation: (R) => R.min(120).max(160) }),
     defineField({ name: 'canonicalUrl', title: 'Canonical URL', type: 'url', group: 'meta' }),
     defineField({ name: 'focusKeyword', title: 'Focus Keyword', type: 'string', group: 'meta' }),
+    defineField({
+      name: 'faqSection', title: 'FAQ / Q&A (GEO)', type: 'array', group: 'meta',
+      description: 'Question & answer pairs. Rendered as an on-page FAQ and emitted as FAQPage structured data -- this is what AI answer engines (ChatGPT, Perplexity, Google AI Overviews) pull direct-answer snippets from, not just search crawlers.',
+      of: [{
+        type: 'object', name: 'faqItem',
+        fields: [
+          defineField({ name: 'question', title: 'Question', type: 'string', validation: (R) => R.required() }),
+          defineField({ name: 'answer', title: 'Answer', type: 'text', rows: 4, validation: (R) => R.required() }),
+        ],
+        preview: { select: { title: 'question' } },
+      }],
+    }),
     defineField({ name: 'relatedArticles', title: 'Related Articles', type: 'array', group: 'meta', of: [{ type: 'reference', to: [{ type: 'article' }] }] }),
     defineField({
       name: 'accessLevel', title: 'Access Level', type: 'string', group: 'monetisation',
