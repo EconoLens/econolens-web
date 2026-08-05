@@ -102,7 +102,7 @@ async function fetchFeed(feed: typeof FEEDS[0]): Promise<NewsItem[]> {
     const res = await fetch(feed.url, {
       signal: controller.signal,
       headers: {
-        "User-Agent": "EconoLens/1.0 (https://econolens.co.in; press@econolens.co.in)",
+        "User-Agent": "EconoLens/1.0 (https://www.econolens.co.in; press@econolens.co.in)",
         "Accept": "application/rss+xml, application/atom+xml, application/xml, text/xml, */*",
       },
       cache: "no-store",

@@ -26,7 +26,7 @@ export async function generateMetadata({ params }: { params: { slug: string } })
   return {
     title: `${indicator.name} — Live Data & Chart | EconoLens`,
     description,
-    alternates: { canonical: `https://econolens.co.in/indicators/${indicator.slug}` },
+    alternates: { canonical: `https://www.econolens.co.in/indicators/${indicator.slug}` },
     openGraph: { title: indicator.name, description, type: 'website' },
   }
 }
@@ -57,17 +57,17 @@ export default async function IndicatorDetailPage({ params }: { params: { slug: 
     '@type': 'Dataset',
     name: indicator.name,
     description: `${indicator.name} (${indicator.unit}). Sourced from ${indicator.source}.`,
-    url: `https://econolens.co.in/indicators/${indicator.slug}`,
-    license: 'https://econolens.co.in/terms',
+    url: `https://www.econolens.co.in/indicators/${indicator.slug}`,
+    license: 'https://www.econolens.co.in/terms',
     isAccessibleForFree: true,
-    creator: { '@type': 'Organization', name: 'EconoLens', url: 'https://econolens.co.in' },
+    creator: { '@type': 'Organization', name: 'EconoLens', url: 'https://www.econolens.co.in' },
     ...(indicator.points.length > 1
       ? {
           distribution: [
             {
               '@type': 'DataDownload',
               encodingFormat: 'text/csv',
-              contentUrl: `https://econolens.co.in/api/indicators/${indicator.slug}/csv`,
+              contentUrl: `https://www.econolens.co.in/api/indicators/${indicator.slug}/csv`,
             },
           ],
           temporalCoverage: `${indicator.points[0].date}/${indicator.points[indicator.points.length - 1].date}`,

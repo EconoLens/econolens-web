@@ -31,7 +31,7 @@ export default defineType({
       name: 'siteUrl',
       title: 'Site URL',
       type: 'url',
-      initialValue: 'https://econolens.co.in',
+      initialValue: 'https://www.econolens.co.in',
     }),
 
     defineField({

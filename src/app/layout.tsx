@@ -18,7 +18,7 @@ export const metadata: Metadata = {
   },
   description:
     'Economics news, research, and macro indicators grounded in official sources — RBI, IMF, World Bank, Fed, and top research institutions.',
-  metadataBase: new URL('https://econolens.co.in'),
+  metadataBase: new URL('https://www.econolens.co.in'),
   openGraph: {
     siteName: 'EconoLens',
     locale: 'en_US',
@@ -47,7 +47,7 @@ const ORGANIZATION_JSON_LD = {
   '@type': 'Organization',
   name: 'EconoLens',
   legalName: 'Econolens Media and Technology',
-  url: 'https://econolens.co.in',
+  url: 'https://www.econolens.co.in',
   description:
     'Economics news, research, and macro indicators grounded in official sources — RBI, IMF, World Bank, Fed, and top research institutions.',
   sameAs: [

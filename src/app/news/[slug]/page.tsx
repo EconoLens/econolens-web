@@ -24,7 +24,7 @@ export async function generateMetadata({ params }: { params: { slug: string } })
       article.metaDescription ||
       (Array.isArray(article.summary) ? article.summary[0] : article.summary) ||
       ''
-    const canonicalUrl = `https://econolens.co.in/news/${params.slug}`
+    const canonicalUrl = `https://www.econolens.co.in/news/${params.slug}`
     const ogImage = article.coverImage?.url
     return {
       title: article.title,
@@ -185,7 +185,7 @@ export default async function ArticlePage({
   const authorName = article.author?.name || 'EconoLens Editorial Team'
   const authorCreds = article.author?.credentials || ''
   const summaryItems: string[] = Array.isArray(article.summary) ? article.summary : []
-  const articleUrl = `https://econolens.co.in/news/${params.slug}`
+  const articleUrl = `https://www.econolens.co.in/news/${params.slug}`
 
   // GEO fix (2026-07-11): NewsArticle structured data. This is what lets AI
   // engines (ChatGPT, Perplexity, Google AI Overviews) and search crawlers
@@ -215,7 +215,7 @@ export default async function ArticlePage({
     publisher: {
       '@type': 'Organization',
       name: 'EconoLens',
-      url: 'https://econolens.co.in',
+      url: 'https://www.econolens.co.in',
     },
     mainEntityOfPage: { '@type': 'WebPage', '@id': articleUrl },
     ...(article.sourceAttribution?.length

@@ -4,6 +4,23 @@ const nextConfig = {
   typescript: { ignoreBuildErrors: true },
   eslint: { ignoreDuringBuilds: true },
   reactStrictMode: true,
+  // Fixed 2026-08-05: econolens.co.in (apex) and www.econolens.co.in were
+  // both live and serving content with no canonical redirect between them.
+  // Google Search Console flagged 29 pages as "Duplicate without
+  // user-selected canonical" because it couldn't tell which host was
+  // authoritative. www is canonical (matches sitemap.ts, robots.ts, and the
+  // brand mark in opengraph-image.tsx) — apex now 308s to it. This is a
+  // second layer of defense on top of the Vercel-level domain redirect.
+  async redirects() {
+    return [
+      {
+        source: '/:path*',
+        has: [{ type: 'host', value: 'econolens.co.in' }],
+        destination: 'https://www.econolens.co.in/:path*',
+        permanent: true,
+      },
+    ];
+  },
   async headers() {
     return [
       {
