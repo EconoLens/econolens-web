@@ -18,7 +18,7 @@ type IndicatorRow = {
 function getBaseUrl(): string {
   if (process.env.NEXT_PUBLIC_BASE_URL) return process.env.NEXT_PUBLIC_BASE_URL;
   if (typeof window !== 'undefined') return '';
-  return 'https://econolens.co.in';
+  return 'https://www.econolens.co.in';
 }
 
 async function loadIndicators(): Promise<{ indicators: IndicatorRow[]; error: string | null }> {

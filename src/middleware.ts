@@ -32,6 +32,13 @@ const isPublicRoute = createRouteMatcher([
   '/sitemap.xml',
   '/robots.txt',
   '/llms.txt',
+  // Fixed 2026-08-05: /contact is not a real route (Contact is a mailto:
+  // link in the footer) but Google had crawled it, presumably from an old
+  // link or bookmark. Because it wasn't in this allowlist, auth.protect()
+  // was invoked on a non-existent route and threw MIDDLEWARE_INVOCATION_FAILED
+  // (confirmed live 500, GSC flagged it as a Server error (5xx)). Adding it
+  // here lets the request fall through to Next.js's normal 404 handling.
+  '/contact',
 ]);
 
 export default clerkMiddleware(async (auth, request) => {

@@ -3,7 +3,7 @@
  *
  * Configure this as a Sanity webhook (sanity.io/manage → project → API →
  * Webhooks — manual step in the dashboard, cannot be done from code):
- *   URL:      https://econolens.co.in/api/webhooks/article-published
+ *   URL:      https://www.econolens.co.in/api/webhooks/article-published
  *   Trigger:  Create + Update
  *   Filter:   _type == "article" && qaStatus == "passed"
  *   Secret:   set to the same value as SANITY_WEBHOOK_SECRET in Vercel
@@ -87,7 +87,7 @@ export async function POST(req: Request) {
     return NextResponse.json({ ok: true, skipped: 'article not QA-passed yet', operation })
   }
 
-  const articleUrl = `https://econolens.co.in/news/${article.slug}`
+  const articleUrl = `https://www.econolens.co.in/news/${article.slug}`
   const imageUrl = article.coverImage ? urlFor(article.coverImage).width(1200).url() : undefined
 
   try {

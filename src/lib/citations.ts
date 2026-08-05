@@ -11,7 +11,7 @@ interface CitableArticle {
   authorName: string
 }
 
-const SITE_URL = 'https://econolens.co.in'
+const SITE_URL = 'https://www.econolens.co.in'
 
 function formatDate(iso: string, style: 'apa' | 'harvard' | 'chicago'): string {
   const d = new Date(iso)
