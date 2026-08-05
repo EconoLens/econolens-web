@@ -2,6 +2,7 @@ import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { getArticleBySlug, getAllArticleSlugs, urlFor } from '@/lib/sanity'
 import CiteThisArticle from '@/components/article/CiteThisArticle'
+import { renderContentNode, isParagraphNode } from '@/components/article/ContentBlocks'
 import NewsletterInline from '@/components/article/NewsletterInline'
 
 export const revalidate = 900
@@ -49,52 +50,11 @@ export async function generateMetadata({ params }: { params: { slug: string } })
   }
 }
 
-// Renders our Portable Text block array to JSX
+// Renders a content-block array (text/h2/h3, image, dataTable,
+// regressionTable, mathBlock) to JSX. See ContentBlocks.tsx.
 function RenderBlocks({ blocks }: { blocks: any[] }) {
   if (!blocks?.length) return <p style={{ color: 'var(--text-tertiary)' }}>Content unavailable.</p>
-  return (
-    <>
-      {blocks.map((block, i) => {
-        const text = block.children?.map((c: any) => c.text).join('') || ''
-        const key = block._key || i
-
-        if (block.style === 'h2') {
-          return (
-            <h2 key={key} style={{
-              fontFamily: 'var(--font-display)',
-              fontSize: 'clamp(1.25rem, 1.8vw, 1.625rem)',
-              fontWeight: 600,
-              color: 'var(--text-primary)',
-              margin: '2.25rem 0 0.875rem',
-              lineHeight: 1.25,
-              letterSpacing: '-0.01em',
-              borderLeft: '2px solid var(--gold)',
-              paddingLeft: '14px',
-            }}>{text}</h2>
-          )
-        }
-        if (block.style === 'h3') {
-          return (
-            <h3 key={key} style={{
-              fontFamily: 'var(--font-display)',
-              fontSize: '1.125rem',
-              fontWeight: 500,
-              color: 'var(--text-primary)',
-              margin: '1.75rem 0 0.625rem',
-            }}>{text}</h3>
-          )
-        }
-        return (
-          <p key={key} style={{
-            fontSize: '1.0625rem',
-            color: 'var(--text-secondary)',
-            lineHeight: 1.8,
-            marginBottom: '1.25rem',
-          }}>{text}</p>
-        )
-      })}
-    </>
-  )
+  return <>{blocks.map((block, i) => renderContentNode(block, block._key || i))}</>
 }
 
 /**
@@ -112,43 +72,11 @@ function RenderBlocksWithInsert({ blocks, insert, afterParagraph = 4 }: { blocks
   const nodes: React.ReactNode[] = []
 
   blocks.forEach((block, i) => {
-    const text = block.children?.map((c: any) => c.text).join('') || ''
     const key = block._key || i
+    nodes.push(renderContentNode(block, key))
 
-    if (block.style === 'h2') {
-      nodes.push(
-        <h2 key={key} style={{
-          fontFamily: 'var(--font-display)',
-          fontSize: 'clamp(1.25rem, 1.8vw, 1.625rem)',
-          fontWeight: 600,
-          color: 'var(--text-primary)',
-          margin: '2.25rem 0 0.875rem',
-          lineHeight: 1.25,
-          letterSpacing: '-0.01em',
-          borderLeft: '2px solid var(--gold)',
-          paddingLeft: '14px',
-        }}>{text}</h2>
-      )
-    } else if (block.style === 'h3') {
-      nodes.push(
-        <h3 key={key} style={{
-          fontFamily: 'var(--font-display)',
-          fontSize: '1.125rem',
-          fontWeight: 500,
-          color: 'var(--text-primary)',
-          margin: '1.75rem 0 0.625rem',
-        }}>{text}</h3>
-      )
-    } else {
+    if (isParagraphNode(block)) {
       seen += 1
-      nodes.push(
-        <p key={key} style={{
-          fontSize: '1.0625rem',
-          color: 'var(--text-secondary)',
-          lineHeight: 1.8,
-          marginBottom: '1.25rem',
-        }}>{text}</p>
-      )
       if (seen === afterParagraph && !insertedAlready) {
         nodes.push(<div key={`${key}-insert`}>{insert}</div>)
         insertedAlready = true
