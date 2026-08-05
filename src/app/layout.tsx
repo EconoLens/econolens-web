@@ -56,7 +56,7 @@ const ORGANIZATION_JSON_LD = {
   ],
   contactPoint: {
     '@type': 'ContactPoint',
-    email: 'khagankp@gmail.com',
+    email: 'contact@econolens.co.in',
     contactType: 'editorial',
   },
 }
@@ -164,7 +164,7 @@ function Footer() {
             <a href="/about" className="footer-link">About</a>
             <a href="/about#founders" className="footer-link">Founders</a>
             <a href="/about#mission" className="footer-link">Mission</a>
-            <a href="mailto:khagankp@gmail.com" className="footer-link">Contact</a>
+            <a href="mailto:contact@econolens.co.in" className="footer-link">Contact</a>
           </div>
           <div>
             <p style={{ fontFamily: 'var(--font-mono)', fontSize: '0.5625rem', letterSpacing: '0.12em', textTransform: 'uppercase', color: 'var(--text-tertiary)', marginBottom: '14px' }}>Legal</p>
