@@ -120,7 +120,7 @@ export default function PricingPage() {
                 Bulk licences · SSO · White-label reports · Custom data feeds
               </p>
             </div>
-            <a href="mailto:khagankp@gmail.com?subject=EconoLens Institutional Access" className="btn-outline" style={{ flexShrink: 0 }}>
+            <a href="mailto:contact@econolens.co.in?subject=EconoLens Institutional Access" className="btn-outline" style={{ flexShrink: 0 }}>
               Contact us →
             </a>
           </div>

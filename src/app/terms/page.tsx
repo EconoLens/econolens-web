@@ -81,8 +81,8 @@ export default function TermsPage() {
           <h2 style={{ fontFamily: 'var(--font-display)', fontSize: '1.125rem', fontWeight: 600, color: 'var(--text-primary)', marginBottom: '8px' }}>Contact</h2>
           <p>
             Questions about these terms? Email{' '}
-            <a href="mailto:khagankp@gmail.com" style={{ color: 'var(--gold)', textDecoration: 'none', borderBottom: '0.5px solid var(--gold)' }}>
-              khagankp@gmail.com
+            <a href="mailto:contact@econolens.co.in" style={{ color: 'var(--gold)', textDecoration: 'none', borderBottom: '0.5px solid var(--gold)' }}>
+              contact@econolens.co.in
             </a>.
           </p>
         </section>

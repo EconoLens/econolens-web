@@ -77,7 +77,7 @@ export default function DisclaimerPage() {
               </h2>
               <p style={{ fontSize: '0.9375rem', color: 'var(--text-secondary)', lineHeight: 1.75 }}>
                 For questions about this disclaimer, please contact us at{' '}
-                <a href="mailto:khagankp@gmail.com" style={{ color: 'var(--gold)' }}>khagankp@gmail.com</a>.
+                <a href="mailto:contact@econolens.co.in" style={{ color: 'var(--gold)' }}>contact@econolens.co.in</a>.
               </p>
             </div>
 
