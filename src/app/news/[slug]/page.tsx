@@ -29,6 +29,17 @@ export async function generateMetadata({ params }: { params: { slug: string } })
     return {
       title: article.title,
       description,
+      alternates: {
+        // Fixed 2026-08-19: canonicalUrl was computed above but never wired
+        // into metadata, so no <link rel="canonical"> was ever emitted for
+        // article pages. Every ?layer=2 / ?layer=3 tab variant was crawlable
+        // as its own unmarked duplicate of the base /news/[slug] URL — this
+        // was the root cause GSC flagged as ~39 pages with no user-selected
+        // canonical. Layer tabs are presentational (client-side query param,
+        // same content family), so all variants should canonicalize to the
+        // bare slug URL.
+        canonical: canonicalUrl,
+      },
       openGraph: {
         type: 'article',
         title: article.title,
