@@ -18,6 +18,10 @@ import { useEffect, useState } from 'react'
 // consent mode and the exact wording here meet Google's EU User Consent Policy
 // for your actual traffic mix at that time — this is a solid baseline, not a
 // substitute for reading that policy yourself before submitting.
+//
+// Updated 2026-09-02: banner copy now names advertising cookies (not just
+// analytics) to match the Cookie Policy's AdSense disclosure — see
+// src/app/privacy/page.tsx commit 4efc1a0.
 
 const STORAGE_KEY = 'econolens_cookie_consent'
 
@@ -82,7 +86,8 @@ export default function CookieConsent() {
       }}
     >
       <p style={{ margin: 0, fontSize: '0.8125rem', color: 'var(--text-secondary)', maxWidth: '640px', lineHeight: 1.5 }}>
-        We use cookies for analytics to understand how EconoLens is used. See our{' '}
+        We use cookies for analytics, and — where enabled — advertising (including Google AdSense),
+        to understand how EconoLens is used and to support the site. See our{' '}
         <a href="/privacy#cookies" style={{ color: 'var(--gold)' }}>Cookie Policy</a> for details. You can accept or decline non-essential cookies below.
       </p>
       <div style={{ display: 'flex', gap: '10px', flexShrink: 0 }}>
