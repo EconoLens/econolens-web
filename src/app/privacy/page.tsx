@@ -13,7 +13,7 @@ export default function PrivacyPage() {
         <h1 className="mt-3 text-4xl font-semibold tracking-tight text-neutral-900">
           Privacy Policy
         </h1>
-        <p className="mt-2 text-sm text-neutral-500">Last updated: June 2026</p>
+        <p className="mt-2 text-sm text-neutral-500">Last updated: September 2026</p>
       </header>
       <div className="mt-10 space-y-8 text-base leading-relaxed text-neutral-700">
         <section>
@@ -57,14 +57,39 @@ export default function PrivacyPage() {
           <p>
             EconoLens uses essential cookies to keep you signed in and remember your session
             preferences. We also use analytics cookies to understand how visitors use the site,
-            helping us improve the experience over time. Non-essential cookies can be disabled in
-            your browser settings at any time without affecting core functionality.
+            and — where advertising is enabled — third-party advertising cookies served by Google
+            and its partners. Non-essential and advertising cookies can be disabled in your browser
+            settings at any time without affecting core functionality.
           </p>
           <p className="mt-3">
             <strong>Essential cookies</strong> are required for the site to function — they manage
             authentication sessions and security tokens. <strong>Analytics cookies</strong> collect
             anonymised usage data (pages visited, time on site) to help us understand audience
-            behaviour. We do not use advertising or tracking cookies.
+            behaviour.
+          </p>
+          <p className="mt-3">
+            <strong>Advertising cookies:</strong> EconoLens may display advertisements served by
+            Google AdSense and other third-party vendors. These vendors use cookies (including the
+            DoubleClick cookie) to serve ads based on a visitor&apos;s prior visits to this and
+            other websites. You may opt out of personalised advertising by visiting{" "}
+            <a
+              href="https://adssettings.google.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-blue-600 underline"
+            >
+              Google&apos;s Ads Settings
+            </a>{" "}
+            or{" "}
+            <a
+              href="https://www.aboutads.info/choices"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-blue-600 underline"
+            >
+              www.aboutads.info/choices
+            </a>
+            .
           </p>
         </section>
         <section>
