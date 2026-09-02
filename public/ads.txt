@@ -1,0 +1,8 @@
+# ads.txt placeholder — no publisher ID assigned yet.
+# Fixes a 500 (Application error) on this route: there was no ads.txt file
+# and no metadata route for it, so requests fell through to the root
+# layout/not-found chain, which errored instead of returning a clean
+# response (same class of bug as the earlier sitemap.xml/robots.txt fix,
+# see src/middleware.ts). Once the Google AdSense account is approved,
+# replace this file's content with the real authorized-sellers line, e.g.:
+# google.com, pub-XXXXXXXXXXXXXXXX, DIRECT, f08c47fec0942fa0
