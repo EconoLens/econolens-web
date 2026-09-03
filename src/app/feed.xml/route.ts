@@ -1,12 +1,12 @@
 import { NextResponse } from 'next/server'
 import { getLatestArticles } from '@/lib/sanity'
- 
+
 // RSS/Atom feed for readers, aggregators, and AI/news crawlers. Reuses the
 // same Sanity query pattern as sitemap.ts. Added 2026-09-03 — EconoLens
 // previously had no outbound feed of its own (only ingested official RSS
 // from the Fed/IMF/RBI for content ideation via /api/news).
 export const revalidate = 3600
- 
+
 function escapeXml(value: string): string {
   return value
     .replace(/&/g, '&amp;')
@@ -15,17 +15,17 @@ function escapeXml(value: string): string {
     .replace(/"/g, '&quot;')
     .replace(/'/g, '&apos;')
 }
- 
+
 export async function GET() {
   const baseUrl = 'https://www.econolens.co.in'
- 
+
   let articles: any[] = []
   try {
     articles = await getLatestArticles(30)
   } catch {
     articles = []
   }
- 
+
   const items = articles
     .filter((a) => a?.slug?.current)
     .map((a) => {
@@ -44,7 +44,7 @@ export async function GET() {
     </item>`
     })
     .join('\n')
- 
+
   const xml = `<?xml version="1.0" encoding="UTF-8"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
@@ -57,7 +57,7 @@ export async function GET() {
 ${items}
   </channel>
 </rss>`
- 
+
   return new NextResponse(xml, {
     headers: {
       'Content-Type': 'application/rss+xml; charset=utf-8',
