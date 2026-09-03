@@ -1,4 +1,4 @@
-mport { NextResponse } from 'next/server'
+import { NextResponse } from 'next/server'
 import { getLatestArticles } from '@/lib/sanity'
  
 // RSS/Atom feed for readers, aggregators, and AI/news crawlers. Reuses the
