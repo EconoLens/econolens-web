@@ -32,12 +32,11 @@ export async function generateMetadata({ params }: { params: { slug: string } })
       alternates: {
         // Fixed 2026-08-19: canonicalUrl was computed above but never wired
         // into metadata, so no <link rel="canonical"> was ever emitted for
-        // article pages. Every ?layer=2 / ?layer=3 tab variant was crawlable
-        // as its own unmarked duplicate of the base /news/[slug] URL — this
-        // was the root cause GSC flagged as ~39 pages with no user-selected
-        // canonical. Layer tabs are presentational (client-side query param,
-        // same content family), so all variants should canonicalize to the
-        // bare slug URL.
+        // article pages. This was the root cause GSC flagged as ~39 pages
+        // with no user-selected canonical (back when layers were ?layer=
+        // tab variants of this URL). Layers now render together on the
+        // bare slug URL, so there's nothing left to de-duplicate — kept
+        // explicit anyway as a defensive habit.
         canonical: canonicalUrl,
       },
       openGraph: {
@@ -73,8 +72,8 @@ function RenderBlocks({ blocks }: { blocks: any[] }) {
  * newsletter form) in right after the 4th paragraph-style block — only
  * counts normal-style blocks toward that position, so headings/images
  * don't throw off the count. Used for Layer 1 only (see call site below):
- * layers render as tabs, so "after paragraph 4 of every article" means
- * Layer 1, the default/most-read tab, not all three layers at once.
+ * all three layers now render sequentially on one page, so this keeps the
+ * newsletter form from repeating in every layer section.
  */
 function RenderBlocksWithInsert({ blocks, insert, afterParagraph = 4 }: { blocks: any[]; insert: React.ReactNode; afterParagraph?: number }) {
   if (!blocks?.length) return <p style={{ color: 'var(--text-tertiary)' }}>Content unavailable.</p>
@@ -165,10 +164,8 @@ const SHARE_PLATFORMS = [
 
 export default async function ArticlePage({
   params,
-  searchParams,
 }: {
   params: { slug: string }
-  searchParams: { layer?: string }
 }) {
   let article: any = null
   try {
@@ -178,8 +175,6 @@ export default async function ArticlePage({
   }
 
   if (!article || article.qaStatus !== 'passed') notFound()
-
-  const activeLayer = ['1', '2', '3'].includes(searchParams?.layer || '') ? (searchParams.layer || '1') : '1'
 
   const layerContent: Record<string, any[]> = {
     '1': article.layerOne || [],
@@ -428,70 +423,61 @@ export default async function ArticlePage({
         </section>
       )}
 
-      {/* ── Layer tabs ── */}
-      <div style={{
-        background: 'var(--ink-mid)',
-        borderBottom: '0.5px solid var(--ink-border)',
-        position: 'sticky',
-        top: 'calc(var(--nav-h) + var(--ticker-h))',
-        zIndex: 50,
-      }}>
-        <div className="container-narrow" style={{ display: 'flex' }}>
-          {LAYER_META.map((layer) => {
-            const isActive = activeLayer === layer.id
-            return (
-              <Link
-                key={layer.id}
-                href={`/news/${params.slug}?layer=${layer.id}`}
-                style={{
-                  display: 'flex',
-                  flexDirection: 'column',
-                  padding: '14px 20px',
-                  textDecoration: 'none',
-                  borderBottom: `2px solid ${isActive ? 'var(--gold)' : 'transparent'}`,
-                  background: isActive ? 'rgba(196,144,42,0.06)' : 'transparent',
-                  transition: 'all 0.15s',
-                  minWidth: 0,
-                }}
-              >
-                <span style={{
-                  fontFamily: 'var(--font-mono)',
-                  fontSize: '0.625rem',
-                  letterSpacing: '0.12em',
-                  textTransform: 'uppercase',
-                  color: isActive ? 'var(--gold)' : 'var(--text-tertiary)',
-                  fontWeight: isActive ? 500 : 400,
-                }}>
-                  Layer {layer.id} — {layer.label}
-                </span>
-                <span style={{
-                  fontFamily: 'var(--font-mono)',
-                  fontSize: '0.5rem',
-                  letterSpacing: '0.06em',
-                  color: 'var(--text-tertiary)',
-                  marginTop: '2px',
-                  opacity: 0.7,
-                }}>
-                  {layer.sub}
-                </span>
-              </Link>
-            )
-          })}
-        </div>
-      </div>
-
-      {/* ── Article content ── */}
+      {/* ── Article content: Layer 1, then Layer 2, then Layer 3, in one
+             continuous scroll. No tab-switcher — each layer is its own
+             section, divided by a small heading, so the reader moves
+             from plain-English overview down into deeper analysis and
+             full technical detail without leaving the page. ── */}
       <main style={{ padding: '40px 0 80px' }}>
         <div className="container-narrow">
           <div style={{
             maxWidth: '720px',
             margin: '0 auto',
           }}>
-            {activeLayer === '1' ? (
-              <RenderBlocksWithInsert blocks={layerContent[activeLayer]} insert={<NewsletterInline />} />
-            ) : (
-              <RenderBlocks blocks={layerContent[activeLayer]} />
-            )}
+            {LAYER_META.map((layer, idx) => {
+              const blocks = layerContent[layer.id]
+              if (!blocks?.length) return null
+              return (
+                <section key={layer.id} id={`layer-${layer.id}`}>
+                  <div style={{
+                    display: 'flex',
+                    alignItems: 'baseline',
+                    gap: '10px',
+                    flexWrap: 'wrap',
+                    borderTop: idx === 0 ? 'none' : '0.5px solid var(--ink-border)',
+                    marginTop: idx === 0 ? 0 : '48px',
+                    paddingTop: idx === 0 ? 0 : '32px',
+                    marginBottom: '20px',
+                  }}>
+                    <span style={{
+                      fontFamily: 'var(--font-mono)',
+                      fontSize: '0.6875rem',
+                      letterSpacing: '0.12em',
+                      textTransform: 'uppercase',
+                      color: 'var(--gold)',
+                      fontWeight: 500,
+                    }}>
+                      Layer {layer.id} — {layer.label}
+                    </span>
+                    <span style={{ width: 3, height: 3, background: 'var(--ink-border-2)', borderRadius: '50%', display: 'inline-block' }} />
+                    <span style={{
+                      fontFamily: 'var(--font-mono)',
+                      fontSize: '0.5625rem',
+                      letterSpacing: '0.06em',
+                      color: 'var(--text-tertiary)',
+                    }}>
+                      {layer.sub}
+                    </span>
+                  </div>
+
+                  {layer.id === '1' ? (
+                    <RenderBlocksWithInsert blocks={blocks} insert={<NewsletterInline />} />
+                  ) : (
+                    <RenderBlocks blocks={blocks} />
+                  )}
+                </section>
+              )
+            })}
           </div>
         </div>
       </main>
