@@ -204,6 +204,15 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             type="application/ld+json"
             dangerouslySetInnerHTML={{ __html: JSON.stringify(ORGANIZATION_JSON_LD) }}
           />
+          {/* AdSense fix (2026-09-07): Auto ads was already ON in the AdSense dashboard,
+              but the actual serving script was never added to the site — so no ads could
+              show even after Google approves the site. Added to enable ad serving once approved. */}
+          <Script
+            async
+            src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1336796462553106"
+            crossOrigin="anonymous"
+            strategy="afterInteractive"
+          />
         </head>
         <body style={{ background: 'var(--ink)', color: 'var(--text-primary)' }}>
           <Navbar />
