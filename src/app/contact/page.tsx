@@ -14,7 +14,7 @@ export default function ContactPage() {
               Contact
             </h1>
             <p style={{ fontSize: '0.9375rem', color: 'var(--text-secondary)', lineHeight: 1.75 }}>
-              EconoLens is edited and operated by a small team based in India. Here is how to reach us.
+              Our editorial and operations team is here to help with coverage questions, corrections, and enquiries. Here is how to reach us.
             </p>
           </div>
         </div>
