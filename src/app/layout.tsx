@@ -164,7 +164,8 @@ function Footer() {
             <a href="/about" className="footer-link">About</a>
             <a href="/about#founders" className="footer-link">Founders</a>
             <a href="/about#mission" className="footer-link">Mission</a>
-            <a href="mailto:contact@econolens.co.in" className="footer-link">Contact</a>
+            <a href="/contact" className="footer-link">Contact</a>
+            <a href="/editorial-policy" className="footer-link">Editorial Policy</a>
           </div>
           <div>
             <p style={{ fontFamily: 'var(--font-mono)', fontSize: '0.5625rem', letterSpacing: '0.12em', textTransform: 'uppercase', color: 'var(--text-tertiary)', marginBottom: '14px' }}>Legal</p>
