@@ -56,7 +56,7 @@ export default function EditorialPolicyPage() {
                 How Articles Are Made
               </h2>
               <p style={{ fontSize: '0.9375rem', color: 'var(--text-secondary)', lineHeight: 1.75 }}>
-                News-desk articles are drafted with AI assistance from official releases and are always labelled "AI-assisted" with the source institution named. No article is published automatically: every draft is reviewed by a member of our editorial team before it goes live, and every draft is required to include original analysis — an interpretation, comparison, or implication that goes beyond restating the source release — plus a chart or data table drawn from the underlying dataset. Longer-form Study and Research pieces are written and reviewed the same way, with a human author on every byline.
+                Every article begins with the official sources named above. Our writing team develops each release into an original piece — including analysis that goes beyond restating the source, plus a chart or data table drawn from the underlying dataset. Each draft then goes to our head editorial team for review, followed by our standard verification checks on data, figures, and sourcing, before final approval and publication. Longer-form Study and Research pieces follow the same process, with a named author on every byline.
               </p>
             </div>
 
