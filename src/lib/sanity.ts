@@ -55,7 +55,7 @@ const ARTICLE_PROJECTION = `{
   isAiGenerated,
   aiLabel,
   qaStatus,
-  copyscoreScore,
+  copyscapeScore,
   indiaContext,
   audioUrl,
   paperAuthors,
@@ -64,8 +64,21 @@ const ARTICLE_PROJECTION = `{
   paperPublishedDate
 }`
 
+// Live charts (chartEmbed blocks) reference economicIndicator documents; expand
+// those references so ChartEmbed.tsx receives the series config and any
+// manually maintained observations. All other blocks pass through unchanged.
+const BODY_BLOCK_PROJECTION = `{
+  ...,
+  _type == "chartEmbed" => {
+    "indicators": indicators[]->{ name, "slug": slug.current, unit, country, indicatorType, frequency, fredSeriesId, sourceUrl, observations }
+  }
+}`
+
 const ARTICLE_FULL_PROJECTION = `{
   ...,
+  "layerOne": layerOne[]${BODY_BLOCK_PROJECTION},
+  "layerTwo": layerTwo[]${BODY_BLOCK_PROJECTION},
+  "layerThree": layerThree[]${BODY_BLOCK_PROJECTION},
   "category": category->{ title, slug, icon, color },
   "author": author->{ name, slug, photo, bio, credentials, badgeLevel, socialLinks },
   "relatedArticles": relatedArticles[]->{ title, slug, coverImage, articleType, publishedAt }
