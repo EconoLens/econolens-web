@@ -2,7 +2,7 @@ import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { getArticleBySlug, getAllArticleSlugs, urlFor } from '@/lib/sanity'
 import CiteThisArticle from '@/components/article/CiteThisArticle'
-import { renderContentNode, isParagraphNode } from '@/components/article/ContentBlocks'
+import { renderContentNode, isParagraphNode, groupListItems } from '@/components/article/ContentBlocks'
 import NewsletterInline from '@/components/article/NewsletterInline'
 
 export const revalidate = 900
@@ -25,7 +25,17 @@ export async function generateMetadata({ params }: { params: { slug: string } })
       (Array.isArray(article.summary) ? article.summary[0] : article.summary) ||
       ''
     const canonicalUrl = `https://www.econolens.co.in/news/${params.slug}`
-    const ogImage = article.coverImage?.url
+    // Fixed 2026-09-17: coverImage comes back from GROQ as a raw image object
+    // (no `url` field), so `coverImage?.url` was always undefined and no
+    // article ever emitted an og:image. Build the URL the same way JSON-LD does.
+    let ogImage: string | undefined
+    try {
+      ogImage = article.coverImage?.asset
+        ? urlFor(article.coverImage).width(1200).height(630).fit('crop').url()
+        : undefined
+    } catch {
+      ogImage = undefined
+    }
     return {
       title: article.title,
       description,
@@ -64,7 +74,7 @@ export async function generateMetadata({ params }: { params: { slug: string } })
 // regressionTable, mathBlock) to JSX. See ContentBlocks.tsx.
 function RenderBlocks({ blocks }: { blocks: any[] }) {
   if (!blocks?.length) return <p style={{ color: 'var(--text-tertiary)' }}>Content unavailable.</p>
-  return <>{blocks.map((block, i) => renderContentNode(block, block._key || i))}</>
+  return <>{groupListItems(blocks).map((block, i) => renderContentNode(block, block._key || i))}</>
 }
 
 /**
@@ -81,7 +91,7 @@ function RenderBlocksWithInsert({ blocks, insert, afterParagraph = 4 }: { blocks
   let insertedAlready = false
   const nodes: React.ReactNode[] = []
 
-  blocks.forEach((block, i) => {
+  groupListItems(blocks).forEach((block, i) => {
     const key = block._key || i
     nodes.push(renderContentNode(block, key))
 
