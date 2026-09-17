@@ -46,6 +46,38 @@ export default defineType({
     }),
 
     defineField({
+      name: 'sourceUrl',
+      title: 'Official Source URL',
+      type: 'url',
+      description: 'Official page for this series (e.g. RBI monetary policy statements). Shown as the chart source link.',
+    }),
+
+    // Added 2026-09-17: series with no stable public API (RBI repo rate, India
+    // CPI) are maintained here after each release. When present, in-article
+    // charts use these instead of calling FRED.
+    defineField({
+      name: 'observations',
+      title: 'Manual Observations',
+      type: 'array',
+      description: 'One row per release/decision. Leave empty for FRED-backed series.',
+      of: [
+        {
+          type: 'object',
+          name: 'observation',
+          fields: [
+            defineField({ name: 'date', title: 'Date', type: 'date', validation: (R) => R.required() }),
+            defineField({ name: 'value', title: 'Value', type: 'number', validation: (R) => R.required() }),
+            defineField({ name: 'note', title: 'Note', type: 'string', description: 'e.g. "MPC hold" or "25 bp cut"' }),
+          ],
+          preview: {
+            select: { date: 'date', value: 'value', note: 'note' },
+            prepare: ({ date, value, note }) => ({ title: `${date ?? '—'}: ${value ?? '—'}`, subtitle: note }),
+          },
+        },
+      ],
+    }),
+
+    defineField({
       name: 'country',
       title: 'Country',
       type: 'string',

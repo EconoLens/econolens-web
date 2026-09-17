@@ -9,7 +9,153 @@
  *        Copyscape score must be < 10% before publish
  */
 
-import { defineField, defineType } from 'sanity'
+import { defineArrayMember, defineField, defineType } from 'sanity'
+
+// ── SHARED ARTICLE BODY BLOCKS (2026-09-17) ─────────────────────────────────
+// One block set for layerOne, layerTwo and layerThree. Before this, tables were
+// only allowed in Layer 2 and formulas/regression tables only in Layer 3, so
+// Studio flagged valid content as invalid depending on which layer it sat in.
+// Existing documents stay valid: every previously allowed type and field
+// name is unchanged; this only adds options.
+
+const textBlock = defineArrayMember({
+  type: 'block',
+  marks: {
+    // Keep the default decorators; declaring `annotations` replaces Sanity's
+    // default link annotation, so it is redefined here with relative-URL support.
+    decorators: [
+      { title: 'Strong', value: 'strong' },
+      { title: 'Emphasis', value: 'em' },
+      { title: 'Code', value: 'code' },
+      { title: 'Underline', value: 'underline' },
+      { title: 'Strike', value: 'strike-through' },
+    ],
+    annotations: [
+      {
+        name: 'link',
+        type: 'object',
+        title: 'Link',
+        fields: [
+          defineField({
+            name: 'href',
+            type: 'url',
+            title: 'URL',
+            description: 'Internal links as /news/<slug> or /indicators; external links as full https:// URLs.',
+            validation: (R) => R.required().uri({ allowRelative: true, scheme: ['http', 'https', 'mailto', 'tel'] }),
+          }),
+        ],
+      },
+      {
+        name: 'inlineMath',
+        type: 'object',
+        title: 'Inline formula',
+        description: 'Select placeholder text, then enter the LaTeX, e.g. \\beta_1',
+        fields: [defineField({ name: 'latex', type: 'string', title: 'LaTeX', validation: (R) => R.required() })],
+      },
+    ],
+  },
+})
+
+const imageBlock = defineArrayMember({
+  type: 'image',
+  options: { hotspot: true },
+  fields: [
+    defineField({
+      name: 'alt',
+      type: 'string',
+      title: 'Alt Text',
+      description: 'Required. Describe what the image or chart shows, including the trend for charts.',
+      validation: (R) => R.required().error('Alt text is required on every image'),
+    }),
+    defineField({ name: 'caption', type: 'string', title: 'Caption', description: 'For charts, name the data source.' }),
+    defineField({ name: 'credit', type: 'string', title: 'Credit', description: 'e.g. "EconoLens original" or the data source.' }),
+  ],
+})
+
+const tableFields = [
+  defineField({ name: 'caption', type: 'string', title: 'Table Caption', validation: (R) => R.required().warning('Add a caption so readers know what the table shows') }),
+  defineField({
+    name: 'data',
+    type: 'text',
+    title: 'CSV Data',
+    description: 'First row is the header. Wrap any cell containing a comma in double quotes, e.g. "3.0% (avg, 2024-25)".',
+    validation: (R) => R.required(),
+  }),
+  defineField({ name: 'notes', type: 'string', title: 'Notes / Source', description: 'Source line, significance levels, units.' }),
+  defineField({
+    name: 'chart',
+    type: 'boolean',
+    title: 'Draw bar chart from first all-numeric column?',
+    description: 'On by default when a column is fully numeric. Switch off to show only the table.',
+  }),
+]
+
+const dataTableBlock = defineArrayMember({ type: 'object', name: 'dataTable', title: 'Data Table', fields: tableFields })
+
+const regressionTableBlock = defineArrayMember({ type: 'object', name: 'regressionTable', title: 'Regression Table', fields: tableFields })
+
+const mathBlock = defineArrayMember({
+  type: 'object',
+  name: 'mathBlock',
+  title: 'Mathematical Expression',
+  fields: [
+    defineField({
+      name: 'latex',
+      type: 'text',
+      rows: 3,
+      title: 'LaTeX Expression',
+      description: 'Typeset on the page with KaTeX. Example: \\hat{\\beta} = (X^\\top X)^{-1} X^\\top y',
+      validation: (R) => R.required(),
+    }),
+    defineField({ name: 'description', type: 'string', title: 'Description', description: 'The "where…" line defining every symbol.' }),
+  ],
+})
+
+const chartEmbedBlock = defineArrayMember({
+  type: 'object',
+  name: 'chartEmbed',
+  title: 'Live Chart (economic indicators)',
+  fields: [
+    defineField({ name: 'title', type: 'string', title: 'Chart Title', validation: (R) => R.required() }),
+    defineField({
+      name: 'indicators',
+      type: 'array',
+      title: 'Indicators',
+      description: 'Up to 4. Indicators sharing a unit share one axis; different units get separate charts.',
+      of: [{ type: 'reference', to: [{ type: 'economicIndicator' }] }],
+      validation: (R) => R.required().min(1).max(4),
+    }),
+    defineField({ name: 'startDate', type: 'date', title: 'Start Date' }),
+    defineField({ name: 'endDate', type: 'date', title: 'End Date', description: 'Leave blank for latest.' }),
+    defineField({
+      name: 'chartStyle',
+      type: 'string',
+      title: 'Chart Style',
+      options: {
+        list: [
+          { title: 'Line (continuous series: CPI, GDP, FX)', value: 'line' },
+          { title: 'Step (policy rates that change on decision dates)', value: 'step' },
+        ],
+        layout: 'radio',
+      },
+      initialValue: 'line',
+    }),
+    defineField({ name: 'caption', type: 'string', title: 'Caption' }),
+    defineField({
+      name: 'alt',
+      type: 'text',
+      rows: 2,
+      title: 'Chart Summary (alt text)',
+      description: 'One or two sentences stating what the chart shows. Auto-generated from the data if left blank.',
+    }),
+  ],
+  preview: {
+    select: { title: 'title', style: 'chartStyle' },
+    prepare: ({ title, style }) => ({ title: title || 'Live chart', subtitle: `📈 ${style || 'line'} chart` }),
+  },
+})
+
+const BODY_BLOCKS = [textBlock, imageBlock, dataTableBlock, regressionTableBlock, mathBlock, chartEmbedBlock]
 
 export default defineType({
   name: 'article',
@@ -78,26 +224,17 @@ export default defineType({
     defineField({ name: 'isAiGenerated', title: 'AI-Generated?', type: 'boolean', group: 'pipeline', initialValue: false }),
     defineField({
       name: 'layerOne', title: 'Layer 1 — Overview (Plain English)', description: '~200 words. No jargon.', type: 'array', group: 'layers',
-      of: [{ type: 'block' }, { type: 'image', options: { hotspot: true }, fields: [defineField({ name: 'alt', type: 'string', title: 'Alt Text' }), defineField({ name: 'caption', type: 'string', title: 'Caption' })] }],
+      of: BODY_BLOCKS,
       validation: (R) => R.required().error('Layer 1 is mandatory'),
     }),
     defineField({
       name: 'layerTwo', title: 'Layer 2 — Explainer (Context & Implications)', description: '~600 words.', type: 'array', group: 'layers',
-      of: [
-        { type: 'block' },
-        { type: 'image', options: { hotspot: true }, fields: [defineField({ name: 'alt', type: 'string', title: 'Alt Text' }), defineField({ name: 'caption', type: 'string', title: 'Caption' })] },
-        { type: 'object', name: 'dataTable', title: 'Data Table', fields: [defineField({ name: 'caption', type: 'string', title: 'Table Caption' }), defineField({ name: 'data', type: 'text', title: 'CSV Data' })] },
-      ],
+      of: BODY_BLOCKS,
       validation: (R) => R.required().error('Layer 2 is mandatory'),
     }),
     defineField({
       name: 'layerThree', title: 'Layer 3 — Technical (Academic / Methodology)', description: '1000+ words.', type: 'array', group: 'layers',
-      of: [
-        { type: 'block' },
-        { type: 'image', options: { hotspot: true }, fields: [defineField({ name: 'alt', type: 'string', title: 'Alt Text' }), defineField({ name: 'caption', type: 'string', title: 'Caption' })] },
-        { type: 'object', name: 'mathBlock', title: 'Mathematical Expression', fields: [defineField({ name: 'latex', type: 'string', title: 'LaTeX Expression' }), defineField({ name: 'description', type: 'string', title: 'Description' })] },
-        { type: 'object', name: 'regressionTable', title: 'Regression Table', fields: [defineField({ name: 'caption', type: 'string', title: 'Table Caption' }), defineField({ name: 'data', type: 'text', title: 'Table Data (CSV)' }), defineField({ name: 'notes', type: 'string', title: 'Notes' })] },
-      ],
+      of: BODY_BLOCKS,
       validation: (R) => R.required().error('Layer 3 is mandatory'),
     }),
     defineField({ name: 'indiaContext', title: '🇮🇳 India Context Paragraph', description: "MANDATORY. Why this matters for India's economy. ~100 words.", type: 'text', group: 'india', rows: 5, validation: (R) => R.required().min(80).error('India context is mandatory (CCO mandate)') }),
