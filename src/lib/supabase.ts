@@ -2,7 +2,7 @@ import { createClient, type SupabaseClient } from "@supabase/supabase-js";
 
 // Fallback so module loads at build time without env vars set in Vercel
 const url = process.env.SUPABASE_URL ?? "https://placeholder.supabase.co";
-const anonKey = process.env.SUPABASE_ANON_KEY ?? "";
+const anonKey = process.env.SUPABASE_ANON_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || "placeholder-anon-key";
 const serviceKey = process.env.SUPABASE_SERVICE_KEY;
 
 export const supabase: SupabaseClient = createClient(url, anonKey, {
