@@ -11,16 +11,16 @@ import type { SanityImageSource } from '@sanity/image-url/lib/types/types'
 // ─── CLIENT ───────────────────────────────────────────────────────────────────
 
 export const sanityClient = createClient({
-  projectId: process.env.NEXT_PUBLIC_SANITY_PROJECT_ID!,  // rvv43603
-  dataset: process.env.NEXT_PUBLIC_SANITY_DATASET!,        // production
+  projectId: process.env.NEXT_PUBLIC_SANITY_PROJECT_ID || 'rvv43603',  // rvv43603
+  dataset: process.env.NEXT_PUBLIC_SANITY_DATASET || 'production',        // production
   apiVersion: '2026-05-31',
   useCdn: true,  // CDN for reads (fast + cached). Use token for writes.
 })
 
 // Write client — server-side only (uses secret token)
 export const sanityWriteClient = createClient({
-  projectId: process.env.NEXT_PUBLIC_SANITY_PROJECT_ID!,
-  dataset: process.env.NEXT_PUBLIC_SANITY_DATASET!,
+  projectId: process.env.NEXT_PUBLIC_SANITY_PROJECT_ID || 'rvv43603',
+  dataset: process.env.NEXT_PUBLIC_SANITY_DATASET || 'production',
   apiVersion: '2026-05-31',
   useCdn: false,
   token: process.env.SANITY_API_TOKEN,  // Editor token — server only
