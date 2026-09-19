@@ -21,8 +21,8 @@ import { researchQuery, explainConcept, PLAN_LIMITS, Plan } from '@/lib/claude'
 
 // Service role — server-side only, never exposed to client
 const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY!
+  process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://placeholder.supabase.co',
+  process.env.SUPABASE_SERVICE_ROLE_KEY || 'placeholder-service-key'
 )
 
 // ─── REQUEST SCHEMA ───────────────────────────────────────────────────────────
