@@ -1,273 +1,211 @@
 import Link from 'next/link'
+import type { Metadata } from 'next'
 
-import { getLatestArticles, getArticlesByCategory } from '@/lib/sanity'
+import FollowLinks from '@/components/FollowLinks'
+import { getStudyGuides } from '@/lib/sanity'
+import { TRACKS, START_HERE_ORDER, readingMinutes, type Cover, type Topic } from '@/lib/study'
 
 export const revalidate = 900
 
-export const metadata = {
-  title: 'Study Economics — EconoLens',
-  description: 'Learn economics and econometrics from first principles. Clear, rigorous explanations of every major concept — from GDP to GARCH models.',
+export const metadata: Metadata = {
+  title: 'Study Economics — Every Big Idea, One Question at a Time',
+  description:
+    'Economics study guides that start with the question you actually have. Plain-language explanations, the formula, and worked examples with real data — from GDP to regression.',
+  alternates: { canonical: 'https://www.econolens.co.in/study' },
 }
 
-const SUBJECTS = [
-  {
-    section: 'Macroeconomics',
-    topics: [
-      { label: 'GDP & National Accounts', icon: '📊', slug: 'study-understanding-gdp-explained' },
-      { label: 'Inflation & Price Theory', icon: '📈', slug: 'study-understanding-inflation-explained' },
-      { label: 'Business Cycles', icon: '🔄', slug: null },
-      { label: 'Monetary Policy', icon: '🏦', slug: null },
-      { label: 'Fiscal Policy & Multipliers', icon: '🏛️', slug: null },
-      { label: 'Exchange Rates & Open Economy', icon: '🌐', slug: null },
-    ],
-  },
-  {
-    section: 'Microeconomics',
-    topics: [
-      { label: 'Supply, Demand & Markets', icon: '⚖️', slug: null },
-      { label: 'Elasticity', icon: '📉', slug: null },
-      { label: 'Market Structures', icon: '🏭', slug: null },
-      { label: 'Game Theory', icon: '♟️', slug: null },
-      { label: 'Information Economics', icon: '💡', slug: null },
-      { label: 'Welfare Economics', icon: '🌱', slug: null },
-    ],
-  },
-  {
-    section: 'Econometrics',
-    topics: [
-      { label: 'OLS Regression', icon: '📐', slug: null },
-      { label: 'Time Series Analysis', icon: '⏱️', slug: null },
-      { label: 'Panel Data Methods', icon: '🗂️', slug: null },
-      { label: 'Instrumental Variables', icon: '🔧', slug: null },
-      { label: 'Difference-in-Differences', icon: '📋', slug: null },
-      { label: 'ARIMA & GARCH', icon: '📡', slug: null },
-    ],
-  },
-  {
-    section: 'International Economics',
-    topics: [
-      { label: 'Comparative Advantage', icon: '🌍', slug: null },
-      { label: 'Balance of Payments', icon: '💱', slug: null },
-      { label: 'Trade Policy & Tariffs', icon: '🛃', slug: null },
-      { label: 'Capital Flows & FDI', icon: '💰', slug: null },
-      { label: 'Purchasing Power Parity', icon: '🔄', slug: null },
-      { label: 'Development Finance', icon: '🏗️', slug: null },
-    ],
-  },
-]
+interface Guide {
+  _id: string
+  title: string
+  slug: string
+  summary?: string[]
+  words?: number
+}
+
+function CoverArt({ cover, big = false }: { cover?: Cover; big?: boolean }) {
+  if (cover?.kind === 'wave') {
+    return (
+      <svg width="220" height="70" viewBox="0 0 220 70" role="img" aria-label="Wave showing expansion, peak, contraction and trough">
+        <path d="M0 50 C30 50 40 10 70 10 S110 60 140 60 S190 15 220 15" fill="none" stroke="var(--gold-light)" strokeWidth="2" />
+      </svg>
+    )
+  }
+  if (cover?.kind === 'cross') {
+    return (
+      <svg width="160" height="90" viewBox="0 0 160 90" role="img" aria-label="Supply and demand curves crossing">
+        <path d="M10 10 L150 80" stroke="var(--gold-light)" strokeWidth="2" />
+        <path d="M10 80 L150 10" stroke="var(--text-secondary)" strokeWidth="2" />
+        <circle cx="80" cy="45" r="4" fill="var(--cream)" />
+      </svg>
+    )
+  }
+  return <span className={big ? 'sg-cover-text sg-cover-text--big' : 'sg-cover-text'}>{cover?.kind === 'text' ? cover.text : 'EconoLens Study'}</span>
+}
+
+function learnPoints(topic: Topic | undefined, guide: Guide): string[] {
+  if (topic?.learn?.length) return topic.learn
+  return (guide.summary || []).slice(0, 2)
+}
+
+function GuideCard({ guide, topic }: { guide: Guide; topic?: Topic }) {
+  const minutes = readingMinutes(guide.words)
+  return (
+    <Link href={`/news/${guide.slug}`} className="sg-card">
+      <div className="sg-cover"><CoverArt cover={topic?.cover} /></div>
+      {topic?.caption && <span className="sg-cap">Fig. {topic.caption}</span>}
+      <div className="sg-body">
+        {topic && <span className="sg-kick">{topic.level}</span>}
+        <h3 className="sg-q">{topic?.question || guide.title}</h3>
+        {topic?.question && <p className="sg-dek">{guide.title}</p>}
+        <ul className="sg-learn">
+          {learnPoints(topic, guide).map((p) => <li key={p}>{p}</li>)}
+        </ul>
+        <div className="sg-foot">
+          <span>{minutes ? `${minutes} min read` : 'Study guide'}</span>
+          <b>Read →</b>
+        </div>
+      </div>
+    </Link>
+  )
+}
 
 export default async function StudyPage() {
-  let studyArticles: any[] = []
+  let guides: Guide[] = []
   try {
-    studyArticles = (await getArticlesByCategory('study', 20)) || []
+    guides = (await getStudyGuides()) || []
   } catch {
-    studyArticles = []
+    guides = []
   }
+  const bySlug = new Map(guides.map((g) => [g.slug, g]))
+  const plannedSlugs = new Set(TRACKS.flatMap((t) => t.topics.map((x) => x.slug)))
+  const topicBySlug = new Map(TRACKS.flatMap((t) => t.topics.map((x) => [x.slug, x] as const)))
 
-  let explainers: any[] = []
-  try {
-    explainers = (await getArticlesByCategory('econometrics', 6)) || []
-  } catch {
-    explainers = []
-  }
+  const featuredSlug = START_HERE_ORDER.find((s) => bySlug.has(s))
+  const featured = featuredSlug ? bySlug.get(featuredSlug)! : undefined
+  const featuredTopic = featuredSlug ? topicBySlug.get(featuredSlug) : undefined
+  const extras = guides.filter((g) => !plannedSlugs.has(g.slug))
+
+  const tracks = TRACKS.map((t) => ({
+    ...t,
+    live: t.topics.filter((x) => bySlug.has(x.slug) && x.slug !== featuredSlug),
+    liveCount: t.topics.filter((x) => bySlug.has(x.slug)).length,
+    upcoming: t.topics.filter((x) => !bySlug.has(x.slug)),
+  }))
 
   return (
     <>
-      {/* ── Page Header ── */}
-      <section style={{
-        padding: '48px 0 40px',
-        borderBottom: '0.5px solid var(--ink-border)',
-        background: 'linear-gradient(180deg, #071320 0%, var(--ink) 100%)',
-      }}>
-        <div className="container">
-          <p className="label-mono" style={{ marginBottom: '12px' }}>Study Series</p>
-          <h1 style={{
-            fontFamily: 'var(--font-display)',
-            fontSize: 'clamp(2rem, 3vw, 3rem)',
-            fontWeight: 600,
-            color: 'var(--text-primary)',
-            lineHeight: 1.1,
-            letterSpacing: '-0.02em',
-            marginBottom: '14px',
-          }}>
-            Economics from First Principles
+      {/* ── Header ── */}
+      <section className="sg-header">
+        <div className="sg-wrap">
+          <p className="sg-kick sg-kick--wide">Study · The EconoLens library</p>
+          <h1 className="sg-h1">
+            Every big idea in economics, <em>answered one question at a time.</em>
           </h1>
-          <p style={{
-            fontSize: '1.0625rem',
-            color: 'var(--text-secondary)',
-            lineHeight: 1.6,
-            maxWidth: '600px',
-            marginBottom: '24px',
-          }}>
-            Rigorous explanations of every major economics and econometrics concept — written for curious minds, not textbooks. From GDP to GARCH, from multipliers to moral hazard.
+          <p className="sg-lede">
+            Pick a question you have always wondered about. Each guide explains it in plain words first, then shows the formula and a worked example with real data.
           </p>
-          <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
-            {['Macro', 'Micro', 'Econometrics', 'International', 'Finance'].map(tag => (
-              <span key={tag} style={{
-                fontFamily: 'var(--font-mono)',
-                fontSize: '0.5rem',
-                letterSpacing: '0.1em',
-                textTransform: 'uppercase',
-                color: 'var(--text-tertiary)',
-                border: '0.5px solid var(--ink-border)',
-                padding: '4px 10px',
-              }}>{tag}</span>
+          <nav aria-label="Jump to a track" className="sg-jump">
+            {tracks.map((t) => (
+              <a key={t.id} href={`#${t.id}`} className={t.liveCount ? '' : 'is-soon'}>
+                {t.title} · {t.liveCount || 'soon'}
+              </a>
             ))}
-          </div>
+          </nav>
         </div>
       </section>
 
-      {/* ── Published Study Articles ── */}
-      {studyArticles.length > 0 && (
-        <section style={{ padding: '40px 0', borderBottom: '0.5px solid var(--ink-border)' }}>
-          <div className="container">
-            <p className="label-mono" style={{ marginBottom: '20px' }}>Latest Study Posts</p>
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))', gap: '1px', background: 'var(--ink-border)' }}>
-              {studyArticles.map((article: any) => (
-                <Link key={article._id} href={'/news/' + (article.slug?.current || '')} className="article-card">
-                  <div className="category">Study</div>
-                  <div className="title">{article.title}</div>
-                  {Array.isArray(article.summary) && article.summary[0] && (
-                    <div className="summary" style={{ WebkitLineClamp: 2, display: '-webkit-box', WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>
-                      {article.summary[0]}
-                    </div>
-                  )}
-                  <div className="meta">
-                    <span>{new Date(article.publishedAt).toLocaleDateString('en-GB', { day: 'numeric', month: 'short' })}</span>
-                    <span style={{ width: 2, height: 2, background: 'var(--ink-border-2)', borderRadius: '50%', display: 'inline-block' }} />
-                    <span>{article.author?.name || 'EconoLens'}</span>
-                  </div>
-                </Link>
-              ))}
-            </div>
-          </div>
-        </section>
-      )}
-
-      {/* ── Curriculum Map ── */}
-      <section style={{ padding: '48px 0' }}>
-        <div className="container">
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: '32px', flexWrap: 'wrap', gap: '8px' }}>
-            <p className="label-mono">Full Curriculum</p>
-            <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.5rem', letterSpacing: '0.06em', color: 'var(--text-tertiary)', textTransform: 'uppercase' }}>
-              New topics added every week
-            </span>
-          </div>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: '24px' }}>
-            {SUBJECTS.map((subject) => (
-              <div key={subject.section} style={{
-                background: 'var(--ink-mid)',
-                border: '0.5px solid var(--ink-border)',
-                padding: '0',
-              }}>
-                <div style={{
-                  padding: '14px 18px',
-                  borderBottom: '0.5px solid var(--ink-border)',
-                  background: 'rgba(196,144,42,0.04)',
-                }}>
-                  <h2 style={{
-                    fontFamily: 'var(--font-display)',
-                    fontSize: '1rem',
-                    fontWeight: 600,
-                    color: 'var(--text-primary)',
-                    margin: 0,
-                  }}>{subject.section}</h2>
-                </div>
-                <ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
-                  {subject.topics.map((topic, i) => (
-                    <li key={topic.label} style={{
-                      borderBottom: i < subject.topics.length - 1 ? '0.5px solid var(--ink-border)' : 'none',
-                    }}>
-                      {topic.slug ? (
-                        <Link href={'/news/' + topic.slug} style={{
-                          display: 'flex',
-                          alignItems: 'center',
-                          gap: '10px',
-                          padding: '11px 18px',
-                          textDecoration: 'none',
-                          transition: 'background 0.15s',
-                        }}
-                        className="study-topic-link"
-                        >
-                          <span style={{ fontSize: '0.875rem', flexShrink: 0 }}>{topic.icon}</span>
-                          <span style={{ fontSize: '0.875rem', color: 'var(--text-primary)', lineHeight: 1.3 }}>{topic.label}</span>
-                          <span style={{ marginLeft: 'auto', fontFamily: 'var(--font-mono)', fontSize: '0.5rem', color: 'var(--gold)', textTransform: 'uppercase', letterSpacing: '0.08em' }}>Read →</span>
-                        </Link>
-                      ) : (
-                        <div style={{
-                          display: 'flex',
-                          alignItems: 'center',
-                          gap: '10px',
-                          padding: '11px 18px',
-                        }}>
-                          <span style={{ fontSize: '0.875rem', flexShrink: 0, opacity: 0.4 }}>{topic.icon}</span>
-                          <span style={{ fontSize: '0.875rem', color: 'var(--text-tertiary)', lineHeight: 1.3 }}>{topic.label}</span>
-                        </div>
-                      )}
-                    </li>
-                  ))}
-                </ul>
+      {/* ── Start here ── */}
+      <section style={{ paddingBottom: '72px' }}>
+        <div className="sg-wrap">
+          {featured ? (
+            <Link href={`/news/${featured.slug}`} className="sg-feat">
+              <div className="sg-feat-art">
+                <CoverArt cover={featuredTopic?.cover} big />
+                {featuredTopic?.caption && <span className="sg-cap" style={{ padding: 0 }}>Fig. 1 — {featuredTopic.caption}</span>}
               </div>
-            ))}
-          </div>
+              <div className="sg-feat-body">
+                <span className="sg-kick">Start here{featuredTopic ? ` · ${featuredTopic.level}` : ''}</span>
+                <h2 className="sg-q sg-q--big">{featuredTopic?.question || featured.title}</h2>
+                {featuredTopic?.question && <p className="sg-dek" style={{ fontSize: '1rem' }}>{featured.title}</p>}
+                <ul className="sg-learn" style={{ fontSize: '0.9375rem' }}>
+                  {learnPoints(featuredTopic, featured).map((p) => <li key={p}>{p}</li>)}
+                </ul>
+                <span className="sg-feat-cta">Read the guide →</span>
+              </div>
+            </Link>
+          ) : (
+            <div className="sg-empty">
+              <p style={{ margin: 0, fontSize: '1.0625rem', color: 'var(--text-primary)' }}>
+                We are rewriting every Study guide to a new, fuller format. The first ones are coming soon.
+              </p>
+              <p style={{ margin: 0, fontSize: '0.875rem', color: 'var(--text-secondary)' }}>Follow us to get each guide the day it is published.</p>
+              <FollowLinks placement="study_empty" variant="compact" />
+            </div>
+          )}
         </div>
       </section>
 
-      {/* ── Econometrics articles ── */}
-      {explainers.length > 0 && (
-        <section style={{ padding: '0 0 56px', borderTop: '0.5px solid var(--ink-border)' }}>
-          <div className="container" style={{ paddingTop: '40px' }}>
-            <p className="label-mono" style={{ marginBottom: '20px' }}>Econometrics</p>
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '1px', background: 'var(--ink-border)' }}>
-              {explainers.map((article: any) => (
-                <Link key={article._id} href={'/news/' + (article.slug?.current || '')} className="article-card">
-                  <div className="category">Econometrics</div>
-                  <div className="title">{article.title}</div>
-                  <div className="meta">
-                    <span>{new Date(article.publishedAt).toLocaleDateString('en-GB', { day: 'numeric', month: 'short' })}</span>
-                    <span style={{ width: 2, height: 2, background: 'var(--ink-border-2)', borderRadius: '50%', display: 'inline-block' }} />
-                    <span>{article.author?.name || 'EconoLens'}</span>
-                  </div>
-                </Link>
-              ))}
+      {/* ── Tracks ── */}
+      {tracks.map((t) => (
+        <section key={t.id} id={t.id} style={{ scrollMarginTop: '80px' }}>
+          <div className="sg-wrap sg-track">
+            <header className="sg-track-head">
+              <span className="sg-kick">Track {t.number}</span>
+              <h2 className="sg-h2">{t.title}</h2>
+              <p className="sg-dek" style={{ fontSize: '0.9375rem' }}>{t.blurb}</p>
+              <span className="sg-count">
+                {t.liveCount === 0 ? 'First guides in progress' : `${t.liveCount} guide${t.liveCount > 1 ? 's' : ''}${t.upcoming.length ? ' · more on the way' : ''}`}
+              </span>
+            </header>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+              {t.live.length > 0 && (
+                <div className="sg-cards">
+                  {t.live.map((x) => <GuideCard key={x.slug} guide={bySlug.get(x.slug)!} topic={x} />)}
+                </div>
+              )}
+              {t.live.length === 0 && t.liveCount === 0 && (
+                <div className="sg-empty">
+                  <p style={{ margin: 0, fontSize: '1rem', color: 'var(--text-primary)' }}>The first guides in this track are being written.</p>
+                </div>
+              )}
+              {t.upcoming.length > 0 && (
+                <div>
+                  <span className="sg-cap" style={{ padding: 0 }}>Coming next in this track</span>
+                  <ul className="sg-next">
+                    {t.upcoming.map((x) => <li key={x.slug}>{x.label}</li>)}
+                  </ul>
+                </div>
+              )}
+            </div>
+          </div>
+        </section>
+      ))}
+
+      {/* ── Guides not yet placed in a track ── */}
+      {extras.length > 0 && (
+        <section>
+          <div className="sg-wrap sg-track">
+            <header className="sg-track-head">
+              <span className="sg-kick">More</span>
+              <h2 className="sg-h2">More guides</h2>
+            </header>
+            <div className="sg-cards">
+              {extras.map((g) => <GuideCard key={g._id} guide={g} />)}
             </div>
           </div>
         </section>
       )}
 
-      {/* ── CTA ── */}
-      <section style={{
-        borderTop: '0.5px solid var(--ink-border)',
-        background: 'var(--ink-mid)',
-        padding: '40px 0',
-      }}>
-        <div className="container" style={{ textAlign: 'center' }}>
-          <p style={{
-            fontFamily: 'var(--font-display)',
-            fontSize: 'clamp(1.125rem, 1.5vw, 1.5rem)',
-            color: 'var(--text-primary)',
-            marginBottom: '10px',
-          }}>
-            Don&apos;t see a topic you need?
-          </p>
-          <p style={{ fontSize: '0.9375rem', color: 'var(--text-secondary)', marginBottom: '20px' }}>
-            We&apos;re building the complete economics curriculum — one rigorous, accessible explainer at a time.
-          </p>
-          <Link href="/articles" style={{
-            display: 'inline-block',
-            fontFamily: 'var(--font-mono)',
-            fontSize: '0.5625rem',
-            letterSpacing: '0.12em',
-            textTransform: 'uppercase',
-            color: 'var(--ink)',
-            background: 'var(--gold)',
-            padding: '10px 20px',
-            textDecoration: 'none',
-            border: '1px solid var(--gold)',
-            transition: 'all 0.15s',
-          }}>
-            Browse All Articles →
-          </Link>
+      {/* ── Follow ── */}
+      <section style={{ padding: '24px 0 96px' }}>
+        <div className="sg-wrap">
+          <div className="sg-follow">
+            <div style={{ maxWidth: '560px' }}>
+              <h2 className="sg-h2" style={{ fontSize: '2rem', marginBottom: '10px' }}>Get the next guide when it lands</h2>
+              <p className="sg-dek" style={{ fontSize: '0.9375rem' }}>One new question answered at a time, shared on the channel you already use.</p>
+            </div>
+            <FollowLinks placement="study_page" variant="compact" />
+          </div>
         </div>
       </section>
     </>
