@@ -4,7 +4,7 @@ import { notFound } from 'next/navigation'
 import { getArticleBySlug, getAllArticleSlugs, urlFor } from '@/lib/sanity'
 import CiteThisArticle from '@/components/article/CiteThisArticle'
 import { renderContentNode, isParagraphNode, groupListItems } from '@/components/article/ContentBlocks'
-import NewsletterInline from '@/components/article/NewsletterInline'
+import FollowInline from '@/components/article/FollowInline'
 
 export const revalidate = 900
 
@@ -486,7 +486,7 @@ export default async function ArticlePage({
                   </div>
 
                   {layer.id === '1' ? (
-                    <RenderBlocksWithInsert blocks={blocks} insert={<NewsletterInline />} />
+                    <RenderBlocksWithInsert blocks={blocks} insert={<FollowInline />} />
                   ) : (
                     <RenderBlocks blocks={blocks} />
                   )}

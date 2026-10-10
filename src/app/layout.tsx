@@ -1,6 +1,6 @@
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
-import { ClerkProvider, SignedIn, SignedOut } from '@clerk/nextjs'
+import { ClerkProvider } from '@clerk/nextjs'
 import './globals.css'
 import Script from 'next/script'
 import FollowLinks from '@/components/FollowLinks'
@@ -14,11 +14,11 @@ const inter = Inter({
 
 export const metadata: Metadata = {
   title: {
-    default: 'EconoLens — World Economics Intelligence',
+    default: 'EconoLens — Economics, Explained with Data',
     template: '%s | EconoLens',
   },
   description:
-    'Economics news, research, and macro indicators grounded in official sources — RBI, IMF, World Bank, Fed, and top research institutions.',
+    'Economist-explained economics built on data: study guides with worked examples, research papers in plain language, and live macro indicators from official sources.',
   metadataBase: new URL('https://www.econolens.co.in'),
   openGraph: {
     siteName: 'EconoLens',
@@ -63,11 +63,13 @@ const ORGANIZATION_JSON_LD = {
   },
 }
 
+// Order follows the core positioning (KP, 2026-10-10): Study + Research are the core,
+// Indicators is the data engine, News is the entry point.
 const NAV_LINKS = [
-  { href: '/articles', label: 'News' },
-  { href: '/indicators', label: 'Indicators' },
   { href: '/study', label: 'Study' },
   { href: '/papers', label: 'Research' },
+  { href: '/indicators', label: 'Indicators' },
+  { href: '/articles', label: 'News' },
   { href: '/about', label: 'About' },
 ]
 
@@ -93,13 +95,8 @@ function Navbar() {
           ))}
         </ul>
         <div className="nav-actions">
-          <SignedOut>
-            <a href="/sign-in" className="nav-signin">Sign in</a>
-            <a href="/sign-up" className="btn-subscribe">Sign up</a>
-          </SignedOut>
-          <SignedIn>
-            <a href="/dashboard" className="nav-signin">Dashboard</a>
-          </SignedIn>
+          {/* No accounts or subscription plan (KP, 2026-10-10): the one action is to follow. */}
+          <a href="/connect" className="btn-subscribe">Follow</a>
         </div>
       </div>
     </nav>
@@ -139,10 +136,10 @@ function Footer() {
           </div>
           <div>
             <p style={{ fontFamily: 'var(--font-mono)', fontSize: '0.5625rem', letterSpacing: '0.12em', textTransform: 'uppercase', color: 'var(--text-tertiary)', marginBottom: '14px' }}>Platform</p>
-            <a href="/articles" className="footer-link">News</a>
-            <a href="/indicators" className="footer-link">Indicators</a>
             <a href="/study" className="footer-link">Study</a>
             <a href="/papers" className="footer-link">Research</a>
+            <a href="/indicators" className="footer-link">Indicators</a>
+            <a href="/articles" className="footer-link">News</a>
           </div>
           <div>
             <p style={{ fontFamily: 'var(--font-mono)', fontSize: '0.5625rem', letterSpacing: '0.12em', textTransform: 'uppercase', color: 'var(--text-tertiary)', marginBottom: '14px' }}>Company</p>
@@ -201,6 +198,22 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           />
         </head>
         <body style={{ background: 'var(--ink)', color: 'var(--text-primary)' }}>
+          {/* Splash (KP spec 2026-09-12): logo for 2s on the first page of a visit, then
+              the page. Pure CSS, decided before first paint by the inline script below,
+              so the content underneath is already rendered and crawlers/no-JS readers
+              never see it. Skipped for reduced-motion users (see globals.css). */}
+          <script dangerouslySetInnerHTML={{ __html: "try{if(!sessionStorage.getItem('el_splash')){document.documentElement.classList.add('show-splash');sessionStorage.setItem('el_splash','1')}}catch(e){}" }} />
+          <div className="splash" aria-hidden="true">
+            <svg width="72" height="72" viewBox="0 0 40 40" fill="none" focusable="false">
+              <polyline points="4,26 14,18 22,24 36,8" stroke="#C4902A" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" fill="none" />
+              <circle cx="4" cy="26" r="3" fill="none" stroke="#C4902A" strokeWidth="2.4" />
+              <circle cx="14" cy="18" r="3" fill="none" stroke="#C4902A" strokeWidth="2.4" />
+              <circle cx="22" cy="24" r="3" fill="none" stroke="#C4902A" strokeWidth="2.4" />
+              <circle cx="36" cy="8" r="3" fill="none" stroke="#C4902A" strokeWidth="2.4" />
+            </svg>
+            <span className="splash-word">Econo<span>Lens</span></span>
+            <span className="splash-tag">Economics, explained with data</span>
+          </div>
           <Navbar />
           <DatelineBar />
           <main>{children}</main>

@@ -5,11 +5,17 @@ import { getIndicators, INDICATOR_COUNT, INDICATOR_REGION_LABEL } from '@/lib/in
 
 export const revalidate = 900
 
+const PATHS = [
+  { href: '/study', kicker: 'Learn', title: 'Study economics', desc: 'Core concepts with worked examples, formulas and tables — GDP to regression.' },
+  { href: '/papers', kicker: 'Understand research', title: 'Research, explained', desc: 'New economics papers in plain language: what was asked, how, and what it found.' },
+  { href: '/indicators', kicker: 'See the data', title: 'Live indicators', desc: 'Policy rates, inflation and growth from official sources, updated as they are released.' },
+]
+
 const SERVICES = [
-  { num: '01', title: 'Economics News',   desc: 'Economics news from RBI, IMF, World Bank, NBER, Fed, and ECB. Global developments analysed at every level of depth.', href: '/articles',  tag: 'LIVE' },
-  { num: '02', title: 'Macro Indicators', desc: `${INDICATOR_COUNT} live economic indicators across ${INDICATOR_REGION_LABEL}. GDP, inflation, monetary policy, trade balances — all in one dashboard.`, href: '/indicators', tag: 'LIVE' },
-  { num: '03', title: 'Study Economics',  desc: 'Rigorous explanations of every major economics and econometrics concept — written for curious minds. From GDP to GARCH.', href: '/study',      tag: 'FREE' },
-  { num: '04', title: 'Academic Papers',  desc: 'NBER and SSRN research translated into plain English. No PhD required to understand cutting-edge economics.', href: '/articles',  tag: 'COMING SOON' },
+  { num: '01', title: 'Study Economics',  desc: 'Rigorous explanations of every major economics and econometrics concept — written for curious minds. From GDP to GARCH.', href: '/study',      tag: 'FREE' },
+  { num: '02', title: 'Research, Explained', desc: 'Economics research papers translated into plain language — the question, the method, the finding, and why it matters.', href: '/papers', tag: 'FREE' },
+  { num: '03', title: 'Macro Indicators', desc: `${INDICATOR_COUNT} live economic indicators across ${INDICATOR_REGION_LABEL}. GDP, inflation, monetary policy, trade balances — all in one dashboard.`, href: '/indicators', tag: 'LIVE' },
+  { num: '04', title: 'Economic Analysis', desc: 'Economist-reviewed analysis of central bank decisions and data releases, linked back to the concepts and data behind them.', href: '/articles',  tag: 'LIVE' },
 ]
 
 function getSummary(s: any): string {
@@ -74,22 +80,30 @@ export default async function HomePage() {
 
   return (
     <>
-      {/* ── Masthead strip ── */}
-      <section style={{ background: 'linear-gradient(180deg, #071320 0%, var(--ink) 100%)', borderBottom: '0.5px solid var(--ink-border)', padding: '40px 0 32px' }}>
+      {/* ── Hero: core positioning (KP, 2026-10-10) ── */}
+      <section style={{ background: 'linear-gradient(180deg, #071320 0%, var(--ink) 100%)', borderBottom: '0.5px solid var(--ink-border)', padding: '48px 0 40px' }}>
         <div className="container">
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr auto', gap: '32px', alignItems: 'center' }}>
-            <div>
-              <h1 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(1.75rem, 3vw, 2.75rem)', fontWeight: 600, lineHeight: 1.1, letterSpacing: '-0.02em', color: 'var(--text-primary)', marginBottom: '10px' }}>
-                The World Economy, <em style={{ fontStyle: 'italic', color: 'var(--gold)' }}>Made Clear.</em>
-              </h1>
-              <p style={{ fontSize: '0.9375rem', color: 'var(--text-secondary)', maxWidth: '560px', lineHeight: 1.6 }}>
-                Economics news, live macro indicators, and deep analysis — grounded in official sources from central banks, multilateral institutions, and top research bodies.
-              </p>
-            </div>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', alignItems: 'flex-end' }}>
-              <Link href="/articles" className="btn-primary">Read Today&apos;s Analysis →</Link>
-              <Link href="/indicators" className="btn-outline">Live Indicators</Link>
-            </div>
+          <p className="label-mono" style={{ marginBottom: '14px' }}>Economist-explained · Built on data</p>
+          <h1 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(2rem, 4vw, 3.25rem)', fontWeight: 600, lineHeight: 1.08, letterSpacing: '-0.02em', color: 'var(--text-primary)', marginBottom: '14px', maxWidth: '880px' }}>
+            Economics, explained with data — <em style={{ fontStyle: 'italic', color: 'var(--gold)' }}>from the headline to the regression.</em>
+          </h1>
+          <p style={{ fontSize: '1rem', color: 'var(--text-secondary)', maxWidth: '640px', lineHeight: 1.65, marginBottom: '28px' }}>
+            Learn the concepts with worked examples, see what new research actually found, and check every claim against live data from central banks and official statistics.
+          </p>
+
+          <div className="paths-grid" style={{ marginBottom: '28px' }}>
+            {PATHS.map((p) => (
+              <Link key={p.href} href={p.href} className="article-card" style={{ background: 'var(--ink-mid)', padding: '22px 24px', textDecoration: 'none', display: 'block' }}>
+                <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.5625rem', letterSpacing: '0.14em', textTransform: 'uppercase', color: 'var(--gold)' }}>{p.kicker}</span>
+                <h2 style={{ fontFamily: 'var(--font-display)', fontSize: '1.5rem', fontWeight: 500, color: 'var(--text-primary)', margin: '8px 0 6px', lineHeight: 1.2 }}>{p.title} →</h2>
+                <p style={{ fontSize: '0.875rem', color: 'var(--text-secondary)', lineHeight: 1.55 }}>{p.desc}</p>
+              </Link>
+            ))}
+          </div>
+
+          <div style={{ display: 'flex', alignItems: 'center', gap: '14px', flexWrap: 'wrap' }}>
+            <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.5625rem', letterSpacing: '0.12em', textTransform: 'uppercase', color: 'var(--text-tertiary)' }}>Follow along</span>
+            <FollowLinks placement="homepage_hero" variant="compact" />
           </div>
         </div>
       </section>
