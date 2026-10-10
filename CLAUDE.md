@@ -59,6 +59,24 @@ as something to check status against anymore.
 | Make.com | Automated news pipeline (FLOW-01 through FLOW-05, later in this file) | ⚠️ Was built, then **explicitly abandoned as a strategy** — not running, kept below for historical/reference value only |
 | 1Password | Named as the key-storage system throughout | ❌ Not actually set up — 4 real secrets were caught sitting in plaintext in Notion 2026-07-12 |
 
+### Core positioning (KP decision, 2026-10-10) — read before any homepage, nav, or content work
+
+**EconoLens's core strength is economist-explained economics, built on data: from the headline to the regression.**
+It is not fast news. The four sections have fixed roles:
+
+| Section | Role | Meaning |
+|---|---|---|
+| **Study** | **Core** | Evergreen teaching content with worked examples, formulas and tables. Main search and subscription driver. |
+| **Research** | **Core** | Research papers explained in plain language. Draws on the founder's econometrics depth, which is hard to copy. |
+| **Indicators** | **Engine** | Live data. Every chart in Study, Research and News pulls from here. Shows the analysis rests on real data. |
+| **News** | **Entry point** | 2–3 analysis pieces a week, not volume. Every piece links the reader into Study and/or Research. |
+
+Consequences: the nav order becomes Study → Research → Indicators → News. The homepage leads with three paths
+(Learn / Understand research / See the data), not a latest-news feed. Every article carries a chart, an EconoLens
+Analysis block, and internal links to Study/Research. Global framing still applies: India is one example among many.
+Why: the AdSense "low value content" flag hit templated news volume, while the founder's PhD/econometrics credential
+and subscription revenue both sit in Study + Research.
+
 ### What's actually blocking revenue
 
 GST application submitted 2026-07-13, **not yet approved**. LUT filing → IEC code → HDFC business
@@ -1316,9 +1334,17 @@ document. This is Claude's read of the standards, not a lawyer's — if this con
 as a real revenue-driving section (AdSense, Pro subscriptions), a short paid IP-lawyer consult is
 worth getting rather than relying on this note indefinitely.
 
+### Session 14 — October 10, 2026 — Core Positioning Locked + Restructuring Started
+
+- **Decision (KP):** the core is Study + Research, Indicators is the data engine, and News is the entry point.
+  See "Core positioning" in the Reality Check section.
+- Website restructuring started. PR #24 is the semantic-HTML batch: it removes nested `<main>` on 11 pages and adds
+  `<article>`, `<time>` and `<nav>` on `/news/[slug]` and `/indicators`.
+- Open: GitHub reports 125 Dependabot vulnerabilities on main (5 critical). These need their own PR.
+
 ---
 
-*ECONOLENS CLOUD HQ — CLAUDE.md v2.7*
+*ECONOLENS CLOUD HQ — CLAUDE.md v2.8*
 *Next update trigger: new tool adoption, pricing change, schema change, phase transition*
 *File location: /econolens/CLAUDE.md (root of project)*
 *This file must be committed and pushed to GitHub in the same session it's edited — a local-only
