@@ -38,6 +38,17 @@ export default function CookieConsent() {
     try {
       const existing = window.localStorage.getItem(STORAGE_KEY)
       if (!existing) setVisible(true)
+      // Fix (2026-10-10): the saved choice was only applied on the click itself.
+      // Every later page load started from the 'denied' default again, so even
+      // visitors who accepted were sent to GA4 as unconsented. Re-apply it here.
+      if (existing === 'granted' && typeof window.gtag === 'function') {
+        window.gtag('consent', 'update', {
+          analytics_storage: 'granted',
+          ad_storage: 'granted',
+          ad_user_data: 'granted',
+          ad_personalization: 'granted',
+        })
+      }
     } catch {
       // localStorage unavailable (e.g. blocked) — don't block rendering on it
       setVisible(true)
