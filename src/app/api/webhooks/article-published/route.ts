@@ -78,13 +78,23 @@ export async function POST(req: Request) {
       title,
       "slug": slug.current,
       qaStatus,
-      coverImage
+      coverImage,
+      publishedAt
     }`,
     { id: documentId },
   )
 
   if (!article || article.qaStatus !== 'passed') {
     return NextResponse.json({ ok: true, skipped: 'article not QA-passed yet', operation })
+  }
+
+  // Guard (2026-10-10): only share genuinely new articles. Re-publishing an old
+  // article (e.g. to update its SEO title or fix a typo) fires this webhook too,
+  // and would otherwise re-post months-old pieces to social channels.
+  const MAX_AGE_MS = 48 * 60 * 60 * 1000
+  const publishedMs = article.publishedAt ? Date.parse(article.publishedAt) : NaN
+  if (!Number.isFinite(publishedMs) || Date.now() - publishedMs > MAX_AGE_MS) {
+    return NextResponse.json({ ok: true, skipped: 'not a new article (published over 48h ago)', operation })
   }
 
   const articleUrl = `https://www.econolens.co.in/news/${article.slug}`
