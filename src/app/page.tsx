@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import FollowLinks from '@/components/FollowLinks'
 import { getLatestArticles } from '@/lib/sanity'
 import { getIndicators, INDICATOR_COUNT, INDICATOR_REGION_LABEL } from '@/lib/indicators'
 
@@ -217,15 +218,15 @@ export default async function HomePage() {
       {/* ── CTA Strip ── */}
       <section style={{ padding: '48px 0', background: '#071320', borderTop: '0.5px solid var(--ink-border)', borderBottom: '0.5px solid var(--ink-border)' }}>
         <div className="container" style={{ textAlign: 'center' }}>
-          <p className="label-mono" style={{ marginBottom: '16px' }}>Start for free today</p>
+          <p className="label-mono" style={{ marginBottom: '16px' }}>Stay connected</p>
           <h2 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(1.75rem, 3vw, 2.5rem)', fontWeight: 600, color: 'var(--text-primary)', marginBottom: '12px', lineHeight: 1.15 }}>
             Economics made clear. The world made legible.
           </h2>
           <p style={{ color: 'var(--text-secondary)', fontSize: '0.9375rem', maxWidth: '480px', margin: '0 auto 28px', lineHeight: 1.6 }}>
-            Join economists, students, and investors who read EconoLens to understand the global economy.
+            Join economists, students, and investors who follow EconoLens to understand the global economy.
           </p>
-          <div style={{ display: 'flex', gap: '12px', justifyContent: 'center', flexWrap: 'wrap' }}>
-            <Link href="/sign-up" className="btn-primary">Get started — it&apos;s free</Link>
+          <div style={{ maxWidth: '760px', margin: '0 auto', textAlign: 'left' }}>
+            <FollowLinks placement="homepage" />
           </div>
         </div>
       </section>

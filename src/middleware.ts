@@ -26,6 +26,7 @@ const isPublicRoute = createRouteMatcher([
   '/llms.txt',
   '/contact(.*)',
   '/editorial-policy(.*)',
+  '/connect(.*)',
   ]);
 
 export default clerkMiddleware(async (auth, request) => {

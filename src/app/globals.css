@@ -254,3 +254,8 @@ body {
   .container { padding: 0 16px; }
   .dateline-bar { display: none; }
 }
+
+/* Connect page: the QR code is for desktop readers only — a phone cannot scan its own screen. */
+@media (max-width: 768px), (pointer: coarse) {
+  .connect-qr { display: none !important; }
+}

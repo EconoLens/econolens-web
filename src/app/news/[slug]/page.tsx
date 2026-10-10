@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import FollowLinks from '@/components/FollowLinks'
 import { notFound } from 'next/navigation'
 import { getArticleBySlug, getAllArticleSlugs, urlFor } from '@/lib/sanity'
 import CiteThisArticle from '@/components/article/CiteThisArticle'
@@ -696,6 +697,19 @@ export default async function ArticlePage({
       </section>
 
       </article>
+
+      {/* ── Follow CTA: turns a finished read into a follower (no subscription plan) ── */}
+      <section aria-label="Follow EconoLens" style={{ borderTop: '0.5px solid var(--ink-border)', padding: '32px 0' }}>
+        <div className="container-narrow">
+          <div style={{ maxWidth: '720px', margin: '0 auto' }}>
+            <p className="label-mono" style={{ marginBottom: '8px' }}>Get the next analysis first</p>
+            <p style={{ color: 'var(--text-secondary)', fontSize: '0.9375rem', lineHeight: 1.6, marginBottom: '16px' }}>
+              Follow EconoLens wherever you read. New pieces are shared the moment they are published.
+            </p>
+            <FollowLinks placement="article_end" />
+          </div>
+        </div>
+      </section>
 
       {/* ── Back nav ── */}
       <div style={{ borderTop: '0.5px solid var(--ink-border)', padding: '20px 0' }}>
