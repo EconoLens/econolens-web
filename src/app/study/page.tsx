@@ -3,14 +3,14 @@ import type { Metadata } from 'next'
 
 import FollowLinks from '@/components/FollowLinks'
 import { getStudyGuides } from '@/lib/sanity'
-import { TRACKS, START_HERE_ORDER, readingMinutes, type Cover, type Topic } from '@/lib/study'
+import { TRACKS, GROUPS, START_HERE_ORDER, readingMinutes, type Cover, type Topic } from '@/lib/study'
 
 export const revalidate = 900
 
 export const metadata: Metadata = {
-  title: 'Study Economics — Every Big Idea, One Question at a Time',
+  title: 'Study Economics — From First Principles to the Frontier',
   description:
-    'Economics study guides that start with the question you actually have. Plain-language explanations, the formula, and worked examples with real data — from GDP to regression.',
+    'Ten tracks of economics study guides: micro, macro, mathematical economics, econometrics, advanced theory, and the applied fields of international, health, agricultural and environmental economics. Built on real data.',
   alternates: { canonical: 'https://www.econolens.co.in/study' },
 }
 
@@ -97,17 +97,17 @@ export default async function StudyPage() {
       {/* ── Header ── */}
       <section className="sg-header">
         <div className="sg-wrap">
-          <p className="sg-kick sg-kick--wide">Study · The EconoLens library</p>
+          <p className="sg-kick sg-kick--wide">Study · Economics for a changing world</p>
           <h1 className="sg-h1">
-            Every big idea in economics, <em>answered one question at a time.</em>
+            Learn the economics of a new age — <em>from first principles to the frontier.</em>
           </h1>
           <p className="sg-lede">
-            Pick a question you have always wondered about. Each guide explains it in plain words first, then shows the formula and a worked example with real data.
+            Ten tracks, from the foundations of micro, macro and mathematical economics to the fields shaping this century: health, food and agriculture, and the environment. Every guide moves from intuition to the formal model to a worked example on real data.
           </p>
           <nav aria-label="Jump to a track" className="sg-jump">
             {tracks.map((t) => (
               <a key={t.id} href={`#${t.id}`} className={t.liveCount ? '' : 'is-soon'}>
-                {t.title} · {t.liveCount || 'soon'}
+                {t.title}{t.liveCount ? ` · ${t.liveCount}` : ''}
               </a>
             ))}
           </nav>
@@ -136,17 +136,23 @@ export default async function StudyPage() {
           ) : (
             <div className="sg-empty">
               <p style={{ margin: 0, fontSize: '1.0625rem', color: 'var(--text-primary)' }}>
-                We are rewriting every Study guide to a new, fuller format. The first ones are coming soon.
+                The library is being rebuilt guide by guide in a fuller, data-rich format. New guides are released track by track.
               </p>
-              <p style={{ margin: 0, fontSize: '0.875rem', color: 'var(--text-secondary)' }}>Follow us to get each guide the day it is published.</p>
+              <p style={{ margin: 0, fontSize: '0.875rem', color: 'var(--text-secondary)' }}>Follow EconoLens to read each guide the day it is released.</p>
               <FollowLinks placement="study_empty" variant="compact" />
             </div>
           )}
         </div>
       </section>
 
-      {/* ── Tracks ── */}
-      {tracks.map((t) => (
+      {/* ── Tracks, in three groups ── */}
+      {GROUPS.map((g) => (
+        <div key={g.id}>
+          <div className="sg-wrap sg-group">
+            <span className="sg-kick">{g.title}</span>
+            <p className="sg-group-blurb">{g.blurb}</p>
+          </div>
+      {tracks.filter((t) => t.group === g.id).map((t) => (
         <section key={t.id} id={t.id} style={{ scrollMarginTop: '80px' }}>
           <div className="sg-wrap sg-track">
             <header className="sg-track-head">
@@ -154,7 +160,7 @@ export default async function StudyPage() {
               <h2 className="sg-h2">{t.title}</h2>
               <p className="sg-dek" style={{ fontSize: '0.9375rem' }}>{t.blurb}</p>
               <span className="sg-count">
-                {t.liveCount === 0 ? 'First guides in progress' : `${t.liveCount} guide${t.liveCount > 1 ? 's' : ''}${t.upcoming.length ? ' · more on the way' : ''}`}
+                {t.liveCount === 0 ? `${t.topics.length} topics · first guides in progress` : `${t.liveCount} of ${t.topics.length} guides live`}
               </span>
             </header>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
@@ -163,14 +169,9 @@ export default async function StudyPage() {
                   {t.live.map((x) => <GuideCard key={x.slug} guide={bySlug.get(x.slug)!} topic={x} />)}
                 </div>
               )}
-              {t.live.length === 0 && t.liveCount === 0 && (
-                <div className="sg-empty">
-                  <p style={{ margin: 0, fontSize: '1rem', color: 'var(--text-primary)' }}>The first guides in this track are being written.</p>
-                </div>
-              )}
               {t.upcoming.length > 0 && (
                 <div>
-                  <span className="sg-cap" style={{ padding: 0 }}>Coming next in this track</span>
+                  <span className="sg-cap" style={{ padding: 0 }}>{t.liveCount ? 'Coming next in this track' : 'What this track covers'}</span>
                   <ul className="sg-next">
                     {t.upcoming.map((x) => <li key={x.slug}>{x.label}</li>)}
                   </ul>
@@ -179,6 +180,8 @@ export default async function StudyPage() {
             </div>
           </div>
         </section>
+      ))}
+        </div>
       ))}
 
       {/* ── Guides not yet placed in a track ── */}
@@ -201,8 +204,8 @@ export default async function StudyPage() {
         <div className="sg-wrap">
           <div className="sg-follow">
             <div style={{ maxWidth: '560px' }}>
-              <h2 className="sg-h2" style={{ fontSize: '2rem', marginBottom: '10px' }}>Get the next guide when it lands</h2>
-              <p className="sg-dek" style={{ fontSize: '0.9375rem' }}>One new question answered at a time, shared on the channel you already use.</p>
+              <h2 className="sg-h2" style={{ fontSize: '2rem', marginBottom: '10px' }}>Be the first to read each new guide</h2>
+              <p className="sg-dek" style={{ fontSize: '0.9375rem' }}>Every guide is shared on our channels the day it is released.</p>
             </div>
             <FollowLinks placement="study_page" variant="compact" />
           </div>

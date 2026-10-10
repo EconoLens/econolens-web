@@ -329,3 +329,6 @@ html.show-splash .splash {
   .sg-follow { padding: 24px; }
 }
 @media (prefers-reduced-motion: reduce) { .sg-card, .sg-card:hover { transition: none; transform: none; } }
+.sg-group { padding-top: 56px; padding-bottom: 8px; display: flex; align-items: baseline; gap: 16px; flex-wrap: wrap; }
+.sg-group .sg-kick { font-size: 0.875rem; letter-spacing: 0.2em; }
+.sg-group-blurb { margin: 0; font-size: 0.9375rem; color: var(--text-secondary); }
