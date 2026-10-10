@@ -2,7 +2,7 @@ import type { Metadata } from 'next'
 import FollowLinks from '@/components/FollowLinks'
 
 export const metadata: Metadata = {
-  title: 'Stay Connected | EconoLens',
+  title: 'Stay Connected',
   description:
     'Follow EconoLens on WhatsApp, LinkedIn and Instagram for economist-explained analysis of the global economy, built on data.',
   alternates: { canonical: 'https://www.econolens.co.in/connect' },
