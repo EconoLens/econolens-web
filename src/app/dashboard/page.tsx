@@ -8,15 +8,15 @@ export default function DashboardPage() {
 
   if (!isLoaded) {
     return (
-      <main className="mx-auto max-w-5xl px-6 py-20">
+      <div className="mx-auto max-w-5xl px-6 py-20">
         <p className="text-sm text-neutral-500">Loading…</p>
-      </main>
+      </div>
     );
   }
 
   if (!isSignedIn) {
     return (
-      <main className="mx-auto max-w-3xl px-6 py-20">
+      <div className="mx-auto max-w-3xl px-6 py-20">
         <h1 className="text-3xl font-semibold tracking-tight text-neutral-900">
           Sign in to view your dashboard
         </h1>
@@ -37,7 +37,7 @@ export default function DashboardPage() {
             Create account
           </Link>
         </div>
-      </main>
+      </div>
     );
   }
 
@@ -49,7 +49,7 @@ export default function DashboardPage() {
     user.firstName || user.username || user.emailAddresses[0]?.emailAddress || "there";
 
   return (
-    <main className="mx-auto max-w-5xl px-6 py-16">
+    <div className="mx-auto max-w-5xl px-6 py-16">
       <header className="border-b border-neutral-200 pb-8">
         <p className="text-xs font-medium uppercase tracking-wider text-neutral-500">
           Dashboard
@@ -109,6 +109,6 @@ export default function DashboardPage() {
           </Link>
         </div>
       </section>
-    </main>
+    </div>
   );
 }

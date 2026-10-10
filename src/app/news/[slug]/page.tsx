@@ -273,7 +273,7 @@ export default async function ArticlePage({
       )}
 
       {/* ── Breadcrumb ── */}
-      <div style={{ background: 'var(--ink)', borderBottom: '0.5px solid var(--ink-border)', padding: '10px 0' }}>
+      <nav aria-label="Breadcrumb" style={{ background: 'var(--ink)', borderBottom: '0.5px solid var(--ink-border)', padding: '10px 0' }}>
         <div className="container" style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
           <Link href="/articles" style={{ fontFamily: 'var(--font-mono)', fontSize: '0.5625rem', letterSpacing: '0.1em', textTransform: 'uppercase', color: 'var(--text-tertiary)', textDecoration: 'none' }}>
             ← Articles
@@ -283,8 +283,12 @@ export default async function ArticlePage({
             {categoryTitle}
           </span>
         </div>
-      </div>
+      </nav>
 
+      {/* Semantic wrapper (2026-10-10): every real article renders through this
+          template, so the <article> element belongs here — header, body layers,
+          context, sources and related blocks all sit inside it. */}
+      <article>
       {/* ── Article header ── */}
       <header style={{
         background: 'linear-gradient(180deg, #071320 0%, var(--ink) 100%)',
@@ -379,7 +383,7 @@ export default async function ArticlePage({
 
             {/* Date */}
             <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.5625rem', letterSpacing: '0.06em', color: 'var(--text-tertiary)' }}>
-              {formattedDate}
+              {article.publishedAt ? <time dateTime={article.publishedAt}>{formattedDate}</time> : formattedDate}
             </span>
 
             {/* AI label */}
@@ -438,7 +442,7 @@ export default async function ArticlePage({
              section, divided by a small heading, so the reader moves
              from plain-English overview down into deeper analysis and
              full technical detail without leaving the page. ── */}
-      <main style={{ padding: '40px 0 80px' }}>
+      <div style={{ padding: '40px 0 80px' }}>
         <div className="container-narrow">
           <div style={{
             maxWidth: '720px',
@@ -490,7 +494,7 @@ export default async function ArticlePage({
             })}
           </div>
         </div>
-      </main>
+      </div>
 
       {/* ── India / Global Context ── */}
       {article.indiaContext && (
@@ -690,6 +694,8 @@ export default async function ArticlePage({
           </div>
         </div>
       </section>
+
+      </article>
 
       {/* ── Back nav ── */}
       <div style={{ borderTop: '0.5px solid var(--ink-border)', padding: '20px 0' }}>
