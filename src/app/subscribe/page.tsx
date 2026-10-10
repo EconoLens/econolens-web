@@ -41,7 +41,7 @@ export default function SubscribePage() {
 
   // eslint-disable-next-line no-unreachable
   return (
-    <main className="min-h-screen">
+    <div className="min-h-screen">
       <section className="border-b border-neutral-200 bg-gradient-to-b from-neutral-50 to-white">
         <div className="mx-auto max-w-4xl px-6 py-20 text-center">
           <p className="text-xs font-medium uppercase tracking-wider text-neutral-500">
@@ -104,6 +104,6 @@ export default function SubscribePage() {
           from your dashboard.
         </p>
       </section>
-    </main>
+    </div>
   );
 }

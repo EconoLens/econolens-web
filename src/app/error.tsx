@@ -14,7 +14,7 @@ export default function Error({
   }, [error]);
 
   return (
-    <main className="min-h-screen flex flex-col items-center justify-center bg-gray-50 px-4">
+    <div className="min-h-screen flex flex-col items-center justify-center bg-gray-50 px-4">
       <div className="text-center max-w-md">
         <h1 className="text-4xl font-bold text-red-600 mb-4">Something went wrong</h1>
         <p className="text-gray-500 mb-8">
@@ -27,6 +27,6 @@ export default function Error({
           Try again
         </button>
       </div>
-    </main>
+    </div>
   );
 }
