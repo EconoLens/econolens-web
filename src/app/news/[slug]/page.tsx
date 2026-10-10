@@ -38,7 +38,10 @@ export async function generateMetadata({ params }: { params: { slug: string } })
       ogImage = undefined
     }
     return {
-      title: article.title,
+      // The search-result title. Fixed 2026-10-10: the schema's 60-char metaTitle
+      // was never read, so Google always got the long headline (often truncated).
+      // The on-page <h1> and social cards keep the full headline.
+      title: article.metaTitle || article.title,
       description,
       alternates: {
         // Fixed 2026-08-19: canonicalUrl was computed above but never wired
