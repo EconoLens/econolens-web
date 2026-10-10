@@ -72,8 +72,17 @@ function GuideCard({ guide, topic }: { guide: Guide; topic?: Topic }) {
 export default async function StudyPage() {
   let guides: Guide[] = []
   try {
-    guides = (await getStudyGuides()) || []
-  } catch {
+    const rows: any[] = (await getStudyGuides()) || []
+    guides = rows.map((r) => ({
+      ...r,
+      words: [...(r.t1 || []), ...(r.t2 || []), ...(r.t3 || [])]
+        .filter((t: unknown) => typeof t === 'string')
+        .join(' ')
+        .split(/\s+/)
+        .filter(Boolean).length,
+    }))
+  } catch (err) {
+    console.error('[study] getStudyGuides failed', err)
     guides = []
   }
   const bySlug = new Map(guides.map((g) => [g.slug, g]))
