@@ -4,7 +4,7 @@ import { notFound } from 'next/navigation'
 import { getArticleBySlug, getAllArticleSlugs, urlFor } from '@/lib/sanity'
 import CiteThisArticle from '@/components/article/CiteThisArticle'
 import { renderContentNode, isParagraphNode, groupListItems } from '@/components/article/ContentBlocks'
-import NewsletterInline from '@/components/article/NewsletterInline'
+import FollowInline from '@/components/article/FollowInline'
 
 export const revalidate = 900
 
@@ -38,7 +38,10 @@ export async function generateMetadata({ params }: { params: { slug: string } })
       ogImage = undefined
     }
     return {
-      title: article.title,
+      // The search-result title. Fixed 2026-10-10: the schema's 60-char metaTitle
+      // was never read, so Google always got the long headline (often truncated).
+      // The on-page <h1> and social cards keep the full headline.
+      title: article.metaTitle || article.title,
       description,
       alternates: {
         // Fixed 2026-08-19: canonicalUrl was computed above but never wired
@@ -486,7 +489,7 @@ export default async function ArticlePage({
                   </div>
 
                   {layer.id === '1' ? (
-                    <RenderBlocksWithInsert blocks={blocks} insert={<NewsletterInline />} />
+                    <RenderBlocksWithInsert blocks={blocks} insert={<FollowInline />} />
                   ) : (
                     <RenderBlocks blocks={blocks} />
                   )}

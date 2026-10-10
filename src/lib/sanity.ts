@@ -50,6 +50,7 @@ const ARTICLE_PROJECTION = `{
   featured,
   focusKeyword,
   metaDescription,
+  metaTitle,
   "category": category->{ title, slug, icon, color },
   "author": author->{ name, slug, photo, credentials, badgeLevel },
   isAiGenerated,

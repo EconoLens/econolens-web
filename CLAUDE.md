@@ -1341,6 +1341,19 @@ worth getting rather than relying on this note indefinitely.
 - Website restructuring started. PR #24 is the semantic-HTML batch: it removes nested `<main>` on 11 pages and adds
   `<article>`, `<time>` and `<nav>` on `/news/[slug]` and `/indicators`.
 - Open: GitHub reports 125 Dependabot vulnerabilities on main (5 critical). These need their own PR.
+- **Decision (KP): no subscription plan and no accounts.** Visitors become WhatsApp/LinkedIn/Instagram followers instead.
+  `/connect` hub + QR shipped (PR #26). Nav Sign in/Sign up removed and `/pricing` → `/connect` (PR #29). Clerk is still
+  mounted for `/research` only. Email newsletter form removed from articles: it stored emails that were never sent anything.
+- Found live: **sitemaps had never been submitted to Search Console**. Submitted `sitemap.xml`, `news-sitemap.xml` and
+  `feed.xml`.
+- Search Console, last 3 months: 46.8k impressions, 124 clicks, 0.3% CTR at average position 8.1. Titles and descriptions
+  are the lever, so the 10 top-impression articles got `metaTitle`/`metaDescription` rewrites. The frontend never read
+  `metaTitle` until PR #29.
+- **GA4 showed 0 sessions over 28 days.** One cause was fixed: the saved cookie consent was not re-applied on later page
+  loads (PR #26). Realtime was still 0 after the fix. KP is to test on a phone to rule out a desktop ad-blocker.
+- Security: next 14.2.25 → 14.2.35 plus non-breaking audit fixes (PR #28). The remaining criticals need a Next 15/16
+  migration (and Sanity 3 → 6 for build tooling).
+- Article-published webhook now ignores articles older than 48h, so SEO re-publishes don't re-post to social.
 
 ---
 

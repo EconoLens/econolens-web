@@ -19,6 +19,17 @@ const nextConfig = {
         destination: 'https://www.econolens.co.in/:path*',
         permanent: true,
       },
+      // No accounts or subscription plan (KP decision 2026-10-10). The pages stay in
+      // the codebase, dormant; visitors are sent home. Temporary (307) so the
+      // decision can be reversed without search engines caching it forever.
+      { source: '/sign-in/:path*', destination: '/', permanent: false },
+      { source: '/sign-up/:path*', destination: '/', permanent: false },
+      { source: '/pricing', destination: '/connect', permanent: false },
+      { source: '/subscribe', destination: '/connect', permanent: false },
+      { source: '/dashboard', destination: '/', permanent: false },
+      // Legacy RSS-template article pages (generic filler text + sign-in paywall).
+      // Every real article lives at /news/[slug]; nothing links here any more.
+      { source: '/articles/:slug', destination: '/articles', permanent: true },
     ];
   },
   async headers() {
