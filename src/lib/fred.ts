@@ -28,7 +28,14 @@ interface FredObservationsResponse {
 
 export async function getFredObservations(
   seriesId: string | undefined,
-  opts: { start?: string; end?: string } = {}
+  opts: {
+    start?: string
+    end?: string
+    /** FRED `units` transformation, e.g. "pc1" = percent change from a year ago. */
+    units?: string
+    /** FRED `frequency` aggregation, e.g. "m" or "q" (averaged). */
+    frequency?: string
+  } = {}
 ): Promise<Observation[] | null> {
   const apiKey = process.env.FRED_API_KEY
   if (!apiKey || !seriesId) return null
@@ -40,6 +47,11 @@ export async function getFredObservations(
   })
   if (opts.start) params.set('observation_start', opts.start)
   if (opts.end) params.set('observation_end', opts.end)
+  if (opts.units) params.set('units', opts.units)
+  if (opts.frequency) {
+    params.set('frequency', opts.frequency)
+    params.set('aggregation_method', 'avg')
+  }
 
   try {
     const res = await fetch(`${FRED_OBSERVATIONS_URL}?${params.toString()}`, {
