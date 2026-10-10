@@ -1,4 +1,4 @@
-// Study curriculum: the four tracks and every planned topic, in teaching order.
+// Study curriculum: ten tracks in three groups, and every planned topic, in teaching order.
 // A topic shows as a full card only when a Sanity article with its `slug` is
 // live (category "study", qaStatus "passed"); otherwise it is listed under
 // "Coming next". Each card leads with the reader's question, not the article
@@ -19,8 +19,17 @@ export interface Topic {
   learn?: string[]
 }
 
+export type TrackGroup = 'foundations' | 'advanced' | 'applied'
+
+export const GROUPS: { id: TrackGroup; title: string; blurb: string }[] = [
+  { id: 'foundations', title: 'Foundations', blurb: 'The core toolkit every economist builds on.' },
+  { id: 'advanced', title: 'Advanced theory', blurb: 'The graduate-level models behind modern research and policy.' },
+  { id: 'applied', title: 'Applied fields', blurb: 'Economics at work on the questions shaping this century.' },
+]
+
 export interface Track {
   id: string
+  group: TrackGroup
   number: string
   title: string
   blurb: string
@@ -29,8 +38,32 @@ export interface Track {
 
 export const TRACKS: Track[] = [
   {
-    id: 'macro',
+    id: 'micro',
+    group: 'foundations',
     number: '01',
+    title: 'Microeconomics',
+    blurb: 'How buyers, sellers and firms make choices — and how prices come out of those choices.',
+    topics: [
+      {
+        label: 'Supply, Demand & Markets',
+        slug: 'study-supply-demand-markets-explained',
+        level: 'Foundations',
+        question: 'Who really sets the price of things?',
+        cover: { kind: 'cross' },
+        caption: 'Where the two curves cross, the price settles',
+        learn: ['Equilibrium in one picture', 'Elasticity, and why taxes hit some goods harder'],
+      },
+      { label: 'Elasticity', slug: 'study-elasticity-explained', level: 'Foundations' },
+      { label: 'Market Structures', slug: 'study-market-structures-explained', level: 'Core' },
+      { label: 'Game Theory', slug: 'study-game-theory-explained', level: 'Core' },
+      { label: 'Information Economics', slug: 'study-information-economics-explained', level: 'Advanced' },
+      { label: 'Welfare Economics', slug: 'study-welfare-economics-explained', level: 'Advanced' },
+    ],
+  },
+  {
+    id: 'macro',
+    group: 'foundations',
+    number: '02',
     title: 'Macroeconomics',
     blurb: 'How whole economies grow, stall and recover — and what governments and central banks do about it.',
     topics: [
@@ -91,30 +124,24 @@ export const TRACKS: Track[] = [
     ],
   },
   {
-    id: 'micro',
-    number: '02',
-    title: 'Microeconomics',
-    blurb: 'How buyers, sellers and firms make choices — and how prices come out of those choices.',
+    id: 'mathematical',
+    group: 'foundations',
+    number: '03',
+    title: 'Mathematical Economics',
+    blurb: 'The mathematics that turns economic ideas into precise, testable models.',
     topics: [
-      {
-        label: 'Supply, Demand & Markets',
-        slug: 'study-supply-demand-markets-explained',
-        level: 'Foundations',
-        question: 'Who really sets the price of things?',
-        cover: { kind: 'cross' },
-        caption: 'Where the two curves cross, the price settles',
-        learn: ['Equilibrium in one picture', 'Elasticity, and why taxes hit some goods harder'],
-      },
-      { label: 'Elasticity', slug: 'study-elasticity-explained', level: 'Foundations' },
-      { label: 'Market Structures', slug: 'study-market-structures-explained', level: 'Core' },
-      { label: 'Game Theory', slug: 'study-game-theory-explained', level: 'Core' },
-      { label: 'Information Economics', slug: 'study-information-economics-explained', level: 'Advanced' },
-      { label: 'Welfare Economics', slug: 'study-welfare-economics-explained', level: 'Advanced' },
+      { label: 'Optimisation & Lagrange Multipliers', slug: 'study-optimisation-lagrange-explained', level: 'Methods' },
+      { label: 'Comparative Statics', slug: 'study-comparative-statics-explained', level: 'Methods' },
+      { label: 'Linear Algebra for Economists', slug: 'study-linear-algebra-economists-explained', level: 'Methods' },
+      { label: 'Difference & Differential Equations', slug: 'study-difference-differential-equations-explained', level: 'Advanced' },
+      { label: 'Dynamic Optimisation', slug: 'study-dynamic-optimisation-explained', level: 'Advanced' },
+      { label: 'Fixed Points & Existence of Equilibrium', slug: 'study-fixed-points-equilibrium-explained', level: 'Advanced' },
     ],
   },
   {
     id: 'econometrics',
-    number: '03',
+    group: 'foundations',
+    number: '04',
     title: 'Econometrics',
     blurb: 'The toolkit economists use to test ideas against real data.',
     topics: [
@@ -135,9 +162,40 @@ export const TRACKS: Track[] = [
     ],
   },
   {
+    id: 'advanced-micro',
+    group: 'advanced',
+    number: '05',
+    title: 'Advanced Microeconomics',
+    blurb: 'How rational choice, markets and incentives work once the simplifying assumptions are lifted.',
+    topics: [
+      { label: 'Consumer Theory & Duality', slug: 'study-consumer-theory-duality-explained', level: 'Advanced' },
+      { label: 'Producer Theory & Cost Functions', slug: 'study-producer-theory-explained', level: 'Advanced' },
+      { label: 'General Equilibrium & Welfare Theorems', slug: 'study-general-equilibrium-explained', level: 'Advanced' },
+      { label: 'Choice under Uncertainty', slug: 'study-choice-under-uncertainty-explained', level: 'Advanced' },
+      { label: 'Mechanism Design & Auctions', slug: 'study-mechanism-design-explained', level: 'Advanced' },
+      { label: 'Behavioural Economics', slug: 'study-behavioural-economics-explained', level: 'Core' },
+    ],
+  },
+  {
+    id: 'advanced-macro',
+    group: 'advanced',
+    number: '06',
+    title: 'Advanced Macroeconomics',
+    blurb: 'The dynamic models central banks and researchers use to explain growth, cycles and policy.',
+    topics: [
+      { label: 'Solow & Endogenous Growth', slug: 'study-growth-models-explained', level: 'Advanced' },
+      { label: 'Ramsey & Overlapping Generations', slug: 'study-ramsey-olg-explained', level: 'Advanced' },
+      { label: 'Consumption & Investment Theory', slug: 'study-consumption-investment-explained', level: 'Advanced' },
+      { label: 'Real Business Cycle Models', slug: 'study-real-business-cycle-explained', level: 'Advanced' },
+      { label: 'New Keynesian Model & DSGE', slug: 'study-new-keynesian-dsge-explained', level: 'Advanced' },
+      { label: 'Unemployment & Search Models', slug: 'study-search-unemployment-explained', level: 'Advanced' },
+    ],
+  },
+  {
     id: 'international',
-    number: '04',
-    title: 'International',
+    group: 'applied',
+    number: '07',
+    title: 'International Economics',
     blurb: 'How countries trade, borrow and invest across borders.',
     topics: [
       { label: 'Comparative Advantage', slug: 'study-comparative-advantage-explained', level: 'Foundations' },
@@ -146,6 +204,51 @@ export const TRACKS: Track[] = [
       { label: 'Capital Flows & FDI', slug: 'study-capital-flows-fdi-explained', level: 'Core' },
       { label: 'Purchasing Power Parity', slug: 'study-purchasing-power-parity-explained', level: 'Advanced' },
       { label: 'Development Finance', slug: 'study-development-finance-explained', level: 'Advanced' },
+    ],
+  },
+  {
+    id: 'health',
+    group: 'applied',
+    number: '08',
+    title: 'Health Economics',
+    blurb: 'How societies pay for, ration and value health and healthcare.',
+    topics: [
+      { label: 'Demand for Health & Healthcare', slug: 'study-demand-for-health-explained', level: 'Foundations' },
+      { label: 'Health Insurance & Moral Hazard', slug: 'study-health-insurance-explained', level: 'Core' },
+      { label: 'Health Financing Systems', slug: 'study-health-financing-explained', level: 'Core' },
+      { label: 'Cost-Effectiveness Analysis', slug: 'study-cost-effectiveness-explained', level: 'Methods' },
+      { label: 'Pharmaceutical Markets & Pricing', slug: 'study-pharmaceutical-markets-explained', level: 'Advanced' },
+      { label: 'The Economics of Pandemics', slug: 'study-pandemic-economics-explained', level: 'Advanced' },
+    ],
+  },
+  {
+    id: 'agricultural',
+    group: 'applied',
+    number: '09',
+    title: 'Agricultural Economics',
+    blurb: 'The economics of food, farming and the land that feeds the world.',
+    topics: [
+      { label: 'Farm Production & Productivity', slug: 'study-farm-productivity-explained', level: 'Foundations' },
+      { label: 'Agricultural Prices & Volatility', slug: 'study-agricultural-prices-explained', level: 'Core' },
+      { label: 'Food Security', slug: 'study-food-security-explained', level: 'Core' },
+      { label: 'Agricultural Policy & Subsidies', slug: 'study-agricultural-policy-explained', level: 'Core' },
+      { label: 'Land, Water & Irrigation', slug: 'study-land-water-irrigation-explained', level: 'Advanced' },
+      { label: 'Agricultural Trade & Value Chains', slug: 'study-agricultural-trade-explained', level: 'Advanced' },
+    ],
+  },
+  {
+    id: 'environmental',
+    group: 'applied',
+    number: '10',
+    title: 'Environmental Economics',
+    blurb: 'Putting a price on pollution, nature and a changing climate.',
+    topics: [
+      { label: 'Externalities & Pigouvian Taxes', slug: 'study-externalities-pigouvian-taxes-explained', level: 'Foundations' },
+      { label: 'Carbon Pricing & Emissions Trading', slug: 'study-carbon-pricing-explained', level: 'Core' },
+      { label: 'Valuing the Environment', slug: 'study-valuing-environment-explained', level: 'Core' },
+      { label: 'Climate Change Economics', slug: 'study-climate-economics-explained', level: 'Core' },
+      { label: 'Natural Resource Economics', slug: 'study-natural-resources-explained', level: 'Advanced' },
+      { label: 'The Economics of the Energy Transition', slug: 'study-energy-transition-explained', level: 'Advanced' },
     ],
   },
 ]

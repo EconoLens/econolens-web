@@ -39,6 +39,27 @@ export default defineType({
     }),
 
     defineField({
+      name: 'fredUnits',
+      title: 'FRED Units Transformation',
+      type: 'string',
+      description: 'Optional. Applied to the FRED series before charting.',
+      options: {
+        list: [
+          { title: 'Levels (as published)', value: 'lin' },
+          { title: 'Percent change from a year ago', value: 'pc1' },
+          { title: 'Percent change from previous period', value: 'pch' },
+          { title: 'Compounded annual rate of change', value: 'pca' },
+        ],
+      },
+    }),
+    defineField({
+      name: 'fredFrequency',
+      title: 'FRED Frequency',
+      type: 'string',
+      description: 'Optional. Averages a daily or monthly series down to this frequency.',
+      options: { list: [{ title: 'Monthly', value: 'm' }, { title: 'Quarterly', value: 'q' }, { title: 'Annual', value: 'a' }] },
+    }),
+    defineField({
       name: 'rbiSeriesId',
       title: 'RBI / India Data Series ID',
       type: 'string',

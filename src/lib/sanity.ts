@@ -71,7 +71,7 @@ const ARTICLE_PROJECTION = `{
 const BODY_BLOCK_PROJECTION = `{
   ...,
   _type == "chartEmbed" => {
-    "indicators": indicators[]->{ name, "slug": slug.current, unit, country, indicatorType, frequency, fredSeriesId, sourceUrl, observations }
+    "indicators": indicators[]->{ name, "slug": slug.current, unit, country, indicatorType, frequency, fredSeriesId, fredUnits, fredFrequency, sourceUrl, observations }
   }
 }`
 

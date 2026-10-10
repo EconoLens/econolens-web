@@ -196,6 +196,8 @@ export default async function ArticlePage({
     notFound()
   }
 
+  const isStudy = article.category?.slug?.current === 'study'
+
   const layerContent: Record<string, any[]> = {
     '1': article.layerOne || [],
     '2': article.layerTwo || [],
@@ -461,6 +463,17 @@ export default async function ArticlePage({
             {LAYER_META.map((layer, idx) => {
               const blocks = layerContent[layer.id]
               if (!blocks?.length) return null
+              // Study guides are one continuous article (Study SOP §2a): the
+              // three stored fields are only storage, so no layer headings.
+              if (isStudy) {
+                return (
+                  <section key={layer.id} id={`layer-${layer.id}`}>
+                    {layer.id === '1'
+                      ? <RenderBlocksWithInsert blocks={blocks} insert={<FollowInline />} />
+                      : <RenderBlocks blocks={blocks} />}
+                  </section>
+                )
+              }
               return (
                 <section key={layer.id} id={`layer-${layer.id}`}>
                   <div style={{

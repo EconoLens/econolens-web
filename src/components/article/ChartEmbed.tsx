@@ -30,6 +30,8 @@ interface IndicatorRef {
   slug?: string
   unit?: string
   fredSeriesId?: string
+  fredUnits?: string
+  fredFrequency?: string
   sourceUrl?: string
   observations?: { date?: string; value?: number }[]
 }
@@ -127,7 +129,7 @@ async function loadSeries(
     }
   }
   if (points.length === 0 && ind.fredSeriesId) {
-    const fred = await getFredObservations(ind.fredSeriesId, { start, end })
+    const fred = await getFredObservations(ind.fredSeriesId, { start, end, units: ind.fredUnits, frequency: ind.fredFrequency })
     if (fred) {
       points = fred
       sourceLabel = `FRED, series ${ind.fredSeriesId}`
