@@ -70,7 +70,7 @@ export default async function IndicatorsPage() {
   return (
     <>
       {/* Page header */}
-      <div style={{ background: 'var(--ink)', borderBottom: '3px solid var(--accent)', padding: '40px 24px 36px' }}>
+      <header style={{ background: 'var(--ink)', borderBottom: '3px solid var(--accent)', padding: '40px 24px 36px' }}>
         <div style={{ maxWidth: 1200, margin: '0 auto' }}>
           <p style={{ fontSize: 11, fontWeight: 700, letterSpacing: '0.14em', textTransform: 'uppercase', color: 'var(--accent)', marginBottom: 12 }}>
             Economic Indicators
@@ -82,9 +82,9 @@ export default async function IndicatorsPage() {
             Live macroeconomic indicators from global data sources. Updated hourly.
           </p>
         </div>
-      </div>
+      </header>
 
-      <div style={{ maxWidth: 1200, margin: '0 auto', padding: '40px 24px' }}>
+      <section aria-label="Indicator snapshot" style={{ maxWidth: 1200, margin: '0 auto', padding: '40px 24px' }}>
         {error && (
           <div style={{ background: 'var(--ink-mid)', border: '0.5px solid var(--ink-border)', borderLeft: '3px solid var(--negative)', padding: '14px 20px', marginBottom: 32, fontSize: 14, color: 'var(--text-secondary)' }}>
             Indicator data temporarily unavailable. Please check back shortly.
@@ -107,7 +107,7 @@ export default async function IndicatorsPage() {
                   {ch.text} <span style={{ color: 'var(--muted)', fontSize: 11 }}>vs prior</span>
                 </p>
                 <p style={{ fontSize: 11, color: 'var(--muted)', borderTop: '1px solid var(--border)', paddingTop: 10, fontFamily: "'Space Mono', monospace" }}>
-                  As of {formatDate(ind.date)}
+                  As of {ind.date ? <time dateTime={ind.date}>{formatDate(ind.date)}</time> : formatDate(ind.date)}
                 </p>
               </Link>
             );
@@ -122,7 +122,7 @@ export default async function IndicatorsPage() {
         <p style={{ marginTop: 24, fontSize: 12, color: 'var(--muted)' }}>
           Data provided as-is for informational purposes only.
         </p>
-      </div>
+      </section>
     </>
   );
 }

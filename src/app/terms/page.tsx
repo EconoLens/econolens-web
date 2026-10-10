@@ -7,7 +7,7 @@ export const metadata: Metadata = {
 
 export default function TermsPage() {
   return (
-    <main style={{ maxWidth: '720px', margin: '0 auto', padding: '60px 24px 80px' }}>
+    <div style={{ maxWidth: '720px', margin: '0 auto', padding: '60px 24px 80px' }}>
       <header style={{ borderBottom: '0.5px solid var(--ink-border)', paddingBottom: '32px', marginBottom: '40px' }}>
         <p style={{ fontFamily: 'var(--font-mono)', fontSize: '0.5rem', fontWeight: 700, letterSpacing: '0.14em', textTransform: 'uppercase', color: 'var(--text-tertiary)', marginBottom: '12px' }}>Legal</p>
         <h1 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(1.75rem, 3vw, 2.5rem)', fontWeight: 600, color: 'var(--text-primary)', letterSpacing: '-0.02em' }}>
@@ -87,6 +87,6 @@ export default function TermsPage() {
           </p>
         </section>
       </div>
-    </main>
+    </div>
   )
 }

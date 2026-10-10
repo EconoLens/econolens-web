@@ -43,7 +43,7 @@ export default async function ArticlePage({
   const { visible, locked } = splitAtWordLimit(body, WORD_LIMIT);
 
   return (
-    <main className="mx-auto max-w-3xl px-6 py-16">
+    <div className="mx-auto max-w-3xl px-6 py-16">
       <Link href="/articles" className="text-sm text-neutral-600 hover:text-neutral-900">
         ← All articles
       </Link>
@@ -113,6 +113,6 @@ export default async function ArticlePage({
           Economic Times
         </a>
       </footer>
-    </main>
+    </div>
   );
 }
