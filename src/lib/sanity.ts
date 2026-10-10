@@ -114,6 +114,18 @@ export async function getArticlesByType(articleType: string, limit = 20) {
   )
 }
 
+/** Study guides for the /study library. Word count feeds the reading-time label. */
+export async function getStudyGuides() {
+  return sanityClient.fetch(
+    `*[_type == "article" && category->slug.current == "study" && qaStatus == "passed"] | order(publishedAt desc) {
+      _id, title, "slug": slug.current, summary, publishedAt,
+      "words": length(string::split(pt::text(coalesce(layerOne, [])) + " " + pt::text(coalesce(layerTwo, [])) + " " + pt::text(coalesce(layerThree, [])), " "))
+    }`,
+    {},
+    { next: { revalidate: 900 } }
+  )
+}
+
 /** Articles by category slug */
 export async function getArticlesByCategory(categorySlug: string, limit = 20) {
   return sanityClient.fetch(

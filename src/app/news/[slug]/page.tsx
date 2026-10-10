@@ -1,6 +1,6 @@
 import Link from 'next/link'
 import FollowLinks from '@/components/FollowLinks'
-import { notFound } from 'next/navigation'
+import { notFound, redirect } from 'next/navigation'
 import { getArticleBySlug, getAllArticleSlugs, urlFor } from '@/lib/sanity'
 import CiteThisArticle from '@/components/article/CiteThisArticle'
 import { renderContentNode, isParagraphNode, groupListItems } from '@/components/article/ContentBlocks'
@@ -188,7 +188,13 @@ export default async function ArticlePage({
     notFound()
   }
 
-  if (!article || article.qaStatus !== 'passed') notFound()
+  if (!article || article.qaStatus !== 'passed') {
+    // Study guides are being rewritten (2026-10-10): a guide that is offline
+    // sends readers to the Study library instead of a 404. Temporary (307), so
+    // the URL comes back as soon as the rewritten guide is published again.
+    if (params.slug.startsWith('study-')) redirect('/study')
+    notFound()
+  }
 
   const layerContent: Record<string, any[]> = {
     '1': article.layerOne || [],
