@@ -114,15 +114,19 @@ export async function getArticlesByType(articleType: string, limit = 20) {
   )
 }
 
-/** Study guides for the /study library. Word count feeds the reading-time label. */
+/** Study guides for the /study library. Text spans come back so the page can
+ *  compute a reading time; no GROQ string functions, which keeps the query
+ *  plain and identical on the CDN and the live API. */
 export async function getStudyGuides() {
   return sanityClient.fetch(
     `*[_type == "article" && category->slug.current == "study" && qaStatus == "passed"] | order(publishedAt desc) {
       _id, title, "slug": slug.current, summary, publishedAt,
-      "words": length(string::split(pt::text(coalesce(layerOne, [])) + " " + pt::text(coalesce(layerTwo, [])) + " " + pt::text(coalesce(layerThree, [])), " "))
+      "t1": layerOne[].children[].text,
+      "t2": layerTwo[].children[].text,
+      "t3": layerThree[].children[].text
     }`,
     {},
-    { next: { revalidate: 900 } }
+    { next: { revalidate: 300 } }
   )
 }
 
