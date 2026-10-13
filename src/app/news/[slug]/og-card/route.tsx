@@ -1,21 +1,20 @@
 import { ImageResponse } from 'next/og'
 import { getArticleBySlug } from '@/lib/sanity'
 
-// Per-article dynamic OG image — falls back to this generated card whenever
-// generateMetadata() in page.tsx doesn't set an explicit `images` array
-// (i.e. whenever the article has no coverImage, which today is every
-// article). Once an article does get a coverImage, that explicit metadata
-// takes precedence over this file-convention image automatically — this is
-// just the fallback so social shares always show the headline instead of a
-// blank/generic preview. Added 2026-09-03. Not run on the edge runtime
-// (unlike the site-wide opengraph-image.tsx) so it can safely reuse the
-// existing Node-based Sanity client.
-export const alt = 'EconoLens'
-export const size = { width: 1200, height: 630 }
-export const contentType = 'image/png'
+// Generated headline card, used as the social preview image only for
+// articles WITHOUT a cover image (see generateMetadata in ../page.tsx).
+//
+// History: this lived at ../opengraph-image.tsx (added 2026-09-03). In the
+// App Router a file-convention opengraph-image always overrides
+// `openGraph.images` from generateMetadata, so once articles started getting
+// cover images (2026-10-13) the cover could never reach WhatsApp/LinkedIn —
+// every share still showed this text card. Moved to a plain route so
+// page.tsx decides: cover when present, this card otherwise.
 export const revalidate = 900
 
-export default async function Image({ params }: { params: { slug: string } }) {
+const size = { width: 1200, height: 630 }
+
+export async function GET(_req: Request, { params }: { params: { slug: string } }) {
   let title = 'EconoLens'
   let category = 'Economics Intelligence'
 
@@ -74,6 +73,6 @@ export default async function Image({ params }: { params: { slug: string } }) {
         </div>
       </div>
     ),
-    { ...size }
+    { ...size, headers: { 'Cache-Control': 'public, max-age=900, s-maxage=900' } }
   )
 }
