@@ -5,6 +5,7 @@ import { getArticleBySlug, getAllArticleSlugs, urlFor } from '@/lib/sanity'
 import CiteThisArticle from '@/components/article/CiteThisArticle'
 import { renderContentNode, isParagraphNode, groupListItems } from '@/components/article/ContentBlocks'
 import FollowInline from '@/components/article/FollowInline'
+import ShareKit from '@/components/article/ShareKit'
 
 export const revalidate = 900
 
@@ -29,13 +30,18 @@ export async function generateMetadata({ params }: { params: { slug: string } })
     // Fixed 2026-09-17: coverImage comes back from GROQ as a raw image object
     // (no `url` field), so `coverImage?.url` was always undefined and no
     // article ever emitted an og:image. Build the URL the same way JSON-LD does.
-    let ogImage: string | undefined
+    // 2026-10-13: cover image as a 1200×630 JPG (small and fast for WhatsApp,
+    // which drops previews from slow or heavy images); articles without a cover
+    // fall back to the generated headline card at ./og-card. That card used to
+    // be a file-convention opengraph-image, which silently overrode this value.
+    const ogCard = `${canonicalUrl}/og-card`
+    let ogImage: string = ogCard
     try {
-      ogImage = article.coverImage?.asset
-        ? urlFor(article.coverImage).width(1200).height(630).fit('crop').url()
-        : undefined
+      if (article.coverImage?.asset) {
+        ogImage = urlFor(article.coverImage).width(1200).height(630).fit('crop').format('jpg').quality(82).url()
+      }
     } catch {
-      ogImage = undefined
+      ogImage = ogCard
     }
     return {
       // The search-result title. Fixed 2026-10-10: the schema's 60-char metaTitle
@@ -59,14 +65,14 @@ export async function generateMetadata({ params }: { params: { slug: string } })
         description,
         url: canonicalUrl,
         siteName: 'EconoLens',
-        ...(ogImage ? { images: [{ url: ogImage, width: 1200, height: 630 }] } : {}),
+        images: [{ url: ogImage, width: 1200, height: 630, alt: article.coverImage?.alt || article.title }],
       },
       twitter: {
         card: 'summary_large_image',
         site: '@EconoLens',
         title: article.title,
         description,
-        ...(ogImage ? { images: [ogImage] } : {}),
+        images: [ogImage],
       },
     }
   } catch {
@@ -408,6 +414,9 @@ export default async function ArticlePage({
               </>
             )}
           </div>
+
+          {/* Share: WhatsApp / copy headline + points + link / story image */}
+          <ShareKit title={article.title} slug={params.slug} points={summaryItems} />
         </div>
       </header>
 
