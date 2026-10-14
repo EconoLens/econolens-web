@@ -27,7 +27,7 @@ export async function GET() {
   }
 
   const items = articles
-    .filter((a) => a?.slug?.current)
+    .filter((a) => a?.slug?.current && !a.noindex)
     .map((a) => {
       const link = `${baseUrl}/news/${a.slug.current}`
       const title = escapeXml(a.title || 'EconoLens')

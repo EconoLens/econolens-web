@@ -148,6 +148,9 @@ function Footer() {
             <a href="/about#mission" className="footer-link">Mission</a>
             <a href="/contact" className="footer-link">Contact</a>
             <a href="/editorial-policy" className="footer-link">Editorial Policy</a>
+            <a href="/fact-checking-methodology" className="footer-link">Fact-Checking</a>
+            <a href="/corrections" className="footer-link">Corrections</a>
+            <a href="/authors" className="footer-link">Authors</a>
           </div>
           <div>
             <p style={{ fontFamily: 'var(--font-mono)', fontSize: '0.5625rem', letterSpacing: '0.12em', textTransform: 'uppercase', color: 'var(--text-tertiary)', marginBottom: '14px' }}>Legal</p>

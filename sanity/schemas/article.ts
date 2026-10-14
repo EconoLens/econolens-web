@@ -157,6 +157,36 @@ const chartEmbedBlock = defineArrayMember({
 
 const BODY_BLOCKS = [textBlock, imageBlock, dataTableBlock, regressionTableBlock, mathBlock, chartEmbedBlock]
 
+// ── NEWS PUBLISH GATE (2026-10-14, Restructuring Plan Phase 2) ──────────────
+// News and Analysis pieces published from GATE_FROM onward must carry an
+// "EconoLens Analysis" heading and at least one chart, table or image, per the
+// core-positioning rule in CLAUDE.md ("every article carries a chart and an
+// EconoLens Analysis block"). Older articles are exempt so editing them (SEO
+// fixes, covers) is never blocked. Studio-only: documents written through the
+// API skip schema validation, so the same check stays in the publish SOP.
+const GATE_FROM = '2026-10-14'
+const GATED_TYPES = ['news', 'analysis']
+const VISUAL_TYPES = ['chartEmbed', 'dataTable', 'regressionTable', 'image']
+
+function newsPublishGate(doc: Record<string, any> | undefined): true | string {
+  if (!doc || !GATED_TYPES.includes(doc.articleType)) return true
+  const when: string = doc.publishedAt || new Date().toISOString()
+  if (when < GATE_FROM) return true
+  const blocks: any[] = [...(doc.layerOne || []), ...(doc.layerTwo || []), ...(doc.layerThree || [])]
+  const hasVisual = blocks.some((b) => VISUAL_TYPES.includes(b?._type))
+  const hasAnalysis = blocks.some(
+    (b) =>
+      b?._type === 'block' &&
+      ['h2', 'h3'].includes(b.style) &&
+      (b.children || []).map((c: any) => c.text || '').join('').trim().toLowerCase().startsWith('econolens analysis'),
+  )
+  const missing = [
+    ...(hasAnalysis ? [] : ['an "EconoLens Analysis" heading (H2 or H3)']),
+    ...(hasVisual ? [] : ['at least one chart, table or image']),
+  ]
+  return missing.length ? `News and Analysis articles need ${missing.join(' and ')} before publishing.` : true
+}
+
 export default defineType({
   name: 'article',
   title: 'Article',
@@ -281,6 +311,31 @@ export default defineType({
     defineField({ name: 'metaTitle', title: 'Meta Title', type: 'string', group: 'meta', validation: (R) => R.max(60) }),
     defineField({ name: 'metaDescription', title: 'Meta Description', type: 'text', group: 'meta', rows: 3, validation: (R) => R.min(120).max(160) }),
     defineField({ name: 'canonicalUrl', title: 'Canonical URL', type: 'url', group: 'meta' }),
+    defineField({
+      name: 'noindex',
+      title: 'Hide from search engines (noindex)',
+      type: 'boolean',
+      group: 'meta',
+      initialValue: false,
+      description:
+        'For thin, single-release pages. The page stays live for readers and links, but is dropped from search results, the sitemap and the RSS feed.',
+    }),
+    defineField({
+      name: 'corrections',
+      title: 'Corrections',
+      type: 'array',
+      group: 'content',
+      description: 'Every material correction, newest last. Shown on the article and on /corrections.',
+      of: [{
+        type: 'object',
+        name: 'correction',
+        fields: [
+          defineField({ name: 'date', title: 'Date', type: 'date', validation: (R) => R.required() }),
+          defineField({ name: 'note', title: 'What was corrected', type: 'text', rows: 3, validation: (R) => R.required().min(20) }),
+        ],
+        preview: { select: { title: 'note', subtitle: 'date' } },
+      }],
+    }),
     defineField({ name: 'focusKeyword', title: 'Focus Keyword', type: 'string', group: 'meta' }),
     defineField({
       name: 'faqSection', title: 'FAQ / Q&A (GEO)', type: 'array', group: 'meta',
@@ -304,6 +359,7 @@ export default defineType({
     defineField({ name: 'featured', title: 'Featured Article?', type: 'boolean', group: 'monetisation', initialValue: false }),
     defineField({ name: 'audioUrl', title: 'Audio URL (Phase 2)', type: 'url', group: 'meta' }),
   ],
+  validation: (Rule) => Rule.custom((doc) => newsPublishGate(doc as Record<string, any> | undefined)),
   preview: {
     select: { title: 'title', subtitle: 'articleType', media: 'coverImage', qa: 'qaStatus', copyscape: 'copyscapeScore' },
     prepare({ title, subtitle, media, qa, copyscape }) {
