@@ -26,7 +26,7 @@ export async function GET() {
   let articles: NewsArticleRow[] = []
   try {
     articles = await sanityClient.fetch(
-      `*[_type == "article" && qaStatus == "passed" && defined(slug.current) && publishedAt > $since]{ "slug": slug.current, title, publishedAt }`,
+      `*[_type == "article" && qaStatus == "passed" && defined(slug.current) && noindex != true && publishedAt > $since]{ "slug": slug.current, title, publishedAt }`,
       { since }
     )
   } catch {

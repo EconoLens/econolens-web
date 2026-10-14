@@ -62,7 +62,8 @@ const ARTICLE_PROJECTION = `{
   paperAuthors,
   paperSource,
   paperUrl,
-  paperPublishedDate
+  paperPublishedDate,
+  noindex
 }`
 
 // Live charts (chartEmbed blocks) reference economicIndicator documents; expand
@@ -146,6 +147,50 @@ export async function getTopArticlesByViews(limit = 5, daysBack = 7) {
     `*[_type == "article" && qaStatus == "passed" && publishedAt > $since] | order(ga4Views desc) [0...$limit] ${ARTICLE_PROJECTION}`,
     { since, limit: limit - 1 },
     { next: { revalidate: 3600 } }
+  )
+}
+
+/** Contributor profile for /authors/[slug] (2026-10-14). */
+export async function getContributorBySlug(slug: string) {
+  return sanityClient.fetch(
+    `*[_type == "contributor" && slug.current == $slug][0]{
+      _id, name, "slug": slug.current, credentials, institution, photo, bio, socialLinks
+    }`,
+    { slug },
+    { next: { revalidate: 900 } }
+  )
+}
+
+/** Published articles by one contributor, newest first. */
+export async function getArticlesByAuthor(authorId: string, limit = 60) {
+  return sanityClient.fetch(
+    `*[_type == "article" && qaStatus == "passed" && author._ref == $authorId] | order(publishedAt desc) [0...$limit] ${ARTICLE_PROJECTION}`,
+    { authorId, limit },
+    { next: { revalidate: 900 } }
+  )
+}
+
+/** Contributors with at least one published article — for /authors. */
+export async function getContributorsWithArticles() {
+  return sanityClient.fetch(
+    `*[_type == "contributor" && defined(slug.current)]{
+      name, "slug": slug.current, credentials,
+      "count": count(*[_type == "article" && qaStatus == "passed" && references(^._id)])
+    }[count > 0] | order(count desc)`,
+    {},
+    { next: { revalidate: 900 } }
+  )
+}
+
+/** Every logged correction across published articles — for /corrections. */
+export async function getCorrections() {
+  return sanityClient.fetch(
+    `*[_type == "article" && qaStatus == "passed" && count(corrections) > 0]{
+      title, "slug": slug.current,
+      "items": corrections[]{ date, note }
+    }`,
+    {},
+    { next: { revalidate: 900 } }
   )
 }
 

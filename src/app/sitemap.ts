@@ -19,6 +19,9 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: `${baseUrl}/connect`, lastModified: now, changeFrequency: "monthly", priority: 0.5 },
     { url: `${baseUrl}/contact`, lastModified: now, changeFrequency: "yearly", priority: 0.4 },
     { url: `${baseUrl}/editorial-policy`, lastModified: now, changeFrequency: "yearly", priority: 0.4 },
+    { url: `${baseUrl}/fact-checking-methodology`, lastModified: now, changeFrequency: "yearly", priority: 0.4 },
+    { url: `${baseUrl}/corrections`, lastModified: now, changeFrequency: "weekly", priority: 0.4 },
+    { url: `${baseUrl}/authors`, lastModified: now, changeFrequency: "monthly", priority: 0.4 },
     { url: `${baseUrl}/about`, lastModified: now, changeFrequency: "monthly", priority: 0.6 },
     { url: `${baseUrl}/privacy`, lastModified: now, changeFrequency: "yearly", priority: 0.3 },
     { url: `${baseUrl}/terms`, lastModified: now, changeFrequency: "yearly", priority: 0.3 },
@@ -33,7 +36,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   let articleEntries: MetadataRoute.Sitemap = [];
   try {
     const articles: { slug: string; publishedAt?: string }[] = await sanityClient.fetch(
-      `*[_type == "article" && qaStatus == "passed" && defined(slug.current)]{ "slug": slug.current, publishedAt }`
+      `*[_type == "article" && qaStatus == "passed" && defined(slug.current) && noindex != true]{ "slug": slug.current, publishedAt }`
     );
     articleEntries = articles
       .filter((a) => a.slug)

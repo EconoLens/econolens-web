@@ -49,6 +49,9 @@ export async function generateMetadata({ params }: { params: { slug: string } })
       // The on-page <h1> and social cards keep the full headline.
       title: article.metaTitle || article.title,
       description,
+      // 2026-10-14: thin single-release pages flagged in Sanity stay readable
+      // and linkable but drop out of search (Restructuring Plan Phase 2).
+      ...(article.noindex ? { robots: { index: false, follow: true } } : {}),
       alternates: {
         // Fixed 2026-08-19: canonicalUrl was computed above but never wired
         // into metadata, so no <link rel="canonical"> was ever emitted for
@@ -218,6 +221,7 @@ export default async function ArticlePage({
   const categoryTitle = article.category?.title || TYPE_LABELS[article.articleType] || 'Economics'
   const authorName = article.author?.name || 'EconoLens Editorial Team'
   const authorCreds = article.author?.credentials || ''
+  const authorSlug: string | undefined = article.author?.slug?.current
   const summaryItems: string[] = Array.isArray(article.summary) ? article.summary : []
   const articleUrl = `https://www.econolens.co.in/news/${params.slug}`
 
@@ -245,6 +249,7 @@ export default async function ArticlePage({
       '@type': 'Person',
       name: authorName,
       ...(authorCreds ? { jobTitle: authorCreds } : {}),
+      ...(authorSlug ? { url: `https://www.econolens.co.in/authors/${authorSlug}` } : {}),
     },
     publisher: {
       '@type': 'Organization',
@@ -387,7 +392,11 @@ export default async function ArticlePage({
               </div>
               <div>
                 <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.5625rem', letterSpacing: '0.08em', color: 'var(--text-primary)', textTransform: 'uppercase' }}>
-                  {authorName}
+                  {authorSlug ? (
+                    <Link href={`/authors/${authorSlug}`} rel="author" style={{ color: 'inherit', textDecoration: 'none', borderBottom: '0.5px solid var(--ink-border-2)' }}>
+                      {authorName}
+                    </Link>
+                  ) : authorName}
                 </div>
                 {authorCreds && (
                   <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.5rem', letterSpacing: '0.06em', color: 'var(--text-tertiary)', marginTop: '2px' }}>
@@ -617,6 +626,28 @@ export default async function ArticlePage({
                   </div>
                 ))}
               </div>
+            </div>
+          </div>
+        </section>
+      )}
+
+      {/* ── Corrections (2026-10-14) ── */}
+      {Array.isArray(article.corrections) && article.corrections.length > 0 && (
+        <section id="corrections" style={{ borderTop: '0.5px solid var(--ink-border)', padding: '24px 0' }} aria-label="Corrections">
+          <div className="container-narrow">
+            <div style={{ maxWidth: '720px', margin: '0 auto' }}>
+              <p style={{ fontFamily: 'var(--font-mono)', fontSize: '0.5rem', letterSpacing: '0.1em', textTransform: 'uppercase', color: 'var(--gold)', marginBottom: '12px' }}>
+                Corrections
+              </p>
+              {article.corrections.map((c: { date?: string; note?: string }, i: number) => (
+                <p key={i} style={{ fontSize: '0.8125rem', color: 'var(--text-secondary)', lineHeight: 1.6, margin: '0 0 8px' }}>
+                  {c.date && <time dateTime={c.date} style={{ fontFamily: 'var(--font-mono)', fontSize: '0.625rem', color: 'var(--text-tertiary)', marginRight: '10px' }}>{c.date}</time>}
+                  {c.note}
+                </p>
+              ))}
+              <p style={{ fontSize: '0.75rem', color: 'var(--text-tertiary)', margin: '10px 0 0' }}>
+                See our <Link href="/corrections" style={{ color: 'var(--text-secondary)' }}>corrections policy and log</Link>.
+              </p>
             </div>
           </div>
         </section>
