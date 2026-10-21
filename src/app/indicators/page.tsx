@@ -13,6 +13,8 @@ type IndicatorRow = {
   change: number;
   trend: 'up' | 'down' | 'stable';
   date?: string;
+  source?: string;
+  isStatic?: boolean;
 };
 
 function getBaseUrl(): string {
@@ -79,7 +81,7 @@ export default async function IndicatorsPage() {
             Global Macro Data
           </h1>
           <p style={{ color: 'rgba(255,255,255,0.55)', fontSize: 15 }}>
-            Live macroeconomic indicators from global data sources. Updated hourly.
+            US and commodity series update hourly from FRED. India series are updated after each official release by MoSPI, RBI and the Ministry of Commerce.
           </p>
         </div>
       </header>
@@ -109,6 +111,11 @@ export default async function IndicatorsPage() {
                 <p style={{ fontSize: 11, color: 'var(--muted)', borderTop: '1px solid var(--border)', paddingTop: 10, fontFamily: "'Space Mono', monospace" }}>
                   As of {ind.date ? <time dateTime={ind.date}>{formatDate(ind.date)}</time> : formatDate(ind.date)}
                 </p>
+                {ind.source && (
+                  <p style={{ fontSize: 11, color: 'var(--muted)', marginTop: 6 }}>
+                    Source: {ind.source}
+                  </p>
+                )}
               </Link>
             );
           })}
