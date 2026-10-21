@@ -27,18 +27,25 @@ const FRED_SERIES = [
   { id: 'GOLDAMGBD228NLBM', slug: 'gold-price', name: 'Gold Price', unit: 'USD/troy oz', country: 'Global', category: 'Commodities' },
 ]
 
-// No free, FRED-style live JSON API exists for RBI/MOSPI/CMIE data, so India
+// No free, FRED-style live JSON API exists for RBI/MOSPI data, so India
 // indicators are manually maintained rather than faked as live. Each entry
 // carries its own `date` and `isStatic: true` so the UI can label it
 // honestly instead of claiming "Updated hourly" for data that isn't.
-// Last manually verified: 2026-07-08.
+// Last manually verified: 2026-10-21. `date` = official release date of the
+// figure shown; the reference period is noted in the comment on each line.
 const INDIA_STATIC = [
-  { id: 'IN_GDP', slug: 'india-gdp-growth', name: 'India GDP Growth', value: '6.4', unit: '%', country: 'IN', category: 'GDP', change: 0.2, trend: 'up' as const, date: '2026-07-08', isStatic: true, source: 'Ministry of Statistics & Programme Implementation (MoSPI)', sourceUrl: 'https://www.mospi.gov.in' },
-  { id: 'IN_CPI', slug: 'india-cpi-inflation', name: 'India CPI Inflation', value: '4.1', unit: '%', country: 'IN', category: 'Inflation', change: -0.3, trend: 'down' as const, date: '2026-07-08', isStatic: true, source: 'Ministry of Statistics & Programme Implementation (MoSPI)', sourceUrl: 'https://www.mospi.gov.in' },
-  { id: 'IN_REPO', slug: 'rbi-repo-rate', name: 'RBI Repo Rate', value: '6.50', unit: '%', country: 'IN', category: 'Monetary Policy', change: 0, trend: 'stable' as const, date: '2026-07-08', isStatic: true, source: 'Reserve Bank of India', sourceUrl: 'https://www.rbi.org.in' },
-  { id: 'IN_UNEMP', slug: 'india-unemployment', name: 'India Unemployment', value: '7.8', unit: '%', country: 'IN', category: 'Employment', change: -0.1, trend: 'down' as const, date: '2026-07-08', isStatic: true, source: 'Centre for Monitoring Indian Economy (CMIE)', sourceUrl: 'https://www.cmie.com' },
-  { id: 'IN_TRADE', slug: 'india-trade-balance', name: 'India Trade Balance', value: '-19.4', unit: 'Bn USD', country: 'IN', category: 'Trade', change: -1.2, trend: 'down' as const, date: '2026-07-08', isStatic: true, source: 'Ministry of Commerce & Industry', sourceUrl: 'https://commerce.gov.in' },
-  { id: 'IN_FOREX', slug: 'india-forex-reserves', name: 'India Forex Reserves', value: '648.2', unit: 'Bn USD', country: 'IN', category: 'Forex', change: 3.1, trend: 'up' as const, date: '2026-07-08', isStatic: true, source: 'Reserve Bank of India', sourceUrl: 'https://www.rbi.org.in' },
+  // Q1 FY2026-27 (Apr–Jun 2026) real GDP, YoY; prev quarter Q4 FY26 revised to 8.6%
+  { id: 'IN_GDP', slug: 'india-gdp-growth', name: 'India GDP Growth', value: '7.8', unit: '%', country: 'IN', category: 'GDP', change: -0.8, trend: 'down' as const, date: '2026-08-31', isStatic: true, source: 'Ministry of Statistics & Programme Implementation (MoSPI)', sourceUrl: 'https://www.mospi.gov.in' },
+  // September 2026 all-India CPI (base 2024=100), YoY; August 2026 final 4.83%
+  { id: 'IN_CPI', slug: 'india-cpi-inflation', name: 'India CPI Inflation', value: '5.54', unit: '%', country: 'IN', category: 'Inflation', change: 0.71, trend: 'up' as const, date: '2026-10-12', isStatic: true, source: 'Ministry of Statistics & Programme Implementation (MoSPI)', sourceUrl: 'https://www.mospi.gov.in' },
+  // 63rd MPC meeting, 5–7 Oct 2026: +25 bps from 5.25%
+  { id: 'IN_REPO', slug: 'rbi-repo-rate', name: 'RBI Repo Rate', value: '5.50', unit: '%', country: 'IN', category: 'Monetary Policy', change: 0.25, trend: 'up' as const, date: '2026-10-07', isStatic: true, source: 'Reserve Bank of India', sourceUrl: 'https://www.rbi.org.in' },
+  // PLFS monthly bulletin, September 2026, CWS age 15+; unchanged from August
+  { id: 'IN_UNEMP', slug: 'india-unemployment', name: 'India Unemployment', value: '5.0', unit: '%', country: 'IN', category: 'Employment', change: 0, trend: 'stable' as const, date: '2026-10-15', isStatic: true, source: 'MoSPI — Periodic Labour Force Survey (PLFS)', sourceUrl: 'https://www.mospi.gov.in' },
+  // September 2026 merchandise trade balance; August 2026 was -26.86 Bn USD
+  { id: 'IN_TRADE', slug: 'india-trade-balance', name: 'India Trade Balance', value: '-30.21', unit: 'Bn USD', country: 'IN', category: 'Trade', change: -3.35, trend: 'down' as const, date: '2026-10-15', isStatic: true, source: 'Ministry of Commerce & Industry', sourceUrl: 'https://commerce.gov.in' },
+  // Week ended 9 Oct 2026 (RBI Weekly Statistical Supplement); prior week 734.6
+  { id: 'IN_FOREX', slug: 'india-forex-reserves', name: 'India Forex Reserves', value: '726.0', unit: 'Bn USD', country: 'IN', category: 'Forex', change: -8.6, trend: 'down' as const, date: '2026-10-16', isStatic: true, source: 'Reserve Bank of India', sourceUrl: 'https://www.rbi.org.in' },
 ]
 
 export const INDICATOR_COUNT = FRED_SERIES.length + INDIA_STATIC.length // 14

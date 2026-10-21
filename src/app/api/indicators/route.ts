@@ -8,6 +8,6 @@ export async function GET() {
   return NextResponse.json({
     indicators,
     lastUpdated: new Date().toISOString(),
-    sources: ['FRED (St. Louis Fed)', 'RBI', 'MOSPI', 'CMIE'],
+    sources: ['FRED (St. Louis Fed)', 'RBI', 'MOSPI'],
   })
 }
