@@ -122,6 +122,8 @@ export async function getIndicators() {
         trend: data?.trend ?? 'stable',
         date: data?.date,
         isStatic: false,
+        source: FRED_SOURCE,
+        sourceUrl: fredSourceUrl(series.id),
       })
     })
   )
