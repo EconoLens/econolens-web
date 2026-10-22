@@ -298,8 +298,8 @@ export default async function ArticlePage({
       {/* ── Breadcrumb ── */}
       <nav aria-label="Breadcrumb" style={{ background: 'var(--ink)', borderBottom: '0.5px solid var(--ink-border)', padding: '10px 0' }}>
         <div className="container" style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
-          <Link href="/articles" style={{ fontFamily: 'var(--font-mono)', fontSize: '0.5625rem', letterSpacing: '0.1em', textTransform: 'uppercase', color: 'var(--text-tertiary)', textDecoration: 'none' }}>
-            ← Articles
+          <Link href={isStudy ? '/study' : '/articles'} style={{ fontFamily: 'var(--font-mono)', fontSize: '0.5625rem', letterSpacing: '0.1em', textTransform: 'uppercase', color: 'var(--text-tertiary)', textDecoration: 'none' }}>
+            {isStudy ? '← Study' : '← Articles'}
           </Link>
           <span style={{ color: 'var(--ink-border-2)', fontSize: '0.5625rem' }}>/</span>
           <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.5625rem', letterSpacing: '0.1em', textTransform: 'uppercase', color: 'var(--gold)' }}>
@@ -776,7 +776,7 @@ export default async function ArticlePage({
       {/* ── Back nav ── */}
       <div style={{ borderTop: '0.5px solid var(--ink-border)', padding: '20px 0' }}>
         <div className="container-narrow">
-          <Link href="/articles" style={{
+          <Link href={isStudy ? '/study' : '/articles'} style={{
             fontFamily: 'var(--font-mono)',
             fontSize: '0.5625rem',
             letterSpacing: '0.1em',
@@ -784,7 +784,7 @@ export default async function ArticlePage({
             color: 'var(--text-tertiary)',
             textDecoration: 'none',
           }}>
-            ← Back to all articles
+            {isStudy ? '← Back to the Study library' : '← Back to all articles'}
           </Link>
         </div>
       </div>

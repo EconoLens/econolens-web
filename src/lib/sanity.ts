@@ -97,6 +97,16 @@ export async function getLatestArticles(limit = 10) {
   )
 }
 
+/** News feed (homepage + /articles) — every published article except Study
+ *  guides, which live in the /study library instead. ISR 15 min */
+export async function getLatestNews(limit = 10) {
+  return sanityClient.fetch(
+    `*[_type == "article" && qaStatus == "passed" && category->slug.current != "study"] | order(publishedAt desc) [0...$limit] ${ARTICLE_PROJECTION}`,
+    { limit: limit - 1 },
+    { next: { revalidate: 900 } }
+  )
+}
+
 /** Single article by slug — ISR 15 min */
 export async function getArticleBySlug(slug: string) {
   return sanityClient.fetch(

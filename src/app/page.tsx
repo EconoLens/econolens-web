@@ -1,6 +1,6 @@
 import Link from 'next/link'
 import FollowLinks from '@/components/FollowLinks'
-import { getLatestArticles } from '@/lib/sanity'
+import { getLatestNews } from '@/lib/sanity'
 import { getIndicators, INDICATOR_COUNT, INDICATOR_REGION_LABEL } from '@/lib/indicators'
 
 export const revalidate = 900
@@ -71,7 +71,7 @@ async function getFeaturedIndicators() {
 
 export default async function HomePage() {
   let articles: any[] = []
-  try { articles = (await getLatestArticles(9)) || [] } catch { articles = [] }
+  try { articles = (await getLatestNews(9)) || [] } catch { articles = [] }
   const featuredIndicators = await getFeaturedIndicators()
 
   const lead = articles[0]
