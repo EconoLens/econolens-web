@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { getLatestArticles } from '@/lib/sanity'
+import { getLatestNews } from '@/lib/sanity'
 
 export const revalidate = 900
 
@@ -14,7 +14,7 @@ function getSummary(s: any): string {
 export default async function ArticlesPage({ searchParams }: { searchParams: { category?: string } }) {
   let articles: any[] = []
   try {
-    articles = (await getLatestArticles(30)) || []
+    articles = (await getLatestNews(30)) || []
   } catch {
     articles = []
   }
