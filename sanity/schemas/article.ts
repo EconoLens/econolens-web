@@ -251,6 +251,7 @@ export default defineType({
     defineField({ name: 'summary', title: 'Summary (3 bullet points)', type: 'array', group: 'content', of: [{ type: 'string' }], validation: (R) => R.required().min(3).max(3).error('Exactly 3 summary bullets required') }),
     defineField({ name: 'publishedAt', title: 'Published At', type: 'datetime', group: 'content', validation: (R) => R.required() }),
     defineField({ name: 'author', title: 'Author', type: 'reference', to: [{ type: 'contributor' }], group: 'content', description: 'Leave blank for AI-generated articles' }),
+    defineField({ name: 'hideByline', title: 'Hide byline?', type: 'boolean', group: 'content', initialValue: false, description: 'Hides the author name, author box and author in citations on the article page. Date stays visible.' }),
     defineField({ name: 'isAiGenerated', title: 'AI-Generated?', type: 'boolean', group: 'pipeline', initialValue: false }),
     defineField({
       name: 'layerOne', title: 'Layer 1 — Overview (Plain English)', description: '~200 words. No jargon.', type: 'array', group: 'layers',

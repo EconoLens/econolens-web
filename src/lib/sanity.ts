@@ -54,6 +54,7 @@ const ARTICLE_PROJECTION = `{
   "category": category->{ title, slug, icon, color },
   "author": author->{ name, slug, photo, credentials, badgeLevel },
   isAiGenerated,
+  hideByline,
   aiLabel,
   qaStatus,
   copyscapeScore,
