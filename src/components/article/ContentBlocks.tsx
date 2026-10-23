@@ -60,11 +60,21 @@ const H4_STYLE: CSSProperties = {
   margin: '1.5rem 0 0.5rem',
 }
 
+// Body text is justified so both edges line up (KP, 2026-10-23: the ragged
+// right edge made articles look uneven). Hyphenation is what keeps justified
+// text from opening wide gaps between words on narrow phone screens; it relies
+// on <html lang="en"> (set in layout.tsx). The last line of each paragraph
+// stays left-aligned, so short one-line blocks ("Reviewed by…") are unaffected.
 const P_STYLE: CSSProperties = {
   fontSize: '1.0625rem',
   color: 'var(--text-secondary)',
   lineHeight: 1.8,
   marginBottom: '1.25rem',
+  textAlign: 'justify',
+  textJustify: 'inter-word',
+  hyphens: 'auto',
+  WebkitHyphens: 'auto',
+  overflowWrap: 'break-word',
 }
 
 const QUOTE_STYLE: CSSProperties = {
