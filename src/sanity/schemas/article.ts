@@ -183,6 +183,15 @@ export default defineType({
     }),
 
     defineField({
+      name: 'hideByline',
+      title: 'Hide byline?',
+      type: 'boolean',
+      group: 'content',
+      initialValue: false,
+      description: 'Hides the author name, author box and author in citations on the article page. Date stays visible.',
+    }),
+
+    defineField({
       name: 'isAiGenerated',
       title: 'AI-Generated?',
       type: 'boolean',

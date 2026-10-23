@@ -219,6 +219,7 @@ export default async function ArticlePage({
   })
 
   const categoryTitle = article.category?.title || TYPE_LABELS[article.articleType] || 'Economics'
+  const hideByline: boolean = article.hideByline === true
   const authorName = article.author?.name || 'EconoLens Editorial Team'
   const authorCreds = article.author?.credentials || ''
   const authorSlug: string | undefined = article.author?.slug?.current
@@ -245,12 +246,14 @@ export default async function ArticlePage({
     ...(coverImageUrl ? { image: [coverImageUrl] } : {}),
     datePublished: article.publishedAt,
     dateModified: article._updatedAt || article.publishedAt,
-    author: {
-      '@type': 'Person',
-      name: authorName,
-      ...(authorCreds ? { jobTitle: authorCreds } : {}),
-      ...(authorSlug ? { url: `https://www.econolens.co.in/authors/${authorSlug}` } : {}),
-    },
+    author: hideByline
+      ? { '@type': 'Organization', name: 'EconoLens', url: 'https://www.econolens.co.in' }
+      : {
+          '@type': 'Person',
+          name: authorName,
+          ...(authorCreds ? { jobTitle: authorCreds } : {}),
+          ...(authorSlug ? { url: `https://www.econolens.co.in/authors/${authorSlug}` } : {}),
+        },
     publisher: {
       '@type': 'Organization',
       name: 'EconoLens',
@@ -373,6 +376,8 @@ export default async function ArticlePage({
 
           {/* Meta row: author · date · AI label */}
           <div style={{ display: 'flex', gap: '20px', alignItems: 'center', flexWrap: 'wrap' }}>
+            {!hideByline && (
+              <>
             {/* Author */}
             <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
               <div style={{
@@ -407,6 +412,8 @@ export default async function ArticlePage({
             </div>
 
             <span style={{ width: 1, height: 24, background: 'var(--ink-border)', display: 'inline-block' }} />
+              </>
+            )}
 
             {/* Date */}
             <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.5625rem', letterSpacing: '0.06em', color: 'var(--text-tertiary)' }}>
@@ -658,7 +665,7 @@ export default async function ArticlePage({
         title={article.title}
         slug={params.slug}
         publishedAt={article.publishedAt}
-        authorName={authorName}
+        authorName={hideByline ? 'EconoLens' : authorName}
       />
 
       {/* ── Share ── */}
@@ -707,6 +714,7 @@ export default async function ArticlePage({
       </section>
 
       {/* ── Author card ── */}
+      {!hideByline && (
       <section style={{ borderTop: '0.5px solid var(--ink-border)', background: 'var(--ink-mid)', padding: '28px 0' }}>
         <div className="container-narrow">
           <div style={{ maxWidth: '720px', margin: '0 auto', display: 'flex', gap: '16px', alignItems: 'center' }}>
@@ -757,6 +765,7 @@ export default async function ArticlePage({
           </div>
         </div>
       </section>
+      )}
 
       </article>
 
