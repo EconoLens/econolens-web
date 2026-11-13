@@ -159,6 +159,8 @@ function Footer() {
             <a href="/privacy" className="footer-link">Privacy Policy</a>
             <a href="/terms" className="footer-link">Terms of Service</a>
             <a href="/disclaimer" className="footer-link">Disclaimer</a>
+            <a href="/refund-policy" className="footer-link">Refund Policy</a>
+            <a href="/delivery-policy" className="footer-link">Delivery Policy</a>
             <a href="/privacy#cookies" className="footer-link">Cookie Policy</a>
           </div>
         </div>

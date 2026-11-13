@@ -95,7 +95,8 @@ export default async function ShopPage() {
         <div className="container">
           <p style={{ color: 'var(--text-tertiary)', fontSize: '0.8125rem', lineHeight: 1.6, maxWidth: '760px' }}>
             Templates and notes are for education and personal planning. They are not financial, investment, tax or
-            legal advice. Questions about an order: <a href="mailto:contact@econolens.co.in" style={{ color: 'var(--accent)' }}>contact@econolens.co.in</a>.
+            legal advice. See our <a href="/refund-policy" style={{ color: 'var(--accent)' }}>Refund &amp; Cancellation Policy</a> and{' '}
+            <a href="/delivery-policy" style={{ color: 'var(--accent)' }}>Delivery Policy</a>. Questions about an order: <a href="mailto:contact@econolens.co.in" style={{ color: 'var(--accent)' }}>contact@econolens.co.in</a>.
           </p>
         </div>
       </section>
