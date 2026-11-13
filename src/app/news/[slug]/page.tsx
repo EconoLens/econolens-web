@@ -420,15 +420,7 @@ export default async function ArticlePage({
               {article.publishedAt ? <time dateTime={article.publishedAt}>{formattedDate}</time> : formattedDate}
             </span>
 
-            {/* AI label */}
-            {article.aiLabel && (
-              <>
-                <span style={{ width: 1, height: 24, background: 'var(--ink-border)', display: 'inline-block' }} />
-                <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.5rem', letterSpacing: '0.08em', color: 'var(--text-tertiary)', textTransform: 'uppercase' }}>
-                  {article.aiLabel}
-                </span>
-              </>
-            )}
+            {/* AI label removed 2026-11-13 (KP decision 29 Oct 2026: no AI label or automation disclosure in user-facing content). */}
           </div>
 
           {/* Share: WhatsApp / copy headline + points + link / story image */}
