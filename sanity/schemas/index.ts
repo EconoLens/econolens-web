@@ -8,6 +8,7 @@ import contributor from './contributor'
 import category from './category'
 import economicIndicator from './economicIndicator'
 import siteSettings from './siteSettings'
+import product from './product'
 
 export const schemaTypes = [
   // Content (most used — shown first)
@@ -19,6 +20,7 @@ export const schemaTypes = [
 
   // Data / Product
   economicIndicator,
+  product,
 
   // Config (shown last)
   siteSettings,

@@ -13,6 +13,7 @@ const isPublicRoute = createRouteMatcher([
   '/disclaimer(.*)',
   '/research(.*)',
   '/papers(.*)',
+  '/shop(.*)',
   '/indicators(.*)',
   '/study(.*)',
   '/studio(.*)',
