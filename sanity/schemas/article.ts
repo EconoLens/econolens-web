@@ -214,6 +214,7 @@ export default defineType({
         { title: 'Fun — Tech & AI Economics (S114)', value: 'fun-tech' },
         { title: 'Fun — Entertainment & Bollywood (S115)', value: 'fun-entertainment' },
         { title: 'Data Story', value: 'data-story' },
+        { title: 'Analysis', value: 'analysis' },
         { title: 'Opinion / Analysis', value: 'opinion' },
       ], layout: 'dropdown' },
       validation: (R) => R.required(),
@@ -266,9 +267,9 @@ export default defineType({
     defineField({
       name: 'layerThree', title: 'Layer 3 — Technical (Academic / Methodology)', description: '1000+ words.', type: 'array', group: 'layers',
       of: BODY_BLOCKS,
-      validation: (R) => R.required().error('Layer 3 is mandatory'),
+      // Optional since KP's 2026-09-01 single-flow decision (no fixed Layer 1/2/3 structure).
     }),
-    defineField({ name: 'indiaContext', title: '🇮🇳 India Context Paragraph', description: "MANDATORY. Why this matters for India's economy. ~100 words.", type: 'text', group: 'india', rows: 5, validation: (R) => R.required().min(80).error('India context is mandatory (CCO mandate)') }),
+    defineField({ name: 'indiaContext', title: '🇮🇳 India Context Paragraph', description: "Only when the topic has a real economic channel to India (KP decision, Session 11). Leave empty otherwise. ~100 words.", type: 'text', group: 'india', rows: 5, validation: (R) => R.custom((v?: string) => !v || v.trim().length >= 80 || 'If used, India context needs at least 80 characters') }),
     defineField({
       name: 'indiaDataPoints', title: 'India Data Points', type: 'array', group: 'india',
       of: [{ type: 'object', fields: [defineField({ name: 'stat', type: 'string', title: 'Statistic' }), defineField({ name: 'source', type: 'string', title: 'Source' }), defineField({ name: 'date', type: 'date', title: 'Data Date' })] }],
@@ -283,13 +284,13 @@ export default defineType({
       ], preview: { select: { title: 'institution', subtitle: 'title' } } }],
       validation: (R) => R.required().min(1).error('At least one source is mandatory'),
     }),
-    defineField({ name: 'aiLabel', title: 'AI Label', type: 'string', group: 'pipeline', description: 'E.g. "AI-assisted · Source: RBI"' }),
+    defineField({ name: 'aiLabel', title: 'AI Label', type: 'string', group: 'pipeline', description: 'Deprecated (KP decision 29 Oct 2026: no AI label in user-facing content). Not rendered; leave empty.' }),
     defineField({ name: 'hasPriceMention', title: 'Contains asset price / stock mention?', type: 'boolean', group: 'pipeline', initialValue: false }),
     defineField({ name: 'sebiDisclaimer', title: 'SEBI Disclaimer', type: 'text', group: 'pipeline', readOnly: true, initialValue: 'Disclaimer: This article is for informational purposes only and does not constitute investment advice. EconoLens is not a SEBI-registered investment advisor. Please consult a qualified financial advisor before making investment decisions.' }),
     defineField({ name: 'copyscapeScore', title: 'Copyscape Score (%)', type: 'number', group: 'pipeline', validation: (R) => R.min(0).max(100).warning('Score above 10% — do not publish') }),
     defineField({
       name: 'qaStatus', title: 'QA Status', type: 'string', group: 'pipeline',
-      options: { list: [{ title: '⏳ Pending Review', value: 'pending' }, { title: '✅ Passed', value: 'passed' }, { title: '❌ Failed', value: 'failed' }, { title: '🔄 Regenerated', value: 'regenerated' }], layout: 'radio' },
+      options: { list: [{ title: '📝 Draft', value: 'draft' }, { title: '⏳ Pending Review', value: 'pending' }, { title: '✅ Passed', value: 'passed' }, { title: '❌ Failed', value: 'failed' }, { title: '🔄 Regenerated', value: 'regenerated' }], layout: 'radio' },
       initialValue: 'pending',
     }),
     defineField({
