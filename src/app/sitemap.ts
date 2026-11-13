@@ -12,7 +12,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const staticEntries: MetadataRoute.Sitemap = [
     { url: baseUrl, lastModified: now, changeFrequency: "daily", priority: 1.0 },
     { url: `${baseUrl}/articles`, lastModified: now, changeFrequency: "hourly", priority: 0.9 },
-    { url: `${baseUrl}/news`, lastModified: now, changeFrequency: "hourly", priority: 0.9 },
+    // /news is removed (2026-11-13): it redirects to /articles, and Search Console flagged it
+    // as "Page with redirect" inside the sitemap. Only list URLs that return 200.
     { url: `${baseUrl}/indicators`, lastModified: now, changeFrequency: "daily", priority: 0.8 },
     { url: `${baseUrl}/study`, lastModified: now, changeFrequency: "weekly", priority: 0.7 },
     { url: `${baseUrl}/papers`, lastModified: now, changeFrequency: "weekly", priority: 0.7 },

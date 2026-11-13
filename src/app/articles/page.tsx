@@ -1,6 +1,14 @@
 import Link from 'next/link'
 import { getLatestNews } from '@/lib/sanity'
 
+import type { Metadata } from 'next'
+
+// Filtered views (/articles?category=X) are the same list re-sorted, so they all point at one
+// canonical. Search Console flagged them as "Duplicate without user-selected canonical" (2026-11-13).
+export const metadata: Metadata = {
+  alternates: { canonical: 'https://www.econolens.co.in/articles' },
+}
+
 export const revalidate = 900
 
 const CATEGORIES = ['All', 'Monetary Policy', 'Fiscal Policy', 'Trade', 'Inflation', 'Markets', 'Research', 'Global Economy']
