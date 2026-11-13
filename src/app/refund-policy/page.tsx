@@ -2,7 +2,7 @@ import type { Metadata } from 'next'
 import PolicyPage, { H } from '../shop/PolicyPage'
 
 export const metadata: Metadata = {
-  title: 'Refund & Cancellation Policy | EconoLens',
+  title: 'Refund & Cancellation Policy',
   description: 'Refunds and cancellations for EconoLens Shop purchases: digital notes and templates, and project-report and data-analysis services.',
   alternates: { canonical: 'https://www.econolens.co.in/refund-policy' },
 }

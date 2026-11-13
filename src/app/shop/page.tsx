@@ -5,7 +5,7 @@ import ProductCard from './ProductCard'
 export const revalidate = 600
 
 export const metadata: Metadata = {
-  title: 'Shop — Exam Notes, Excel Templates and Project Reports | EconoLens',
+  title: 'Shop — Exam Notes, Excel Templates and Project Reports',
   description:
     'Economics exam notes for UGC-NET, RBI Grade B and IES, ready-to-use Excel planners and DPR financial models, plus project-report and thesis data-analysis services from EconoLens.',
   alternates: { canonical: 'https://www.econolens.co.in/shop' },

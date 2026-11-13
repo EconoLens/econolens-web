@@ -2,7 +2,7 @@ import type { Metadata } from 'next'
 import PolicyPage, { H } from '../shop/PolicyPage'
 
 export const metadata: Metadata = {
-  title: 'Delivery Policy | EconoLens',
+  title: 'Delivery Policy',
   description: 'How and when EconoLens Shop purchases are delivered: digital files by email or download link, and services on the agreed timeline.',
   alternates: { canonical: 'https://www.econolens.co.in/delivery-policy' },
 }

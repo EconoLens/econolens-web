@@ -7,9 +7,9 @@ export const revalidate = 600
 
 export async function generateMetadata({ params }: { params: { slug: string } }): Promise<Metadata> {
   const p = await getProduct(params.slug)
-  if (!p) return { title: 'Shop | EconoLens' }
+  if (!p) return { title: 'Shop' }
   return {
-    title: `${p.title} | EconoLens Shop`,
+    title: `${p.title} — Shop`,
     description: p.tagline,
     alternates: { canonical: `https://www.econolens.co.in/shop/${p.slug}` },
   }
