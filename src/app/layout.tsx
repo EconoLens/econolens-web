@@ -70,6 +70,7 @@ const NAV_LINKS = [
   { href: '/papers', label: 'Research' },
   { href: '/indicators', label: 'Indicators' },
   { href: '/articles', label: 'News' },
+  { href: '/shop', label: 'Shop' },
   { href: '/about', label: 'About' },
 ]
 
@@ -140,6 +141,7 @@ function Footer() {
             <a href="/papers" className="footer-link">Research</a>
             <a href="/indicators" className="footer-link">Indicators</a>
             <a href="/articles" className="footer-link">News</a>
+            <a href="/shop" className="footer-link">Shop</a>
           </div>
           <div>
             <p style={{ fontFamily: 'var(--font-mono)', fontSize: '0.5625rem', letterSpacing: '0.12em', textTransform: 'uppercase', color: 'var(--text-tertiary)', marginBottom: '14px' }}>Company</p>
@@ -157,6 +159,8 @@ function Footer() {
             <a href="/privacy" className="footer-link">Privacy Policy</a>
             <a href="/terms" className="footer-link">Terms of Service</a>
             <a href="/disclaimer" className="footer-link">Disclaimer</a>
+            <a href="/refund-policy" className="footer-link">Refund Policy</a>
+            <a href="/delivery-policy" className="footer-link">Delivery Policy</a>
             <a href="/privacy#cookies" className="footer-link">Cookie Policy</a>
           </div>
         </div>
