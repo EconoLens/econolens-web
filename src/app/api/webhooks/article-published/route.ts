@@ -79,7 +79,9 @@ export async function POST(req: Request) {
       "slug": slug.current,
       qaStatus,
       coverImage,
-      publishedAt
+      publishedAt,
+      summary,
+      tags
     }`,
     { id: documentId },
   )
@@ -105,6 +107,11 @@ export async function POST(req: Request) {
       title: article.title,
       url: articleUrl,
       imageUrl,
+      // The third summary bullet carries the EconoLens analysis; fall back to the first.
+      summary: Array.isArray(article.summary)
+        ? (article.summary[2] ?? article.summary[0])
+        : undefined,
+      tags: Array.isArray(article.tags) ? article.tags : undefined,
     })
 
     return NextResponse.json({ ok: true, results })

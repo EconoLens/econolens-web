@@ -185,6 +185,9 @@ export async function postArticleToBuffer(article: {
   title: string
   url: string
   imageUrl?: string
+  /** First summary bullet (the key finding), optional. */
+  summary?: string
+  tags?: string[]
 }, services: string[] = ['instagram', 'linkedin']): Promise<Record<string, CreatePostResult | { ok: false; error: string }>> {
   const channels = await getChannels()
   const results: Record<string, CreatePostResult | { ok: false; error: string }> = {}
@@ -203,11 +206,52 @@ export async function postArticleToBuffer(article: {
       const key = matches.length > 1 ? `${service}:${channel.name}` : service
       results[key] = await createPost({
         channelId: channel.id,
-        text: `${article.title}\n\nRead the full analysis: ${article.url}`,
+        text: buildPostText(article, service),
         imageUrl: article.imageUrl,
+        // Publish almost immediately instead of waiting for the next queue
+        // slot (KP, 2026-11-16: "the moment an article is live it needs to be
+        // on social media"). Buffer documents only addToQueue and
+        // customScheduled, so schedule two minutes ahead.
+        dueAt: new Date(Date.now() + 2 * 60 * 1000).toISOString(),
       })
     }
   }
 
   return results
+}
+
+// ─── POST TEXT ───────────────────────────────────────────────────────────────
+
+function toHashtag(tag: string): string {
+  const words = tag.replace(/[^A-Za-z0-9 ]/g, ' ').split(/\s+/).filter(Boolean)
+  if (words.length === 0 || words.length > 3) return ''
+  return '#' + words.map((w) => w[0].toUpperCase() + w.slice(1)).join('')
+}
+
+/**
+ * Per-platform post text. LinkedIn: finding + link + hashtags. Instagram:
+ * links in captions are not clickable, so point to the link in bio instead.
+ * Every post ends with the follow line required by the Marketing SOP v1.1
+ * (Section 11, cross-platform follow CTA).
+ */
+export function buildPostText(
+  article: { title: string; url: string; summary?: string; tags?: string[] },
+  service: string,
+): string {
+  const raw = article.summary?.replace(/^EconoLens analysis:\s*/i, '').trim()
+  const finding = raw ? raw[0].toUpperCase() + raw.slice(1) : undefined
+  const hashtags = ['#Economics', '#EconoLens', ...(article.tags ?? []).map(toHashtag)]
+    .filter((h, i, a) => h && a.indexOf(h) === i)
+    .slice(0, 6)
+    .join(' ')
+  const follow = 'Follow EconoLens for economics explained with data.'
+  const parts = [article.title]
+  if (finding) parts.push(finding)
+  if (service.toLowerCase() === 'instagram') {
+    parts.push('Full analysis, data and working: link in bio (econolens.co.in).')
+  } else {
+    parts.push(`Full analysis, data and working: ${article.url}`)
+  }
+  parts.push(follow, hashtags)
+  return parts.join('\n\n')
 }
