@@ -77,7 +77,7 @@ export async function getChannels(): Promise<BufferChannel[]> {
   const organizationId = await getOrganizationId()
 
   const data = await bufferRequest<{ channels: BufferChannel[] }>(
-    `query GetChannels($organizationId: String!) {
+    `query GetChannels($organizationId: OrganizationId!) {
       channels(input: { organizationId: $organizationId }) {
         id
         name
