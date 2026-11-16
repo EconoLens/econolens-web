@@ -110,6 +110,8 @@ type CreatePostInput = {
   imageUrl?: string
   /** ISO 8601 UTC datetime. Omit to add to the next open queue slot instead. */
   dueAt?: string
+  /** Channel service, e.g. "instagram". Instagram posts must declare a post type. */
+  service?: string
 }
 
 type CreatePostResult =
@@ -144,6 +146,10 @@ export async function createPost(input: CreatePostInput): Promise<CreatePostResu
       ...(input.dueAt ? { dueAt: input.dueAt } : {}),
       ...(input.imageUrl
         ? { assets: [{ image: { url: input.imageUrl } }] }
+        : {}),
+      // Buffer rejects Instagram posts without a type (post, story or reel).
+      ...(input.service?.toLowerCase() === 'instagram'
+        ? { metadata: { instagram: { type: 'post', shouldShareToFeed: true } } }
         : {}),
     },
   }
@@ -208,6 +214,7 @@ export async function postArticleToBuffer(article: {
         channelId: channel.id,
         text: buildPostText(article, service),
         imageUrl: article.imageUrl,
+        service,
         // Publish almost immediately instead of waiting for the next queue
         // slot (KP, 2026-11-16: "the moment an article is live it needs to be
         // on social media"). Buffer documents only addToQueue and
