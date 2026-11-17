@@ -34,6 +34,13 @@ const nextConfig = {
   },
   async headers() {
     return [
+      // Generated social images are files, not pages: keep them out of Google's
+      // page index (they showed up as "crawled - currently not indexed" and 404s).
+      // Not blocked in robots.txt, because social-media crawlers must still fetch them.
+      ...['/opengraph-image', '/news/:slug/opengraph-image', '/news/:slug/og-card', '/news/:slug/story-image'].map((source) => ({
+        source,
+        headers: [{ key: 'X-Robots-Tag', value: 'noindex' }],
+      })),
       {
         source: '/(.*)',
         headers: [

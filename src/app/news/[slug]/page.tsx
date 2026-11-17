@@ -21,7 +21,10 @@ export async function generateStaticParams() {
 export async function generateMetadata({ params }: { params: { slug: string } }) {
   try {
     const article = await getArticleBySlug(params.slug)
-    if (!article) return {}
+    // Missing or unpublished article: the page calls notFound(), but because the
+    // root loading.tsx streams the response, the status is already 200. Mark it
+    // noindex so Google treats it as gone instead of indexing a soft 404.
+    if (!article || article.qaStatus !== 'passed') return { robots: { index: false, follow: true } }
     const description =
       article.metaDescription ||
       (Array.isArray(article.summary) ? article.summary[0] : article.summary) ||

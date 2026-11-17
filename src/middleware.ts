@@ -35,8 +35,13 @@ const isPublicRoute = createRouteMatcher([
   '/fact-checking-methodology(.*)',
   ]);
 
+// Only API routes are protected here. Pages have no sign-in requirement (accounts
+// were removed 2026-10-10), and protecting unlisted page paths made every unknown
+// URL, and the root /opengraph-image, return a 500 instead of the 404 page.
+const isApiRoute = createRouteMatcher(['/api(.*)', '/trpc(.*)']);
+
 export default clerkMiddleware(async (auth, request) => {
-  if (!isPublicRoute(request)) {
+  if (isApiRoute(request) && !isPublicRoute(request)) {
     await auth.protect();
   }
 });
